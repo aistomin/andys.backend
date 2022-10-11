@@ -1,0 +1,28 @@
+version: 1.0.{build}
+skip_tags: true
+branches:
+  only:
+    - master
+image: Ubuntu2004
+services:
+  - postgresql
+environment:
+#  PGUSER: postgres
+#  PGPASSWORD: Password12!
+#  dt_db_url: jdbc:postgresql://localhost:5432/deutsch_trainer
+#  dt_db_user: postgres
+#  dt_db_password: Password12!
+  matrix:
+    - JAVA_HOME: /usr/lib/jvm/java-18-openjdk-amd64
+init:
+  - sudo sed -i -E -e 's/(local\s+all\s+postgres\s+)peer/\1trust/' /etc/postgresql/14/main/pg_hba.conf
+build_script:
+  - echo $JAVA_HOME
+  - export PATH=$JAVA_HOME/bin:$PATH
+  - java -version
+#  - sudo -u postgres psql -c "ALTER USER postgres with password '${PGPASSWORD}';" postgres
+#  - psql -c 'create database deutsch_trainer;' -U postgres
+#  - psql -U postgres -d deutsch_trainer -f ./database/db.sql
+  - mvn -version
+  - mvn clean install package
+#  - bash <(curl -s https://codecov.io/bash)
