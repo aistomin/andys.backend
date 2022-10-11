@@ -39,11 +39,17 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.0.0-M7</version>
                 <configuration>
-                    <skipTests>true</skipTests>
                     <argLine>
                         --add-opens java.base/java.lang=ALL-UNNAMED
                     </argLine>
                 </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.google.inject</groupId>
+                        <artifactId>guice</artifactId>
+                        <version>5.1.0</version>
+                    </dependency>
+                </dependencies>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
