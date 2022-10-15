@@ -11,6 +11,7 @@
         <maven.compiler.target>18</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junitVersion>5.9.1</junitVersion>
+        <linkXRef>false</linkXRef>
     </properties>
     <dependencies>
         <dependency>
@@ -89,6 +90,27 @@
                     <execution>
                         <id>validate</id>
                         <phase>validate</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-pmd-plugin</artifactId>
+                <version>3.19.0</version>
+                <configuration>
+                    <failurePriority>1</failurePriority>
+                    <failOnViolation>true</failOnViolation>
+                    <rulesets>
+                        <ruleset>conf/pmd-rules.xml</ruleset>
+                    </rulesets>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>default</id>
+                        <phase>verify</phase>
                         <goals>
                             <goal>check</goal>
                         </goals>
