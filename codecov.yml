@@ -1,0 +1,6 @@
+status:
+  project:
+    default:
+      target: 80%
+ignore:
+  - "src/main/java/org/**/*"
