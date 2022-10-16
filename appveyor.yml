@@ -25,4 +25,6 @@ build_script:
 #  - psql -U postgres -d deutsch_trainer -f ./database/db.sql
   - mvn -version
   - mvn clean install package
-  - bash <(curl -s https://codecov.io/bash)
+  - curl -Os https://uploader.codecov.io/latest/linux/codecov
+  - chmod +x codecov
+  - ./codecov
