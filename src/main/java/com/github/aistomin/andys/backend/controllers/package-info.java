@@ -13,23 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.aistomin.andys.backend;
-
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-
 /**
- * Dummy tests suite.
+ * Application controllers.
  *
  * @since 0.1
  */
-final class DummyTest {
-
-    /**
-     * Dummy test.
-     */
-    @Test
-    void testDummy() {
-        Assertions.assertEquals("Andrej", new Dummy().dummy());
-    }
-}
+package com.github.aistomin.andys.backend.controllers;
