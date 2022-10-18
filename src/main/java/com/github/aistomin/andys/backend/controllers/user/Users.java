@@ -13,30 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.aistomin.andys.backend.services;
+package com.github.aistomin.andys.backend.controllers.user;
 
-import com.github.aistomin.andys.backend.controllers.user.UserDto;
-import com.github.aistomin.andys.backend.controllers.user.Users;
+import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
- * User's service.
+ * Users that we return as a response to the frontend request.
  *
  * @since 0.1
  */
-public interface UserService {
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public final class Users {
 
     /**
-     * Create user.
-     *
-     * @param user User that needs to be created.
-     * @return Created user.
+     * List of loaded users.
      */
-    UserDto create(UserDto user);
-
-    /**
-     * Load all users.
-     *
-     * @return Users
-     */
-    Users loadAll();
+    private List<UserDto> content;
 }
