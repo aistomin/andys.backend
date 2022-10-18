@@ -37,19 +37,27 @@ public final class UserControllerTest {
     private TestRestTemplate template;
 
     /**
-     * Check that we can correctly create a user.
+     * Check that we can correctly perform CRUD operations with users.
      */
     @Test
-    public void testCreate() {
+    public void testCrud() {
         final UserDto user = new UserDto();
         user.setId(1L);
         user.setUsername("andrej");
-        final ResponseEntity<String> result = template.postForEntity(
+        final ResponseEntity<String> saved = template.postForEntity(
             "/users", new HttpEntity<>(user), String.class
         );
-        Assertions.assertEquals(201, result.getStatusCodeValue());
+        Assertions.assertEquals(201, saved.getStatusCodeValue());
         Assertions.assertEquals(
-            "{\"id\":1,\"username\":\"andrej\"}", result.getBody()
+            "{\"id\":1,\"username\":\"andrej\"}", saved.getBody()
+        );
+        final ResponseEntity<String> selected = template.getForEntity(
+            "/users", String.class
+        );
+        Assertions.assertEquals(200, selected.getStatusCodeValue());
+        Assertions.assertEquals(
+            "{\"content\":[{\"id\":1,\"username\":\"andrej\"}]}",
+            selected.getBody()
         );
     }
 }
