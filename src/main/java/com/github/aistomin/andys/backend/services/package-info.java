@@ -13,26 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.aistomin.andys.backend.controllers;
-
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 /**
- * Dummy controller.
+ * Application services.
  *
  * @since 0.1
  */
-@RestController
-public final class HelloController {
-
-    /**
-     * Index method.
-     *
-     * @return Dummy string.
-     */
-    @GetMapping("/")
-    public String index() {
-        return "Greetings from Spring Boot!";
-    }
-}
+package com.github.aistomin.andys.backend.services;
