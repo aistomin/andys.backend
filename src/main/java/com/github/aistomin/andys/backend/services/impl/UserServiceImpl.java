@@ -20,6 +20,7 @@ import com.github.aistomin.andys.backend.controllers.user.Users;
 import com.github.aistomin.andys.backend.services.UserService;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import org.springframework.stereotype.Service;
 
 /**
@@ -47,6 +48,21 @@ public final class UserServiceImpl implements UserService {
     public UserDto create(final UserDto user) {
         this.storage.add(user);
         return user;
+    }
+
+    @Override
+    public void delete(final Long id) {
+        final UserDto user = this.storage
+            .stream()
+            .filter(item -> Objects.equals(item.getId(), id))
+            .findAny()
+            .orElse(null);
+        if (null == user) {
+            throw new IllegalStateException(
+                String.format("User with ID = %d not found.", id)
+            );
+        }
+        this.storage.remove(user);
     }
 
     /**

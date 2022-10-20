@@ -18,7 +18,9 @@ package com.github.aistomin.andys.backend.controllers.user;
 import com.github.aistomin.andys.backend.services.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -58,6 +60,16 @@ public final class UserController {
         return new ResponseEntity<>(
             this.users.create(user), HttpStatus.CREATED
         );
+    }
+
+    /**
+     * Delete user.
+     *
+     * @param id User ID.
+     */
+    @DeleteMapping("/{id}")
+    public void deleteUser(@PathVariable("id") final Long id) {
+        this.users.delete(id);
     }
 
     /**
