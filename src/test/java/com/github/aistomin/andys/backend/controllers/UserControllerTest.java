@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 
 /**
@@ -44,20 +45,40 @@ public final class UserControllerTest {
         final UserDto user = new UserDto();
         user.setId(1L);
         user.setUsername("andrej");
-        final ResponseEntity<String> saved = template.postForEntity(
+        final ResponseEntity<String> saved = this.template.postForEntity(
             "/users", new HttpEntity<>(user), String.class
         );
         Assertions.assertEquals(201, saved.getStatusCodeValue());
         Assertions.assertEquals(
             "{\"id\":1,\"username\":\"andrej\"}", saved.getBody()
         );
-        final ResponseEntity<String> selected = template.getForEntity(
+        final ResponseEntity<String> selected = this.template.getForEntity(
             "/users", String.class
         );
         Assertions.assertEquals(200, selected.getStatusCodeValue());
         Assertions.assertEquals(
             "{\"content\":[{\"id\":1,\"username\":\"andrej\"}]}",
             selected.getBody()
+        );
+        template.exchange(
+            "/users/666",
+            HttpMethod.DELETE,
+            HttpEntity.EMPTY,
+            Void.class
+        );
+        template.exchange(
+            String.format("/users/%d", user.getId()),
+            HttpMethod.DELETE,
+            HttpEntity.EMPTY,
+            Void.class
+        );
+        final ResponseEntity<String> empty = this.template.getForEntity(
+            "/users", String.class
+        );
+        Assertions.assertEquals(200, empty.getStatusCodeValue());
+        Assertions.assertEquals(
+            "{\"content\":[]}",
+            empty.getBody()
         );
     }
 }

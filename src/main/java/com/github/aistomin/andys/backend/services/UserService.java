@@ -34,6 +34,13 @@ public interface UserService {
     UserDto create(UserDto user);
 
     /**
+     * Delete user.
+     *
+     * @param id User ID.
+     */
+    void delete(Long id);
+
+    /**
      * Load all users.
      *
      * @return Users
