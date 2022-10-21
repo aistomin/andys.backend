@@ -60,6 +60,22 @@ public final class UserControllerTest {
             "{\"content\":[{\"id\":1,\"username\":\"andrej\"}]}",
             selected.getBody()
         );
+        user.setUsername("new_username");
+        final ResponseEntity<String> changed = this.template.exchange(
+            "/users", HttpMethod.PUT, new HttpEntity<>(user), String.class
+        );
+        Assertions.assertEquals(200, changed.getStatusCodeValue());
+        Assertions.assertEquals(
+            "{\"id\":1,\"username\":\"new_username\"}", changed.getBody()
+        );
+        final ResponseEntity<String> updated = this.template.getForEntity(
+            "/users", String.class
+        );
+        Assertions.assertEquals(200, updated.getStatusCodeValue());
+        Assertions.assertEquals(
+            "{\"content\":[{\"id\":1,\"username\":\"new_username\"}]}",
+            updated.getBody()
+        );
         template.exchange(
             "/users/666",
             HttpMethod.DELETE,

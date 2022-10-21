@@ -34,6 +34,14 @@ public interface UserService {
     UserDto create(UserDto user);
 
     /**
+     * Update user.
+     *
+     * @param user User that needs to be updated.
+     * @return Created user.
+     */
+    UserDto update(UserDto user);
+
+    /**
      * Delete user.
      *
      * @param id User ID.
