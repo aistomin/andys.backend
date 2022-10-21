@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -63,12 +64,27 @@ public final class UserController {
     }
 
     /**
+     * Update user.
+     *
+     * @param user User that needs to be updated.
+     * @return Updated user.
+     */
+    @PutMapping()
+    public ResponseEntity<UserDto> update(
+        @RequestBody final UserDto user
+    ) {
+        return new ResponseEntity<>(
+            this.users.update(user), HttpStatus.OK
+        );
+    }
+
+    /**
      * Delete user.
      *
      * @param id User ID.
      */
     @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable("id") final Long id) {
+    public void delete(@PathVariable("id") final Long id) {
         this.users.delete(id);
     }
 

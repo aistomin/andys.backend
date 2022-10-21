@@ -51,6 +51,25 @@ public final class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserDto update(final UserDto user) {
+        final Long id = user.getId();
+        final UserDto existing = this.storage
+            .stream()
+            .filter(item -> {
+                return Objects.equals(item.getId(), id);
+            })
+            .findAny()
+            .orElse(null);
+        if (null == existing) {
+            throw new IllegalStateException(
+                String.format("User with ID = %d not found.", id)
+            );
+        }
+        existing.setUsername(user.getUsername());
+        return existing;
+    }
+
+    @Override
     public void delete(final Long id) {
         final UserDto user = this.storage
             .stream()
