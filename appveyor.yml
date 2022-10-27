@@ -7,11 +7,11 @@ image: Ubuntu2004
 services:
   - postgresql
 environment:
-#  PGUSER: postgres
-#  PGPASSWORD: Password12!
-#  dt_db_url: jdbc:postgresql://localhost:5432/deutsch_trainer
-#  dt_db_user: postgres
-#  dt_db_password: Password12!
+  PGUSER: postgres
+  PGPASSWORD: Password12!
+  andys_db_url: jdbc:postgresql://localhost:5432/andys
+  andys_db_user: postgres
+  andys_db_password: Password12!
   matrix:
     - JAVA_HOME: /usr/lib/jvm/java-18-openjdk-amd64
 init:
@@ -20,9 +20,9 @@ build_script:
   - echo $JAVA_HOME
   - export PATH=$JAVA_HOME/bin:$PATH
   - java -version
-#  - sudo -u postgres psql -c "ALTER USER postgres with password '${PGPASSWORD}';" postgres
-#  - psql -c 'create database deutsch_trainer;' -U postgres
-#  - psql -U postgres -d deutsch_trainer -f ./database/db.sql
+  - sudo -u postgres psql -c "ALTER USER postgres with password '${PGPASSWORD}';" postgres
+  - psql -c 'create database andys;' -U postgres
+  - echo $andys_db_user
   - mvn -version
   - mvn clean install package
   - curl -Os https://uploader.codecov.io/latest/linux/codecov
