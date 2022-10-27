@@ -16,36 +16,29 @@
 package com.github.aistomin.andys.backend.controllers.user;
 
 import com.github.aistomin.andys.backend.data.User;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import java.util.Random;
+import java.util.UUID;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
- * User DTO.
+ * Test for {@link UserDto}.
  *
  * @since 0.1
  */
-@AllArgsConstructor
-@NoArgsConstructor
-@Data
-public final class UserDto {
+final class UserDtoTest {
 
     /**
-     * User ID.
+     * Check that we correctly convert {@link com.github.aistomin.andys.backend.data.User}
+     * to {@link UserDto}
      */
-    private Long id;
-
-    /**
-     * Username.
-     */
-    private String username;
-
-    /**
-     * Ctor.
-     *
-     * @param user User data object.
-     */
-    public UserDto(final User user) {
-        this(user.getId(), user.getUsername());
+    @Test
+    void testConvert() {
+        final User user = new User(
+            new Random().nextLong(1000), UUID.randomUUID().toString()
+        );
+        final UserDto dto = new UserDto(user);
+        Assertions.assertEquals(user.getId(), dto.getId());
+        Assertions.assertEquals(user.getUsername(), dto.getUsername());
     }
 }

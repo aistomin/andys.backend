@@ -27,6 +27,8 @@ import org.springframework.http.ResponseEntity;
 
 /**
  * Test for {@link com.github.aistomin.andys.backend.controllers.user.UserController}.
+ *
+ * @since 0.1
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public final class UserControllerTest {
@@ -57,7 +59,7 @@ public final class UserControllerTest {
         );
         Assertions.assertEquals(200, selected.getStatusCodeValue());
         Assertions.assertEquals(
-            "{\"content\":[{\"id\":null,\"username\":\"admin\"},{\"id\":1,\"username\":\"andrej\"}]}",
+            "{\"content\":[{\"id\":1,\"username\":\"andrej\"}]}",
             selected.getBody()
         );
         user.setUsername("new_username");
@@ -73,7 +75,7 @@ public final class UserControllerTest {
         );
         Assertions.assertEquals(200, updated.getStatusCodeValue());
         Assertions.assertEquals(
-            "{\"content\":[{\"id\":null,\"username\":\"admin\"},{\"id\":1,\"username\":\"new_username\"}]}",
+            "{\"content\":[{\"id\":1,\"username\":\"new_username\"}]}",
             updated.getBody()
         );
         template.exchange(
@@ -93,7 +95,7 @@ public final class UserControllerTest {
         );
         Assertions.assertEquals(200, empty.getStatusCodeValue());
         Assertions.assertEquals(
-            "{\"content\":[{\"id\":null,\"username\":\"admin\"}]}",
+            "{\"content\":[]}",
             empty.getBody()
         );
     }
