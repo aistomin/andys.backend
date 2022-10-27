@@ -57,7 +57,7 @@ public final class UserControllerTest {
         );
         Assertions.assertEquals(200, selected.getStatusCodeValue());
         Assertions.assertEquals(
-            "{\"content\":[{\"id\":1,\"username\":\"andrej\"}]}",
+            "{\"content\":[{\"id\":null,\"username\":\"admin\"},{\"id\":1,\"username\":\"andrej\"}]}",
             selected.getBody()
         );
         user.setUsername("new_username");
@@ -73,7 +73,7 @@ public final class UserControllerTest {
         );
         Assertions.assertEquals(200, updated.getStatusCodeValue());
         Assertions.assertEquals(
-            "{\"content\":[{\"id\":1,\"username\":\"new_username\"}]}",
+            "{\"content\":[{\"id\":null,\"username\":\"admin\"},{\"id\":1,\"username\":\"new_username\"}]}",
             updated.getBody()
         );
         template.exchange(
@@ -93,7 +93,7 @@ public final class UserControllerTest {
         );
         Assertions.assertEquals(200, empty.getStatusCodeValue());
         Assertions.assertEquals(
-            "{\"content\":[]}",
+            "{\"content\":[{\"id\":null,\"username\":\"admin\"}]}",
             empty.getBody()
         );
     }
