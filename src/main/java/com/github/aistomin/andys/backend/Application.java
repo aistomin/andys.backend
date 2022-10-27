@@ -15,7 +15,9 @@
  */
 package com.github.aistomin.andys.backend;
 
-import java.util.Arrays;
+import com.github.aistomin.andys.backend.controllers.user.UserDto;
+import com.github.aistomin.andys.backend.services.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -29,6 +31,12 @@ import org.springframework.context.annotation.Bean;
  */
 @SpringBootApplication
 public class Application {
+
+    /**
+     * User service.
+     */
+    @Autowired
+    private UserService users;
 
     /**
      * App entry point.
@@ -48,13 +56,17 @@ public class Application {
     @Bean
     public CommandLineRunner commandLineRunner(final ApplicationContext ctx) {
         return args -> {
-            System.out.println(
-                "Let's inspect the beans provided by Spring Boot:"
-            );
-            String[] beanNames = ctx.getBeanDefinitionNames();
-            Arrays.sort(beanNames);
-            for (String beanName : beanNames) {
-                System.out.println(beanName);
+            System.out.println("Application is starting .....");
+            final boolean adminUserExists = this.users
+                .loadAll()
+                .getContent()
+                .stream()
+                .anyMatch(user -> "admin".equals(user.getUsername()));
+            if (!adminUserExists) {
+                System.out.println("Admin user is missing. Let's create it.");
+                final UserDto admin = new UserDto();
+                admin.setUsername("admin");
+                this.users.create(admin);
             }
         };
     }
