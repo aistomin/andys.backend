@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: ${andys.db.url:jdbc:postgresql://localhost:5432/andys}
-    username: ${andys.db.user:root}
-    password: ${andys.db.password:root}
+    url: ${andys_db_url:jdbc:postgresql://localhost:5432/andys}
+    username: ${andys_db_user:root}
+    password: ${andys_db_password:root}
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQL94Dialect
     show-sql: true

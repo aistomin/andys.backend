@@ -9,9 +9,9 @@ services:
 environment:
   PGUSER: postgres
   PGPASSWORD: Password12!
-  andys.db.url: jdbc:postgresql://localhost:5432/andys
-  andys.db.user: postgres
-  andys.db.password: Password12!
+  andys_db_url: jdbc:postgresql://localhost:5432/andys
+  andys_db_user: postgres
+  andys_db_password: Password12!
   matrix:
     - JAVA_HOME: /usr/lib/jvm/java-18-openjdk-amd64
 init:
@@ -22,6 +22,7 @@ build_script:
   - java -version
   - sudo -u postgres psql -c "ALTER USER postgres with password '${PGPASSWORD}';" postgres
   - psql -c 'create database andys;' -U postgres
+  - echo $andys_db_user
   - mvn -version
   - mvn clean install package
   - curl -Os https://uploader.codecov.io/latest/linux/codecov
