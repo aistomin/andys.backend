@@ -17,6 +17,8 @@ package com.github.aistomin.andys.backend.services.impl;
 
 import com.github.aistomin.andys.backend.controllers.user.UserDto;
 import com.github.aistomin.andys.backend.controllers.user.Users;
+import com.github.aistomin.andys.backend.data.User;
+import com.github.aistomin.andys.backend.data.UserRepository;
 import com.github.aistomin.andys.backend.services.UserService;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,11 +34,25 @@ import org.springframework.stereotype.Service;
 public final class UserServiceImpl implements UserService {
 
     /**
+     * User repository.
+     */
+    private final UserRepository repo;
+
+    /**
      * Temporary storage.
      *
      * @todo Issue #27. Replace it with the real database.
      */
     private final List<UserDto> storage = new ArrayList<>();
+
+    /**
+     * Ctor.
+     *
+     * @param repository User repository.
+     */
+    public UserServiceImpl(final UserRepository repository) {
+        this.repo = repository;
+    }
 
     /**
      * Create a user.
@@ -46,6 +62,7 @@ public final class UserServiceImpl implements UserService {
      */
     @Override
     public UserDto create(final UserDto user) {
+        this.repo.save(new User(user));
         this.storage.add(user);
         return user;
     }
