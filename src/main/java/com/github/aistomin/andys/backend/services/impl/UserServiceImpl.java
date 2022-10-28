@@ -20,8 +20,6 @@ import com.github.aistomin.andys.backend.controllers.user.Users;
 import com.github.aistomin.andys.backend.data.User;
 import com.github.aistomin.andys.backend.data.UserRepository;
 import com.github.aistomin.andys.backend.services.UserService;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import org.springframework.stereotype.Service;
 
@@ -37,13 +35,6 @@ public final class UserServiceImpl implements UserService {
      * User repository.
      */
     private final UserRepository repo;
-
-    /**
-     * Temporary storage.
-     *
-     * @todo Issue #27. Replace it with the real database.
-     */
-    private final List<UserDto> storage = new ArrayList<>();
 
     /**
      * Ctor.
@@ -62,15 +53,14 @@ public final class UserServiceImpl implements UserService {
      */
     @Override
     public UserDto create(final UserDto user) {
-        this.repo.save(new User(user));
-        this.storage.add(user);
-        return user;
+        return save(user);
     }
 
     @Override
     public UserDto update(final UserDto user) {
         final Long id = user.getId();
-        final UserDto existing = this.storage
+        final UserDto existing = this.loadAll()
+            .getContent()
             .stream()
             .filter(item -> {
                 return Objects.equals(item.getId(), id);
@@ -83,12 +73,13 @@ public final class UserServiceImpl implements UserService {
             );
         }
         existing.setUsername(user.getUsername());
-        return existing;
+        return this.save(existing);
     }
 
     @Override
     public void delete(final Long id) {
-        final UserDto user = this.storage
+        final UserDto user = this.loadAll()
+            .getContent()
             .stream()
             .filter(item -> Objects.equals(item.getId(), id))
             .findAny()
@@ -98,7 +89,7 @@ public final class UserServiceImpl implements UserService {
                 String.format("User with ID = %d not found.", id)
             );
         }
-        this.storage.remove(user);
+        this.repo.delete(new User(user));
     }
 
     /**
@@ -109,7 +100,19 @@ public final class UserServiceImpl implements UserService {
     @Override
     public Users loadAll() {
         final Users users = new Users();
-        users.setContent(this.storage);
+        users.setContent(
+            this.repo.findAll().stream().map(UserDto::new).toList()
+        );
         return users;
+    }
+
+    /**
+     * Save user.
+     *
+     * @param user User to save.
+     * @return Saved user.
+     */
+    private UserDto save(final UserDto user) {
+        return new UserDto(this.repo.save(new User(user)));
     }
 }
