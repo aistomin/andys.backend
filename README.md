@@ -4,3 +4,8 @@
 [![codecov](https://codecov.io/gh/aistomin/andys.backend/branch/master/graph/badge.svg)](https://codecov.io/gh/aistomin/andys.backend)
 
 Andy's Website. Backend.
+
+To start the up run:
+```angular2html
+ mvn spring-boot:run
+```
