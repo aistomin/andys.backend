@@ -17,6 +17,8 @@ package com.github.aistomin.andys.backend;
 
 import com.github.aistomin.andys.backend.controllers.user.UserDto;
 import com.github.aistomin.andys.backend.services.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -31,6 +33,11 @@ import org.springframework.context.annotation.Bean;
  */
 @SpringBootApplication
 public class Application {
+
+    /**
+     * Logger.
+     */
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     /**
      * User service.
@@ -56,14 +63,14 @@ public class Application {
     @Bean
     public CommandLineRunner commandLineRunner(final ApplicationContext ctx) {
         return args -> {
-            System.out.println("Application is starting .....");
+            logger.info("Application is starting .....");
             final boolean adminUserExists = this.users
                 .loadAll()
                 .getContent()
                 .stream()
                 .anyMatch(user -> "admin".equals(user.getUsername()));
             if (!adminUserExists) {
-                System.out.println("Admin user is missing. Let's create it.");
+                logger.info("Admin user is missing. Let's create it.");
                 final UserDto admin = new UserDto();
                 admin.setUsername("admin");
                 this.users.create(admin);
