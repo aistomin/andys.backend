@@ -6,6 +6,6 @@
 Andy's Website. Backend.
 
 To start the up run:
-```angular2html
- mvn spring-boot:run
+```
+mvn spring-boot:run
 ```
