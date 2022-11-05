@@ -18,6 +18,7 @@ package com.github.aistomin.andys.backend.controllers.user;
 import com.github.aistomin.andys.backend.data.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
@@ -27,6 +28,7 @@ import lombok.NoArgsConstructor;
  */
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode
 @Data
 public final class UserDto {
 
