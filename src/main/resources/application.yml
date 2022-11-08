@@ -1,3 +1,4 @@
+jwt.secret: javainuse
 spring:
   datasource:
     url: ${andys_db_url:jdbc:postgresql://localhost:5432/andys}
