@@ -128,6 +128,7 @@ public final class JwtTokenUtil implements Serializable {
      * @param claims Claims.
      * @param subject Subject.
      * @return Token.
+     * @todo: Let's solve Issue #55 and remove this TODO.
      */
     private String doGenerateToken(
         final Map<String, Object> claims, final String subject

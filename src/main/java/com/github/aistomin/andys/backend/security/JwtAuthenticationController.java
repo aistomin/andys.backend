@@ -13,11 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.aistomin.andys.backend.controllers.security;
+package com.github.aistomin.andys.backend.security;
 
-import com.github.aistomin.andys.backend.security.JwtRequest;
-import com.github.aistomin.andys.backend.security.JwtResponse;
-import com.github.aistomin.andys.backend.security.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;

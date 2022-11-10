@@ -23,11 +23,11 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
@@ -38,7 +38,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+public class SecurityConfig {
 
     /**
      * JWT authentication entry point.
@@ -59,19 +59,25 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private JwtRequestFilter filter;
 
     /**
-     * Configure AuthenticationManager so that it knows from where to load user
-     * for matching credentials. Use BCryptPasswordEncoder.
+     * Create authentication manager.
      *
-     * @param auth Authentication manager builder.
+     * @param http HTTP security.
+     * @param encoder Password encoder.
+     * @param user User details.
+     * @return Authentication manager.
      * @throws Exception If something goes wrong.
      */
-    @Autowired
-    public void configureGlobal(
-        final AuthenticationManagerBuilder auth
+    @Bean
+    public AuthenticationManager authManager(
+        final HttpSecurity http,
+        final PasswordEncoder encoder,
+        final UserDetailsService user
     ) throws Exception {
-        auth
-            .userDetailsService(this.service)
-            .passwordEncoder(passwordEncoder());
+        return http.getSharedObject(AuthenticationManagerBuilder.class)
+            .userDetailsService(user)
+            .passwordEncoder(encoder)
+            .and()
+            .build();
     }
 
     /**
@@ -85,20 +91,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     /**
-     * Override this method to expose the AuthenticationManager from
-     * configure(AuthenticationManagerBuilder) to be exposed as a Bean.
+     * Filter chain.
      *
-     * @return Authentication manager.
+     * @param http HTTP security.
+     * @return Security filter chain.
      * @throws Exception If something goes wrong.
      */
     @Bean
-    @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
-    }
-
-    @Override
-    protected final void configure(final HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(
+        final HttpSecurity http
+    ) throws Exception {
         // We don't need CSRF for this example
         http.csrf().disable()
             // dont authenticate this particular request
@@ -117,5 +119,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.addFilterBefore(
             this.filter, UsernamePasswordAuthenticationFilter.class
         );
+        return http.build();
     }
 }

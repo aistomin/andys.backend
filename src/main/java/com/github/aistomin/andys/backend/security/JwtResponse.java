@@ -19,12 +19,14 @@ import java.io.Serial;
 import java.io.Serializable;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 /**
  * JWT response.
  *
  * @since 0.1
  */
+@NoArgsConstructor
 @AllArgsConstructor
 @Getter
 public final class JwtResponse implements Serializable {
@@ -38,5 +40,5 @@ public final class JwtResponse implements Serializable {
     /**
      * JWT token.
      */
-    private final String token;
+    private String token;
 }
