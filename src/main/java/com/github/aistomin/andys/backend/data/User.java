@@ -26,6 +26,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  * Data object that stores user's data.
@@ -36,6 +37,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString(exclude = "password")
 @Entity
 @Table(name = "andys_user")
 public final class User {
@@ -52,8 +54,14 @@ public final class User {
     /**
      * Username.
      */
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String username;
+
+    /**
+     * Password.
+     */
+    @Column(nullable = false)
+    private String password;
 
     /**
      * Ctor.
@@ -61,6 +69,6 @@ public final class User {
      * @param user User DTO.
      */
     public User(final UserDto user) {
-        this(user.getId(), user.getUsername());
+        this(user.getId(), user.getUsername(), user.getPassword());
     }
 }
