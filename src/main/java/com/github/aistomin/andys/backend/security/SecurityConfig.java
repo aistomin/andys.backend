@@ -44,13 +44,7 @@ public class SecurityConfig {
      * JWT authentication entry point.
      */
     @Autowired
-    private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
-
-    /**
-     * JWT user details service.
-     */
-    @Autowired
-    private UserDetailsService service;
+    private JwtAuthenticationEntryPoint auth;
 
     /**
      * JWT request filter.
@@ -112,7 +106,7 @@ public class SecurityConfig {
             // make sure we use stateless session; session won't be used to
             // store user's state.
             .exceptionHandling()
-            .authenticationEntryPoint(this.jwtAuthenticationEntryPoint)
+            .authenticationEntryPoint(this.auth)
             .and().sessionManagement()
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         // Add a filter to validate the tokens with every request

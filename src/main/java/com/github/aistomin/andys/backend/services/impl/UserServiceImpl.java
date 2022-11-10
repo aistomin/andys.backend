@@ -21,6 +21,7 @@ import com.github.aistomin.andys.backend.data.User;
 import com.github.aistomin.andys.backend.data.UserRepository;
 import com.github.aistomin.andys.backend.services.UserService;
 import java.util.Objects;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 /**
@@ -37,12 +38,21 @@ public final class UserServiceImpl implements UserService {
     private final UserRepository repo;
 
     /**
+     * Password encoder.
+     */
+    private final PasswordEncoder enc;
+
+    /**
      * Ctor.
      *
      * @param repository User repository.
+     * @param encoder Password encoder.
      */
-    public UserServiceImpl(final UserRepository repository) {
+    public UserServiceImpl(
+        final UserRepository repository, final PasswordEncoder encoder
+    ) {
         this.repo = repository;
+        this.enc = encoder;
     }
 
     /**
@@ -62,9 +72,7 @@ public final class UserServiceImpl implements UserService {
         final UserDto existing = this.loadAll()
             .getContent()
             .stream()
-            .filter(item -> {
-                return Objects.equals(item.getId(), id);
-            })
+            .filter(item -> Objects.equals(item.getId(), id))
             .findAny()
             .orElse(null);
         if (null == existing) {
@@ -113,6 +121,13 @@ public final class UserServiceImpl implements UserService {
      * @return Saved user.
      */
     private UserDto save(final UserDto user) {
+        if (user.getPassword() != null) {
+            user.setPassword(this.enc.encode(user.getPassword()));
+        } else {
+            user.setPassword(
+                this.repo.findByUsername(user.getUsername()).getPassword()
+            );
+        }
         return new UserDto(this.repo.save(new User(user)));
     }
 }

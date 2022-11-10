@@ -8,7 +8,7 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQL94Dialect
     show-sql: true
     hibernate:
-      ddl-auto: ${andys_ddl_auto:create-drop}
+      ddl-auto: ${andys_ddl_auto:update}
     properties:
       hibernate:
         dialect:org.hibernate.dialect.PostgreSQL81Dialect

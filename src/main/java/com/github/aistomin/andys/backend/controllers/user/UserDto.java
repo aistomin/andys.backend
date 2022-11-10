@@ -20,6 +20,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 /**
  * User DTO.
@@ -29,6 +30,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
+@ToString(exclude = "password")
 @Data
 public final class UserDto {
 
@@ -43,11 +45,16 @@ public final class UserDto {
     private String username;
 
     /**
+     * Password.
+     */
+    private String password;
+
+    /**
      * Ctor.
      *
      * @param user User data object.
      */
     public UserDto(final User user) {
-        this(user.getId(), user.getUsername());
+        this(user.getId(), user.getUsername(), user.getPassword());
     }
 }

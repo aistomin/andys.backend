@@ -35,7 +35,9 @@ final class UserDtoTest {
     @Test
     void testConvert() {
         final User user = new User(
-            new Random().nextLong(1000), UUID.randomUUID().toString()
+            new Random().nextLong(1000),
+            UUID.randomUUID().toString(),
+            UUID.randomUUID().toString()
         );
         final UserDto dto = new UserDto(user);
         Assertions.assertEquals(user.getId(), dto.getId());

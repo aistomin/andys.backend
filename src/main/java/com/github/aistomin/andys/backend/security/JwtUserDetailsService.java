@@ -13,9 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.aistomin.andys.backend.services.impl;
+package com.github.aistomin.andys.backend.security;
 
+import com.github.aistomin.andys.backend.data.UserRepository;
 import java.util.ArrayList;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -30,20 +33,42 @@ import org.springframework.stereotype.Service;
 @Service
 public final class JwtUserDetailsService implements UserDetailsService {
 
+    /**
+     * Logger.
+     */
+    private final Logger logger = LoggerFactory.getLogger(getClass());
+
+    /**
+     * User repository.
+     */
+    private final UserRepository repo;
+
+    /**
+     * Ctor.
+     *
+     * @param repository User repository.
+     */
+    public JwtUserDetailsService(final UserRepository repository) {
+        this.repo = repository;
+    }
+
     @Override
     public UserDetails loadUserByUsername(
         final String username
     ) throws UsernameNotFoundException {
-        if ("javainuse".equals(username)) {
+        final var user = this.repo.findByUsername(username);
+        if (user != null) {
             return new User(
-                "javainuse",
-                "$2a$10$slYQmyNdGzTn7ZLBXBChFOC9f6kFjAqPhccnP6DxlWXx2lPk1C3G6",
+                user.getUsername(),
+                user.getPassword(),
                 new ArrayList<>()
             );
         } else {
-            throw new UsernameNotFoundException(
-                String.format("User not found with username: %s", username)
+            final String msg = String.format(
+                "User not found with username: %s", username
             );
+            logger.error(msg);
+            throw new UsernameNotFoundException(msg);
         }
     }
 }

@@ -64,15 +64,17 @@ public class Application {
     public CommandLineRunner commandLineRunner(final ApplicationContext ctx) {
         return args -> {
             logger.info("Application is starting .....");
+            final String username = "admin";
             final boolean adminUserExists = this.users
                 .loadAll()
                 .getContent()
                 .stream()
-                .anyMatch(user -> "admin".equals(user.getUsername()));
+                .anyMatch(user -> username.equals(user.getUsername()));
             if (!adminUserExists) {
                 logger.info("Admin user is missing. Let's create it.");
                 final UserDto admin = new UserDto();
-                admin.setUsername("admin");
+                admin.setUsername(username);
+                admin.setPassword(username);
                 this.users.create(admin);
             }
         };
