@@ -13,38 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.aistomin.andys.backend.services;
+package com.github.aistomin.andys.backend.controllers.user;
 
-import com.github.aistomin.andys.backend.controllers.user.RegistrationDto;
-import com.github.aistomin.andys.backend.controllers.user.UserDto;
-import com.github.aistomin.andys.backend.controllers.user.Users;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 /**
- * User's service.
+ * User registration DTO.
  *
  * @since 0.1
  */
-public interface UserService {
+@AllArgsConstructor
+@NoArgsConstructor
+@EqualsAndHashCode
+@Data
+public final class RegistrationDto {
 
     /**
-     * Create user.
-     *
-     * @param user User that needs to be created.
-     * @return Created user.
+     * Username.
      */
-    UserDto register(RegistrationDto user);
+    private String username;
 
     /**
-     * Delete user.
-     *
-     * @param id User ID.
+     * Password.
      */
-    void delete(Long id);
-
-    /**
-     * Load all users.
-     *
-     * @return Users
-     */
-    Users loadAll();
+    private String password;
 }

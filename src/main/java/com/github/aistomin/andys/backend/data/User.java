@@ -15,7 +15,7 @@
  */
 package com.github.aistomin.andys.backend.data;
 
-import com.github.aistomin.andys.backend.controllers.user.UserDto;
+import com.github.aistomin.andys.backend.controllers.user.RegistrationDto;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -68,7 +68,7 @@ public final class User {
      *
      * @param user User DTO.
      */
-    public User(final UserDto user) {
-        this(user.getId(), user.getUsername(), user.getPassword());
+    public User(final RegistrationDto user) {
+        this(null, user.getUsername(), user.getPassword());
     }
 }

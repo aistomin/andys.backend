@@ -15,7 +15,7 @@
  */
 package com.github.aistomin.andys.backend;
 
-import com.github.aistomin.andys.backend.controllers.user.UserDto;
+import com.github.aistomin.andys.backend.controllers.user.RegistrationDto;
 import com.github.aistomin.andys.backend.services.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -72,10 +72,10 @@ public class Application {
                 .anyMatch(user -> username.equals(user.getUsername()));
             if (!adminUserExists) {
                 logger.info("Admin user is missing. Let's create it.");
-                final UserDto admin = new UserDto();
+                final var admin = new RegistrationDto();
                 admin.setUsername(username);
                 admin.setPassword(username);
-                this.users.create(admin);
+                this.users.register(admin);
             }
         };
     }
