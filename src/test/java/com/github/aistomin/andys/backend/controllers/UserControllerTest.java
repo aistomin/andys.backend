@@ -15,6 +15,7 @@
  */
 package com.github.aistomin.andys.backend.controllers;
 
+import com.github.aistomin.andys.backend.controllers.user.RegistrationDto;
 import com.github.aistomin.andys.backend.controllers.user.UserDto;
 import com.github.aistomin.andys.backend.controllers.user.Users;
 import com.github.aistomin.andys.backend.security.JwtRequest;
@@ -59,17 +60,16 @@ public final class UserControllerTest {
             Users.class
         ).getBody().getContent();
         final var before = content.size();
-        final UserDto user = new UserDto();
+        final var registration = new RegistrationDto();
         final var username = UUID.randomUUID().toString();
-        user.setUsername(username);
-        user.setPassword(UUID.randomUUID().toString());
+        registration.setUsername(username);
+        registration.setPassword(UUID.randomUUID().toString());
         final ResponseEntity<UserDto> saved = this.template.postForEntity(
-            "/users", new HttpEntity<>(user, authentication), UserDto.class
+            "/users/register", new HttpEntity<>(registration, authentication), UserDto.class
         );
         Assertions.assertEquals(201, saved.getStatusCodeValue());
-        user.setId(saved.getBody().getId());
-        user.setPassword(null);
-        Assertions.assertEquals(username, saved.getBody().getUsername());
+        final var user = saved.getBody();
+        Assertions.assertEquals(username, user.getUsername());
         final ResponseEntity<Users> selected = this.template.exchange(
             "/users", HttpMethod.GET,
             new HttpEntity<>(authentication),
@@ -79,25 +79,6 @@ public final class UserControllerTest {
         final List<UserDto> users = selected.getBody().getContent();
         Assertions.assertEquals(before + 1, users.size());
         Assertions.assertTrue(users.contains(saved.getBody()));
-        final String newUsername = "new_username";
-        user.setUsername(newUsername);
-        final ResponseEntity<UserDto> changed = this.template.exchange(
-            "/users", HttpMethod.PUT,
-            new HttpEntity<>(user, authentication), UserDto.class
-        );
-        Assertions.assertEquals(200, changed.getStatusCodeValue());
-        Assertions.assertEquals(user.getId(), changed.getBody().getId());
-        Assertions.assertEquals(newUsername, changed.getBody().getUsername());
-        final ResponseEntity<Users> updated = this.template.exchange(
-            "/users", HttpMethod.GET,
-            new HttpEntity<>(authentication),
-            Users.class
-        );
-        Assertions.assertEquals(200, updated.getStatusCodeValue());
-        Assertions.assertEquals(before + 1, updated.getBody().getContent().size());
-        Assertions.assertTrue(
-            updated.getBody().getContent().contains(changed.getBody())
-        );
         template.exchange(
             "/users/666",
             HttpMethod.DELETE,

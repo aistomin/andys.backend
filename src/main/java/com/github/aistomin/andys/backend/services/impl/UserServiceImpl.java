@@ -15,12 +15,12 @@
  */
 package com.github.aistomin.andys.backend.services.impl;
 
+import com.github.aistomin.andys.backend.controllers.user.RegistrationDto;
 import com.github.aistomin.andys.backend.controllers.user.UserDto;
 import com.github.aistomin.andys.backend.controllers.user.Users;
 import com.github.aistomin.andys.backend.data.User;
 import com.github.aistomin.andys.backend.data.UserRepository;
 import com.github.aistomin.andys.backend.services.UserService;
-import java.util.Objects;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -62,42 +62,20 @@ public final class UserServiceImpl implements UserService {
      * @return Created user.
      */
     @Override
-    public UserDto create(final UserDto user) {
-        return save(user);
-    }
-
-    @Override
-    public UserDto update(final UserDto user) {
-        final Long id = user.getId();
-        final UserDto existing = this.loadAll()
-            .getContent()
-            .stream()
-            .filter(item -> Objects.equals(item.getId(), id))
-            .findAny()
-            .orElse(null);
-        if (null == existing) {
-            throw new IllegalStateException(
-                String.format("User with ID = %d not found.", id)
-            );
-        }
-        existing.setUsername(user.getUsername());
-        return this.save(existing);
+    public UserDto register(final RegistrationDto user) {
+        user.setPassword(this.enc.encode(user.getPassword()));
+        return new UserDto(this.repo.save(new User(user)));
     }
 
     @Override
     public void delete(final Long id) {
-        final UserDto user = this.loadAll()
-            .getContent()
-            .stream()
-            .filter(item -> Objects.equals(item.getId(), id))
-            .findAny()
-            .orElse(null);
-        if (null == user) {
+        final var found = this.repo.findById(id);
+        if (found.isEmpty()) {
             throw new IllegalStateException(
                 String.format("User with ID = %d not found.", id)
             );
         }
-        this.repo.delete(new User(user));
+        this.repo.delete(found.get());
     }
 
     /**
@@ -114,20 +92,4 @@ public final class UserServiceImpl implements UserService {
         return users;
     }
 
-    /**
-     * Save user.
-     *
-     * @param user User to save.
-     * @return Saved user.
-     */
-    private UserDto save(final UserDto user) {
-        if (user.getPassword() != null) {
-            user.setPassword(this.enc.encode(user.getPassword()));
-        } else {
-            user.setPassword(
-                this.repo.findByUsername(user.getUsername()).getPassword()
-            );
-        }
-        return new UserDto(this.repo.save(new User(user)));
-    }
 }

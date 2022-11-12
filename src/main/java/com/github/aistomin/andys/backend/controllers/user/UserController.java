@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -56,25 +55,12 @@ public final class UserController {
      * @param user User that needs to be created.
      * @return Created user.
      */
-    @PostMapping
-    public ResponseEntity<UserDto> create(@RequestBody final UserDto user) {
-        return new ResponseEntity<>(
-            this.users.create(user), HttpStatus.CREATED
-        );
-    }
-
-    /**
-     * Update user.
-     *
-     * @param user User that needs to be updated.
-     * @return Updated user.
-     */
-    @PutMapping()
-    public ResponseEntity<UserDto> update(
-        @RequestBody final UserDto user
+    @PostMapping("/register")
+    public ResponseEntity<UserDto> register(
+        @RequestBody final RegistrationDto user
     ) {
         return new ResponseEntity<>(
-            this.users.update(user), HttpStatus.OK
+            this.users.register(user), HttpStatus.CREATED
         );
     }
 

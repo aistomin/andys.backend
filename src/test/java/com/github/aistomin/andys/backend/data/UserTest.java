@@ -15,6 +15,7 @@
  */
 package com.github.aistomin.andys.backend.data;
 
+import com.github.aistomin.andys.backend.controllers.user.RegistrationDto;
 import com.github.aistomin.andys.backend.controllers.user.UserDto;
 import java.util.Random;
 import java.util.UUID;
@@ -34,13 +35,11 @@ final class UserTest {
      */
     @Test
     void testConvert() {
-        final UserDto dto = new UserDto(
-            new Random().nextLong(1000),
+        final var dto = new RegistrationDto(
             UUID.randomUUID().toString(),
             UUID.randomUUID().toString()
         );
         final User user = new User(dto);
-        Assertions.assertEquals(dto.getId(), user.getId());
         Assertions.assertEquals(dto.getUsername(), user.getUsername());
     }
 }
