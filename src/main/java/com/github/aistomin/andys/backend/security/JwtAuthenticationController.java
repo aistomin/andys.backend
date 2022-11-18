@@ -48,7 +48,7 @@ public final class JwtAuthenticationController {
      * JWT utils.
      */
     @Autowired
-    private JwtTokenUtil jwtTokenUtil;
+    private Jwt jwt;
 
     /**
      * User details service.
@@ -70,7 +70,7 @@ public final class JwtAuthenticationController {
         authenticate(request.getUsername(), request.getPassword());
         final UserDetails userDetails = this.userDetailsService
             .loadUserByUsername(request.getUsername());
-        final String token = this.jwtTokenUtil.generateToken(userDetails);
+        final String token = this.jwt.generateToken(userDetails);
         return ResponseEntity.ok(new JwtResponse(token));
     }
 

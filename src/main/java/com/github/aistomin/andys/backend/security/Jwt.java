@@ -17,9 +17,11 @@ package com.github.aistomin.andys.backend.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 import java.io.Serial;
 import java.io.Serializable;
+import java.security.Key;
+import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -34,7 +36,7 @@ import org.springframework.stereotype.Component;
  * @since 0.1
  */
 @Component
-public final class JwtTokenUtil implements Serializable {
+public final class Jwt implements Serializable {
 
     @Serial
     private static final long serialVersionUID = -2550185165626007488L;
@@ -91,8 +93,9 @@ public final class JwtTokenUtil implements Serializable {
      * @return Claims.
      */
     private Claims getAllClaimsFromToken(final String token) {
-        return Jwts.parser()
-            .setSigningKey(secret)
+        return Jwts.parserBuilder()
+            .setSigningKey(this.key())
+            .build()
             .parseClaimsJws(token)
             .getBody();
     }
@@ -128,7 +131,6 @@ public final class JwtTokenUtil implements Serializable {
      * @param claims Claims.
      * @param subject Subject.
      * @return Token.
-     * @todo: Let's solve Issue #55 and remove this TODO.
      */
     private String doGenerateToken(
         final Map<String, Object> claims, final String subject
@@ -140,7 +142,7 @@ public final class JwtTokenUtil implements Serializable {
             .setExpiration(
                 new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY)
             )
-            .signWith(SignatureAlgorithm.HS512, secret).compact();
+            .signWith(key()).compact();
     }
 
     /**
@@ -155,5 +157,14 @@ public final class JwtTokenUtil implements Serializable {
     ) {
         final String username = getUsernameFromToken(token);
         return username.equals(details.getUsername()) && !isTokenExpired(token);
+    }
+
+    /**
+     * Secret key.
+     *
+     * @return Secret key.
+     */
+    private Key key() {
+        return Keys.hmacShaKeyFor(Base64.getDecoder().decode(this.secret));
     }
 }
