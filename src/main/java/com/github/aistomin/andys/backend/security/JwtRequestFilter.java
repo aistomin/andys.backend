@@ -48,7 +48,7 @@ public final class JwtRequestFilter extends OncePerRequestFilter {
      * JWT utils.
      */
     @Autowired
-    private JwtTokenUtil utils;
+    private Jwt utils;
 
     @Override
     protected void doFilterInternal(
