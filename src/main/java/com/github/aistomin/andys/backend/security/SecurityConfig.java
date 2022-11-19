@@ -18,6 +18,7 @@ package com.github.aistomin.andys.backend.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -55,9 +56,9 @@ public class SecurityConfig {
     /**
      * Create authentication manager.
      *
-     * @param http HTTP security.
+     * @param http    HTTP security.
      * @param encoder Password encoder.
-     * @param user User details.
+     * @param user    User details.
      * @return Authentication manager.
      * @throws Exception If something goes wrong.
      */
@@ -100,6 +101,8 @@ public class SecurityConfig {
             // dont authenticate this particular request
             .authorizeRequests()
             .antMatchers("/authenticate")
+            .permitAll()
+            .antMatchers(HttpMethod.GET, "/videos")
             .permitAll()
             // all other requests need to be authenticated
             .anyRequest().authenticated().and()
