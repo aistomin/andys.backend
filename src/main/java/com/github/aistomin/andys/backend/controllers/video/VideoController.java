@@ -16,10 +16,15 @@
 package com.github.aistomin.andys.backend.controllers.video;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -62,6 +67,8 @@ public final class VideoController {
                         "https://%s.com/%s",
                         UUID.randomUUID(), UUID.randomUUID()
                     ),
+                    new Date(),
+                    new Date(),
                     tags
                 )
             );
@@ -76,5 +83,19 @@ public final class VideoController {
     @GetMapping
     public Videos load() {
         return new Videos(this.storage);
+    }
+
+    /**
+     * Create a video.
+     *
+     * @param video Video that needs to be created.
+     * @return Created video.
+     */
+    @PostMapping()
+    public ResponseEntity<VideoDto> create(
+        @RequestBody final VideoDto video
+    ) {
+        this.storage.add(video);
+        return new ResponseEntity<>(video, HttpStatus.CREATED);
     }
 }
