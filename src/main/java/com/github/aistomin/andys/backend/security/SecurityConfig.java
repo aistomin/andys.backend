@@ -99,10 +99,10 @@ public class SecurityConfig {
         // We don't need CSRF for this example
         http.csrf().disable()
             // dont authenticate this particular request
-            .authorizeRequests()
-            .antMatchers("/authenticate")
+            .authorizeHttpRequests()
+            .requestMatchers("/authenticate")
             .permitAll()
-            .antMatchers(HttpMethod.GET, "/videos")
+            .requestMatchers(HttpMethod.GET, "/videos")
             .permitAll()
             // all other requests need to be authenticated
             .anyRequest().authenticated().and()
