@@ -15,12 +15,22 @@
  */
 package com.github.aistomin.andys.backend.controllers;
 
+import com.github.aistomin.andys.backend.controllers.video.VideoDto;
 import com.github.aistomin.andys.backend.controllers.video.Videos;
+import com.github.aistomin.andys.backend.security.JwtRequest;
+import com.github.aistomin.andys.backend.security.JwtResponse;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 
 /**
@@ -38,13 +48,88 @@ public final class VideoControllerTest {
     private TestRestTemplate template;
 
     /**
-     * Check that we can correctly load the videos.
+     * Check that we can correctly create a video.
      */
     @Test
-    public void testLoadVideos() {
-        final ResponseEntity<Videos> videos =
-            this.template.getForEntity("/videos", Videos.class);
-        Assertions.assertEquals(200, videos.getStatusCodeValue());
-        Assertions.assertEquals(10, videos.getBody().getContent().size());
+    public void testCreateVideo() {
+        final int before = this.template.getForEntity("/videos", Videos.class)
+            .getBody()
+            .getContent()
+            .size();
+        final var video = new VideoDto();
+        final var username = UUID.randomUUID().toString();
+        video.setTitle("My New Video");
+        video.setDescription("This is my new video");
+        video.setUrl("https://whatever.com/video/abc");
+        video.setCreatedOn(new Date());
+        video.setPublishedOn(new Date());
+        video.setTags(Arrays.asList("Nature", "Dogs", "Pets"));
+        final ResponseEntity<VideoDto> unauthorised = this.template.postForEntity(
+            "/videos", new HttpEntity<>(video), VideoDto.class
+        );
+        Assertions.assertEquals(401, unauthorised.getStatusCode().value());
+        final ResponseEntity<VideoDto> created = this.template.postForEntity(
+            "/videos", new HttpEntity<>(video, this.authenticateAsAdmin()),
+            VideoDto.class
+        );
+        Assertions.assertEquals(201, created.getStatusCode().value());
+        final List<VideoDto> all = this.template.getForEntity("/videos", Videos.class)
+            .getBody()
+            .getContent();
+        Assertions.assertEquals(before + 1, all.size());
+        final Optional<VideoDto> found = all.stream()
+            .filter(vid -> vid.getTitle().equals(video.getTitle()))
+            .findAny();
+        Assertions.assertTrue(found.isPresent());
+        Assertions.assertEquals(
+            video.getDescription(), found.get().getDescription()
+        );
+        Assertions.assertEquals(video.getUrl(), found.get().getUrl());
+        Assertions.assertEquals(
+            video.getCreatedOn(), found.get().getCreatedOn()
+        );
+        Assertions.assertEquals(
+            video.getPublishedOn(), found.get().getPublishedOn()
+        );
+        Assertions.assertEquals(
+            video.getTags().size(), found.get().getTags().size()
+        );
+        for (final String tag : video.getTags()) {
+            Assertions.assertTrue(found.get().getTags().contains(tag));
+        }
+    }
+
+    /**
+     * Authenticate as admin.
+     *
+     * @return Headers with JWT token.
+     */
+    private HttpHeaders authenticateAsAdmin() {
+        final var admin = "admin";
+        final var auth = this.authenticate(admin, admin);
+        Assertions.assertEquals(200, auth.getStatusCodeValue());
+        return new HttpHeaders() {{
+            set(
+                "Authorization",
+                String.format("Bearer %s", auth.getBody().getToken())
+            );
+        }};
+    }
+
+    /**
+     * Authenticate user.
+     *
+     * @param username Username.
+     * @param password Password.
+     * @return Authentication response.
+     */
+    private ResponseEntity<JwtResponse> authenticate(
+        final String username, final String password
+    ) {
+        return this.template.postForEntity(
+            "/authenticate",
+            new HttpEntity<>(new JwtRequest(username, password)),
+            JwtResponse.class
+        );
     }
 }

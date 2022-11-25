@@ -15,6 +15,7 @@
  */
 package com.github.aistomin.andys.backend.controllers.video;
 
+import java.util.Date;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -53,6 +54,16 @@ public final class VideoDto {
      * Video URL.
      */
     private String url;
+
+    /**
+     * The date when the video was created.
+     */
+    private Date createdOn;
+
+    /**
+     * The date when the video was published.
+     */
+    private Date publishedOn;
 
     /**
      * Video hashtags.
