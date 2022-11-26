@@ -17,8 +17,6 @@ package com.github.aistomin.andys.backend.controllers;
 
 import com.github.aistomin.andys.backend.controllers.video.VideoDto;
 import com.github.aistomin.andys.backend.controllers.video.Videos;
-import com.github.aistomin.andys.backend.security.JwtRequest;
-import com.github.aistomin.andys.backend.security.JwtResponse;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -30,7 +28,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 
 /**
@@ -40,6 +37,12 @@ import org.springframework.http.ResponseEntity;
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public final class VideoControllerTest {
+
+    /**
+     * Test authenticator.
+     */
+    @Autowired
+    private Authenticator authenticator;
 
     /**
      * Test REST template.
@@ -69,7 +72,8 @@ public final class VideoControllerTest {
         );
         Assertions.assertEquals(401, unauthorised.getStatusCode().value());
         final ResponseEntity<VideoDto> created = this.template.postForEntity(
-            "/videos", new HttpEntity<>(video, this.authenticateAsAdmin()),
+            "/videos",
+            new HttpEntity<>(video, this.authenticator.authenticateAsAdmin()),
             VideoDto.class
         );
         Assertions.assertEquals(201, created.getStatusCode().value());
@@ -97,39 +101,5 @@ public final class VideoControllerTest {
         for (final String tag : video.getTags()) {
             Assertions.assertTrue(found.get().getTags().contains(tag));
         }
-    }
-
-    /**
-     * Authenticate as admin.
-     *
-     * @return Headers with JWT token.
-     */
-    private HttpHeaders authenticateAsAdmin() {
-        final var admin = "admin";
-        final var auth = this.authenticate(admin, admin);
-        Assertions.assertEquals(200, auth.getStatusCodeValue());
-        return new HttpHeaders() {{
-            set(
-                "Authorization",
-                String.format("Bearer %s", auth.getBody().getToken())
-            );
-        }};
-    }
-
-    /**
-     * Authenticate user.
-     *
-     * @param username Username.
-     * @param password Password.
-     * @return Authentication response.
-     */
-    private ResponseEntity<JwtResponse> authenticate(
-        final String username, final String password
-    ) {
-        return this.template.postForEntity(
-            "/authenticate",
-            new HttpEntity<>(new JwtRequest(username, password)),
-            JwtResponse.class
-        );
     }
 }
