@@ -18,8 +18,6 @@ package com.github.aistomin.andys.backend.controllers;
 import com.github.aistomin.andys.backend.controllers.user.RegistrationDto;
 import com.github.aistomin.andys.backend.controllers.user.UserDto;
 import com.github.aistomin.andys.backend.controllers.user.Users;
-import com.github.aistomin.andys.backend.security.JwtRequest;
-import com.github.aistomin.andys.backend.security.JwtResponse;
 import java.util.List;
 import java.util.UUID;
 import org.junit.jupiter.api.Assertions;
@@ -28,7 +26,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 
@@ -39,6 +36,12 @@ import org.springframework.http.ResponseEntity;
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public final class UserControllerTest {
+
+    /**
+     * Test authenticator.
+     */
+    @Autowired
+    private Authenticator authenticator;
 
     /**
      * Test REST template.
@@ -53,7 +56,7 @@ public final class UserControllerTest {
      */
     @Test
     public void testCrud() {
-        final var authentication = this.authenticateAsAdmin();
+        final var authentication = this.authenticator.authenticateAsAdmin();
         final List<UserDto> content = this.template.exchange(
             "/users", HttpMethod.GET,
             new HttpEntity<>(authentication),
@@ -67,7 +70,7 @@ public final class UserControllerTest {
         final ResponseEntity<UserDto> saved = this.template.postForEntity(
             "/users/register", new HttpEntity<>(registration, authentication), UserDto.class
         );
-        Assertions.assertEquals(201, saved.getStatusCodeValue());
+        Assertions.assertEquals(201, saved.getStatusCode().value());
         final var user = saved.getBody();
         Assertions.assertEquals(username, user.getUsername());
         final ResponseEntity<Users> selected = this.template.exchange(
@@ -75,7 +78,7 @@ public final class UserControllerTest {
             new HttpEntity<>(authentication),
             Users.class
         );
-        Assertions.assertEquals(200, selected.getStatusCodeValue());
+        Assertions.assertEquals(200, selected.getStatusCode().value());
         final List<UserDto> users = selected.getBody().getContent();
         Assertions.assertEquals(before + 1, users.size());
         Assertions.assertTrue(users.contains(saved.getBody()));
@@ -96,7 +99,7 @@ public final class UserControllerTest {
             new HttpEntity<>(authentication),
             Users.class
         );
-        Assertions.assertEquals(200, empty.getStatusCodeValue());
+        Assertions.assertEquals(200, empty.getStatusCode().value());
         Assertions.assertEquals(before, empty.getBody().getContent().size());
     }
 
@@ -107,61 +110,27 @@ public final class UserControllerTest {
     void testAuthentication() {
         Assertions.assertEquals(
             401,
-            this.authenticate(
+            this.authenticator.authenticate(
                 UUID.randomUUID().toString(),
                 UUID.randomUUID().toString()
-            ).getStatusCodeValue()
+            ).getStatusCode().value()
         );
         Assertions.assertEquals(
             401,
-            this.authenticate(
+            this.authenticator.authenticate(
                 "admin",
                 UUID.randomUUID().toString()
-            ).getStatusCodeValue()
+            ).getStatusCode().value()
         );
         final var forbidden = this.template.getForEntity(
             "/users", Users.class
         );
-        Assertions.assertEquals(401, forbidden.getStatusCodeValue());
+        Assertions.assertEquals(401, forbidden.getStatusCode().value());
         final var allowed = this.template.exchange(
             "/users", HttpMethod.GET,
-            new HttpEntity<>(this.authenticateAsAdmin()),
+            new HttpEntity<>(this.authenticator.authenticateAsAdmin()),
             Users.class
         );
-        Assertions.assertEquals(200, allowed.getStatusCodeValue());
-    }
-
-    /**
-     * Authenticate as admin.
-     *
-     * @return Headers with JWT token.
-     */
-    private HttpHeaders authenticateAsAdmin() {
-        final var admin = "admin";
-        final var auth = this.authenticate(admin, admin);
-        Assertions.assertEquals(200, auth.getStatusCodeValue());
-        return new HttpHeaders() {{
-            set(
-                "Authorization",
-                String.format("Bearer %s", auth.getBody().getToken())
-            );
-        }};
-    }
-
-    /**
-     * Authenticate user.
-     *
-     * @param username Username.
-     * @param password Password.
-     * @return Authentication response.
-     */
-    private ResponseEntity<JwtResponse> authenticate(
-        final String username, final String password
-    ) {
-        return this.template.postForEntity(
-            "/authenticate",
-            new HttpEntity<>(new JwtRequest(username, password)),
-            JwtResponse.class
-        );
+        Assertions.assertEquals(200, allowed.getStatusCode().value());
     }
 }
