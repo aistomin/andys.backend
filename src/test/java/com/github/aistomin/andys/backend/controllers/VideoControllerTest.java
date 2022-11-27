@@ -19,6 +19,7 @@ import com.github.aistomin.andys.backend.controllers.video.VideoDto;
 import com.github.aistomin.andys.backend.controllers.video.Videos;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -28,7 +29,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.MultiValueMapAdapter;
 
 /**
  * Test for {@link com.github.aistomin.andys.backend.controllers.video.VideoController}.
@@ -101,5 +104,68 @@ public final class VideoControllerTest {
         for (final String tag : video.getTags()) {
             Assertions.assertTrue(found.get().getTags().contains(tag));
         }
+    }
+
+    /**
+     * Check that we can correctly create a video.
+     */
+    @Test
+    public void testDeleteVideo() {
+        final int before = this.template.getForEntity("/videos", Videos.class)
+            .getBody()
+            .getContent()
+            .size();
+        final var video = new VideoDto();
+        video.setTitle("Video that I will deleted");
+        video.setDescription("Test video that I will delete later");
+        video.setUrl("https://whatever.com/video/cde");
+        video.setCreatedOn(new Date());
+        video.setPublishedOn(new Date());
+        video.setTags(Arrays.asList("Video", "testing", "deletion"));
+        final ResponseEntity<VideoDto> created = this.template.postForEntity(
+            "/videos",
+            new HttpEntity<>(video, this.authenticator.authenticateAsAdmin()),
+            VideoDto.class
+        );
+        Assertions.assertEquals(201, created.getStatusCode().value());
+        final VideoDto found = this.template
+            .getForEntity("/videos", Videos.class)
+            .getBody()
+            .getContent()
+            .stream()
+            .filter(vid -> vid.getTitle().equals(video.getTitle()))
+            .findAny()
+            .get();
+        final ResponseEntity<Void> unauthorised = template.exchange(
+            String.format("/videos/%d", found.getId()),
+            HttpMethod.DELETE,
+            new HttpEntity<>(new MultiValueMapAdapter(new HashMap())),
+            Void.class
+        );
+        Assertions.assertEquals(401, unauthorised.getStatusCode().value());
+        final ResponseEntity<Void> deleted = template.exchange(
+            String.format("/videos/%d", found.getId()),
+            HttpMethod.DELETE,
+            new HttpEntity<>(this.authenticator.authenticateAsAdmin()),
+            Void.class
+        );
+        Assertions.assertEquals(200, deleted.getStatusCode().value());
+        template.exchange(
+            String.format("/videos/%d", found.getId()),
+            HttpMethod.DELETE,
+            new HttpEntity<>(this.authenticator.authenticateAsAdmin()),
+            Void.class
+        );
+        final List<VideoDto> after = this.template
+            .getForEntity("/videos", Videos.class)
+            .getBody()
+            .getContent();
+        Assertions.assertEquals(before, after.size());
+        Assertions.assertTrue(
+            after.stream()
+                .filter(vid -> vid.getId().equals(found.getId()))
+                .findAny()
+                .isEmpty()
+        );
     }
 }
