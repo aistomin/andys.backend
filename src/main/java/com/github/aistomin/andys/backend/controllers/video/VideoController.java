@@ -18,11 +18,14 @@ package com.github.aistomin.andys.backend.controllers.video;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 import java.util.UUID;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -95,7 +98,37 @@ public final class VideoController {
     public ResponseEntity<VideoDto> create(
         @RequestBody final VideoDto video
     ) {
+        if (video.getId() == null) {
+            video.setId(
+                this.storage
+                    .stream()
+                    .map(VideoDto::getId)
+                    .max(Long::compareTo).get() + 1
+            );
+        }
         this.storage.add(video);
         return new ResponseEntity<>(video, HttpStatus.CREATED);
+    }
+
+    /**
+     * Delete video.
+     *
+     * @param id Video ID.
+     */
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable("id") final Long id) {
+        final Optional<VideoDto> found = this.storage
+            .stream()
+            .filter(vid -> vid.getId().equals(id))
+            .findFirst();
+        if (found.isPresent()) {
+            final VideoDto video = found
+                .get();
+            this.storage.remove(video);
+        } else {
+            throw new IllegalStateException(
+                String.format("Video %s does not exist.", id)
+            );
+        }
     }
 }
