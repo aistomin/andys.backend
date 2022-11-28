@@ -15,7 +15,7 @@
  */
 package com.github.aistomin.andys.backend.controllers.user;
 
-import com.github.aistomin.andys.backend.data.User;
+import com.github.aistomin.andys.backend.model.User;
 import java.util.Random;
 import java.util.UUID;
 import org.junit.jupiter.api.Assertions;
@@ -29,7 +29,7 @@ import org.junit.jupiter.api.Test;
 final class UserDtoTest {
 
     /**
-     * Check that we correctly convert {@link com.github.aistomin.andys.backend.data.User}
+     * Check that we correctly convert {@link com.github.aistomin.andys.backend.model.User}
      * to {@link UserDto}
      */
     @Test

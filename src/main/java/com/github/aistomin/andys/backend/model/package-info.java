@@ -18,4 +18,4 @@
  *
  * @since 0.1
  */
-package com.github.aistomin.andys.backend.data;
+package com.github.aistomin.andys.backend.model;

@@ -15,12 +15,7 @@
  */
 package com.github.aistomin.andys.backend.controllers.video;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
-import java.util.UUID;
+import com.github.aistomin.andys.backend.services.VideoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -42,41 +37,17 @@ import org.springframework.web.bind.annotation.RestController;
 public final class VideoController {
 
     /**
-     * Just 10.
+     * Video service.
      */
-    private static final int TEN = 10;
-
-    /**
-     * Temporal "in memory" storage.
-     */
-    private final List<VideoDto> storage = new ArrayList<>();
+    private final VideoService videos;
 
     /**
      * Ctor.
+     *
+     * @param service Video service.
      */
-    public VideoController() {
-        final var random = new Random();
-        for (long i = 0; i < TEN; i++) {
-            final var count = random.nextInt(TEN);
-            final var tags = new ArrayList<String>(count);
-            for (int j = 0; j < count; j++) {
-                tags.add(UUID.randomUUID().toString());
-            }
-            this.storage.add(
-                new VideoDto(
-                    i + 1,
-                    UUID.randomUUID().toString(),
-                    UUID.randomUUID().toString(),
-                    String.format(
-                        "https://%s.com/%s",
-                        UUID.randomUUID(), UUID.randomUUID()
-                    ),
-                    new Date(),
-                    new Date(),
-                    tags
-                )
-            );
-        }
+    public VideoController(final VideoService service) {
+        this.videos = service;
     }
 
     /**
@@ -86,7 +57,7 @@ public final class VideoController {
      */
     @GetMapping
     public Videos load() {
-        return new Videos(this.storage);
+        return this.videos.load();
     }
 
     /**
@@ -99,16 +70,9 @@ public final class VideoController {
     public ResponseEntity<VideoDto> create(
         @RequestBody final VideoDto video
     ) {
-        if (video.getId() == null) {
-            video.setId(
-                this.storage
-                    .stream()
-                    .map(VideoDto::getId)
-                    .max(Long::compareTo).get() + 1
-            );
-        }
-        this.storage.add(video);
-        return new ResponseEntity<>(video, HttpStatus.CREATED);
+        return new ResponseEntity<>(
+            this.videos.save(video), HttpStatus.CREATED
+        );
     }
 
     /**
@@ -121,12 +85,8 @@ public final class VideoController {
     public ResponseEntity<VideoDto> edit(
         @RequestBody final VideoDto video
     ) {
-        final VideoDto found = this.findById(video.getId());
-        final int index = this.storage.indexOf(found);
-        this.storage.remove(found);
-        this.storage.add(index, video);
         return new ResponseEntity<>(
-            video, HttpStatus.OK
+            this.videos.save(video), HttpStatus.OK
         );
     }
 
@@ -137,26 +97,6 @@ public final class VideoController {
      */
     @DeleteMapping("/{id}")
     public void delete(@PathVariable("id") final Long id) {
-        this.storage.remove(this.findById(id));
-    }
-
-    /**
-     * Find video by ID.
-     *
-     * @param id Video's ID.
-     * @return Video.
-     */
-    private VideoDto findById(final Long id) {
-        final Optional<VideoDto> found = this.storage
-            .stream()
-            .filter(vid -> vid.getId().equals(id))
-            .findFirst();
-        if (found.isPresent()) {
-            return found.get();
-        } else {
-            throw new IllegalStateException(
-                String.format("Video %s does not exist.", id)
-            );
-        }
+        this.videos.delete(id);
     }
 }

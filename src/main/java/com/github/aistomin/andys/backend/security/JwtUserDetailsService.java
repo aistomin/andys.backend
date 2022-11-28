@@ -15,7 +15,7 @@
  */
 package com.github.aistomin.andys.backend.security;
 
-import com.github.aistomin.andys.backend.data.UserRepository;
+import com.github.aistomin.andys.backend.model.UserRepository;
 import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

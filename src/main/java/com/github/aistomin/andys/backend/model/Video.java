@@ -13,78 +13,100 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.aistomin.andys.backend.controllers.video;
+package com.github.aistomin.andys.backend.model;
 
-import com.github.aistomin.andys.backend.model.Video;
+import com.github.aistomin.andys.backend.controllers.video.VideoDto;
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import java.util.Date;
 import java.util.List;
 import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 
 /**
- * Video DTO.
+ * Data object that stores video's data.
  *
  * @since 0.1
  */
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode
-@ToString()
-@Data
-public final class VideoDto {
+@ToString
+@Entity
+public final class Video {
+
+    /**
+     * Length of the video description.
+     */
+    private static final int DESCRIPTION_LENGTH = 100_000;
 
     /**
      * User ID.
      */
+    @Id
+    @GeneratedValue(
+        strategy = GenerationType.IDENTITY
+    )
     private Long id;
 
     /**
-     * Title.
+     * Video's title.
      */
+    @Column(nullable = false)
     private String title;
 
     /**
-     * Description.
+     * Video's description.
      */
+    @Column(length = Video.DESCRIPTION_LENGTH)
     private String description;
 
     /**
      * Video URL.
      */
+    @Column
     private String url;
 
     /**
      * The date when the video was created.
      */
+    @Column
     private Date createdOn;
 
     /**
      * The date when the video was published.
      */
+    @Column
     private Date publishedOn;
 
     /**
      * Video hashtags.
      */
+    @ElementCollection
     private List<String> tags;
 
     /**
      * Ctor.
      *
-     * @param video Video entity.
+     * @param dto Video DTO.
      */
-    public VideoDto(final Video video) {
+    public Video(final VideoDto dto) {
         this(
-            video.getId(),
-            video.getTitle(),
-            video.getDescription(),
-            video.getUrl(),
-            video.getCreatedOn(),
-            video.getPublishedOn(),
-            video.getTags()
+            dto.getId(),
+            dto.getTitle(),
+            dto.getDescription(),
+            dto.getUrl(),
+            dto.getCreatedOn(),
+            dto.getPublishedOn(),
+            dto.getTags()
         );
     }
 }

@@ -13,43 +13,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.aistomin.andys.backend.controllers.user;
+package com.github.aistomin.andys.backend.services;
 
-import com.github.aistomin.andys.backend.model.User;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import com.github.aistomin.andys.backend.controllers.video.VideoDto;
+import com.github.aistomin.andys.backend.controllers.video.Videos;
 
 /**
- * User DTO.
+ * Video's service.
  *
  * @since 0.1
  */
-@AllArgsConstructor
-@NoArgsConstructor
-@EqualsAndHashCode
-@ToString()
-@Data
-public final class UserDto {
+public interface VideoService {
 
     /**
-     * User ID.
-     */
-    private Long id;
-
-    /**
-     * Username.
-     */
-    private String username;
-
-    /**
-     * Ctor.
+     * Load videos.
      *
-     * @param user User data object.
+     * @return Videos.
      */
-    public UserDto(final User user) {
-        this(user.getId(), user.getUsername());
-    }
+    Videos load();
+
+    /**
+     * Save a video.
+     *
+     * @param video Video that needs to be created.
+     * @return Created video.
+     */
+    VideoDto save(VideoDto video);
+
+    /**
+     * Delete video.
+     *
+     * @param id Video ID.
+     */
+    void delete(Long id);
 }

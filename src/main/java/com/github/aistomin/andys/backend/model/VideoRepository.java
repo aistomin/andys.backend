@@ -13,22 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.aistomin.andys.backend.data;
+package com.github.aistomin.andys.backend.model;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
- * Data access class for {@link User}.
+ * Data access class for {@link Video}.
  *
  * @since 0.1
  */
-public interface UserRepository extends JpaRepository<User, Long> {
-
-    /**
-     * Find user by username.
-     *
-     * @param username Username.
-     * @return User.
-     */
-    User findByUsername(String username);
+public interface VideoRepository extends JpaRepository<Video, Long> {
 }
