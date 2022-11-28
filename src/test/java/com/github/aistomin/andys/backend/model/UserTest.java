@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.aistomin.andys.backend.data;
+package com.github.aistomin.andys.backend.model;
 
 import com.github.aistomin.andys.backend.controllers.user.RegistrationDto;
 import com.github.aistomin.andys.backend.controllers.user.UserDto;
@@ -30,7 +30,7 @@ final class UserTest {
 
     /**
      * Check that we correctly convert {@link UserDto} to
-     * {@link com.github.aistomin.andys.backend.data.User}.
+     * {@link com.github.aistomin.andys.backend.model.User}.
      */
     @Test
     void testConvert() {

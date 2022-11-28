@@ -13,43 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.aistomin.andys.backend.controllers.user;
+package com.github.aistomin.andys.backend.model;
 
-import com.github.aistomin.andys.backend.model.User;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
- * User DTO.
+ * Data access class for {@link User}.
  *
  * @since 0.1
  */
-@AllArgsConstructor
-@NoArgsConstructor
-@EqualsAndHashCode
-@ToString()
-@Data
-public final class UserDto {
+public interface UserRepository extends JpaRepository<User, Long> {
 
     /**
-     * User ID.
-     */
-    private Long id;
-
-    /**
-     * Username.
-     */
-    private String username;
-
-    /**
-     * Ctor.
+     * Find user by username.
      *
-     * @param user User data object.
+     * @param username Username.
+     * @return User.
      */
-    public UserDto(final User user) {
-        this(user.getId(), user.getUsername());
-    }
+    User findByUsername(String username);
 }

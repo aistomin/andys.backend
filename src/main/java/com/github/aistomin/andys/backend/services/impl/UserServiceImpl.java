@@ -18,8 +18,8 @@ package com.github.aistomin.andys.backend.services.impl;
 import com.github.aistomin.andys.backend.controllers.user.RegistrationDto;
 import com.github.aistomin.andys.backend.controllers.user.UserDto;
 import com.github.aistomin.andys.backend.controllers.user.Users;
-import com.github.aistomin.andys.backend.data.User;
-import com.github.aistomin.andys.backend.data.UserRepository;
+import com.github.aistomin.andys.backend.model.User;
+import com.github.aistomin.andys.backend.model.UserRepository;
 import com.github.aistomin.andys.backend.services.UserService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -91,5 +91,4 @@ public final class UserServiceImpl implements UserService {
         );
         return users;
     }
-
 }

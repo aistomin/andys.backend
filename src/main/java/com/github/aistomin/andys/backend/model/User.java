@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.aistomin.andys.backend.data;
+package com.github.aistomin.andys.backend.model;
 
 import com.github.aistomin.andys.backend.controllers.user.RegistrationDto;
 import jakarta.persistence.Column;
