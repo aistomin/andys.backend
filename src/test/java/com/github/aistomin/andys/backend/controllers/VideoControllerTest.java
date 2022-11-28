@@ -22,7 +22,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,7 +62,6 @@ public final class VideoControllerTest {
             .getContent()
             .size();
         final var video = new VideoDto();
-        final var username = UUID.randomUUID().toString();
         video.setTitle("My New Video");
         video.setDescription("This is my new video");
         video.setUrl("https://whatever.com/video/abc");
@@ -104,6 +102,69 @@ public final class VideoControllerTest {
         for (final String tag : video.getTags()) {
             Assertions.assertTrue(found.get().getTags().contains(tag));
         }
+    }
+
+    /**
+     * Check that we can correctly update a video.
+     */
+    @Test
+    public void testUpdateVideo() {
+        final int before = this.template.getForEntity("/videos", Videos.class)
+            .getBody()
+            .getContent()
+            .size();
+        final var video = new VideoDto();
+        final var initialTitle = "The Video I'm going to edit.";
+        video.setTitle(initialTitle);
+        video.setDescription("This is the video that will change it's title.");
+        video.setUrl("https://whatever.com/video/efg");
+        video.setCreatedOn(new Date());
+        video.setPublishedOn(new Date());
+        video.setTags(Arrays.asList("Video", "Editing"));
+        final var created = this.template.postForEntity(
+            "/videos",
+            new HttpEntity<>(video, this.authenticator.authenticateAsAdmin()),
+            VideoDto.class
+        );
+        video.setId(created.getBody().getId());
+        Assertions.assertEquals(201, created.getStatusCode().value());
+        video.setTitle("Some intermediate title");
+        template.exchange(
+            "/videos",
+            HttpMethod.PUT,
+            new HttpEntity<>(video),
+            Void.class
+        );
+        Assertions.assertEquals(
+            initialTitle,
+            this.template.getForEntity("/videos", Videos.class)
+                .getBody()
+                .getContent()
+                .stream()
+                .filter(vid -> vid.getId().equals(video.getId()))
+                .findAny().get().getTitle()
+        );
+        final String newTitle = "Final updated title";
+        video.setTitle(newTitle);
+        final String newDescription = "This video description was edited.";
+        video.setDescription(newDescription);
+        final var response = template.exchange(
+            "/videos",
+            HttpMethod.PUT,
+            new HttpEntity<>(video, this.authenticator.authenticateAsAdmin()),
+            Void.class
+        );
+        Assertions.assertEquals(200, response.getStatusCode().value());
+        final List<VideoDto> after = this.template.getForEntity("/videos", Videos.class)
+            .getBody()
+            .getContent();
+        Assertions.assertEquals(before + 1, after.size());
+        final var updated = after
+            .stream()
+            .filter(vid -> vid.getId().equals(video.getId()))
+            .findAny().get();
+        Assertions.assertEquals(newTitle, updated.getTitle());
+        Assertions.assertEquals(newDescription, updated.getDescription());
     }
 
     /**

@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -111,20 +112,47 @@ public final class VideoController {
     }
 
     /**
+     * Edit video.
+     *
+     * @param video Video that needs to be updated.
+     * @return Updated user.
+     */
+    @PutMapping()
+    public ResponseEntity<VideoDto> edit(
+        @RequestBody final VideoDto video
+    ) {
+        final VideoDto found = this.findById(video.getId());
+        final int index = this.storage.indexOf(found);
+        this.storage.remove(found);
+        this.storage.add(index, video);
+        return new ResponseEntity<>(
+            video, HttpStatus.OK
+        );
+    }
+
+    /**
      * Delete video.
      *
      * @param id Video ID.
      */
     @DeleteMapping("/{id}")
     public void delete(@PathVariable("id") final Long id) {
+        this.storage.remove(this.findById(id));
+    }
+
+    /**
+     * Find video by ID.
+     *
+     * @param id Video's ID.
+     * @return Video.
+     */
+    private VideoDto findById(final Long id) {
         final Optional<VideoDto> found = this.storage
             .stream()
             .filter(vid -> vid.getId().equals(id))
             .findFirst();
         if (found.isPresent()) {
-            final VideoDto video = found
-                .get();
-            this.storage.remove(video);
+            return found.get();
         } else {
             throw new IllegalStateException(
                 String.format("Video %s does not exist.", id)
