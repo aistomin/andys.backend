@@ -29,8 +29,7 @@ import org.junit.jupiter.api.Test;
 final class UserDtoTest {
 
     /**
-     * Check that we correctly convert {@link com.github.aistomin.andys.backend.model.User}
-     * to {@link UserDto}
+     * Check that we correctly convert {@link User} to {@link UserDto}.
      */
     @Test
     void testConvert() {
