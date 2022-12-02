@@ -43,8 +43,14 @@ public final class JwtAuthenticationEntryPoint
     public void commence(
         final HttpServletRequest request,
         final HttpServletResponse response,
-        final AuthenticationException authException
+        final AuthenticationException exception
     ) throws IOException {
-        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
+        final String path = request.getRequestURL().toString();
+        // todo: Issue #97. Do the homework and remove this hack.
+        if (!path.endsWith("/error")) {
+            response.sendError(
+                HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized"
+            );
+        }
     }
 }

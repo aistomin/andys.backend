@@ -21,7 +21,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -38,7 +38,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
  */
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableMethodSecurity
 public class SecurityConfig {
 
     /**
@@ -96,23 +96,17 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(
         final HttpSecurity http
     ) throws Exception {
-        // We don't need CSRF for this example
         http.csrf().disable()
-            // dont authenticate this particular request
             .authorizeHttpRequests()
             .requestMatchers("/authenticate")
             .permitAll()
             .requestMatchers(HttpMethod.GET, "/videos")
             .permitAll()
-            // all other requests need to be authenticated
             .anyRequest().authenticated().and()
-            // make sure we use stateless session; session won't be used to
-            // store user's state.
             .exceptionHandling()
             .authenticationEntryPoint(this.auth)
             .and().sessionManagement()
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        // Add a filter to validate the tokens with every request
         http.addFilterBefore(
             this.filter, UsernamePasswordAuthenticationFilter.class
         );

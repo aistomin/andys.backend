@@ -15,6 +15,7 @@
  */
 package com.github.aistomin.andys.backend.services.impl;
 
+import com.github.aistomin.andys.backend.controllers.exceptions.NotFound;
 import com.github.aistomin.andys.backend.controllers.video.VideoDto;
 import com.github.aistomin.andys.backend.controllers.video.Videos;
 import com.github.aistomin.andys.backend.model.Video;
@@ -72,7 +73,7 @@ public final class VideoServiceImpl implements VideoService {
         if (found.isPresent()) {
             return found.get();
         } else {
-            throw new IllegalStateException(
+            throw new NotFound(
                 String.format("Video %s does not exist.", id)
             );
         }

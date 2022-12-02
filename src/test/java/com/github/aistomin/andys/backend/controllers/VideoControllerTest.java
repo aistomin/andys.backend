@@ -211,12 +211,13 @@ public final class VideoControllerTest {
             Void.class
         );
         Assertions.assertEquals(200, deleted.getStatusCode().value());
-        template.exchange(
+        final ResponseEntity<Void> notFound = template.exchange(
             String.format("/videos/%d", found.getId()),
             HttpMethod.DELETE,
             new HttpEntity<>(this.authenticator.authenticateAsAdmin()),
             Void.class
         );
+        Assertions.assertEquals(404, notFound.getStatusCode().value());
         final List<VideoDto> after = this.template
             .getForEntity("/videos", Videos.class)
             .getBody()
