@@ -43,7 +43,7 @@ public final class JwtAuthenticationEntryPoint
     public void commence(
         final HttpServletRequest request,
         final HttpServletResponse response,
-        final AuthenticationException authException
+        final AuthenticationException exception
     ) throws IOException {
         response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
     }
