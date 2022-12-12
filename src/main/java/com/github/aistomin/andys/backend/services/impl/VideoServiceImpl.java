@@ -74,7 +74,7 @@ public final class VideoServiceImpl implements VideoService {
             return found.get();
         } else {
             throw new NotFound(
-                String.format("Video %s does not exist.", id)
+                String.format("Video with ID = %d not found.", id)
             );
         }
     }
