@@ -15,6 +15,7 @@
  */
 package com.github.aistomin.andys.backend.services.impl;
 
+import com.github.aistomin.andys.backend.controllers.exceptions.NotFound;
 import com.github.aistomin.andys.backend.controllers.user.RegistrationDto;
 import com.github.aistomin.andys.backend.controllers.user.UserDto;
 import com.github.aistomin.andys.backend.controllers.user.Users;
@@ -71,7 +72,7 @@ public final class UserServiceImpl implements UserService {
     public void delete(final Long id) {
         final var found = this.repo.findById(id);
         if (found.isEmpty()) {
-            throw new IllegalStateException(
+            throw new NotFound(
                 String.format("User with ID = %d not found.", id)
             );
         }
