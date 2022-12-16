@@ -200,7 +200,7 @@ public final class VideoControllerTest {
         final ResponseEntity<Void> unauthorised = template.exchange(
             String.format("/videos/%d", found.getId()),
             HttpMethod.DELETE,
-            new HttpEntity<>(new MultiValueMapAdapter(new HashMap())),
+            new HttpEntity<>(new MultiValueMapAdapter<>(new HashMap<>())),
             Void.class
         );
         Assertions.assertEquals(401, unauthorised.getStatusCode().value());
