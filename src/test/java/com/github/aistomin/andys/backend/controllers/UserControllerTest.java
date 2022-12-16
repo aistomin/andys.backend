@@ -146,7 +146,7 @@ public final class UserControllerTest {
         final ResponseEntity<Void> unauthorised = template.exchange(
             String.format("/users/%d", found.getId()),
             HttpMethod.DELETE,
-            new HttpEntity<>(new MultiValueMapAdapter(new HashMap())),
+            new HttpEntity<>(new MultiValueMapAdapter<>(new HashMap<>())),
             Void.class
         );
         Assertions.assertEquals(401, unauthorised.getStatusCode().value());
