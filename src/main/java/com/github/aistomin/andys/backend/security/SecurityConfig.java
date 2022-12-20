@@ -100,7 +100,7 @@ public class SecurityConfig {
             .authorizeHttpRequests()
             .requestMatchers("/authenticate")
             .permitAll()
-            .requestMatchers(HttpMethod.GET, "/videos")
+            .requestMatchers(HttpMethod.GET, "/videos", "/music/sheets")
             .permitAll()
             .anyRequest().authenticated().and()
             .exceptionHandling()

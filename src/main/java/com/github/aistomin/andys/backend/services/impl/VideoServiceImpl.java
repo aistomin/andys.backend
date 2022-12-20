@@ -33,13 +33,13 @@ import org.springframework.stereotype.Service;
 public final class VideoServiceImpl implements VideoService {
 
     /**
-     * User repository.
+     * Video repository.
      */
     private final VideoRepository repo;
     /**
      * Ctor.
      *
-     * @param repository User repository.
+     * @param repository Video repository.
      */
     public VideoServiceImpl(final VideoRepository repository) {
         this.repo = repository;
