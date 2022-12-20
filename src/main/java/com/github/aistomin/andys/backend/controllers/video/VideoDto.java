@@ -37,12 +37,12 @@ import lombok.ToString;
 public final class VideoDto {
 
     /**
-     * User ID.
+     * Video ID.
      */
     private Long id;
 
     /**
-     * Title.
+     * Video's title.
      */
     private String title;
 
