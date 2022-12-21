@@ -15,6 +15,7 @@
  */
 package com.github.aistomin.andys.backend.services;
 
+import com.github.aistomin.andys.backend.controllers.music.sheet.MusicSheetDto;
 import com.github.aistomin.andys.backend.controllers.music.sheet.MusicSheets;
 
 /**
@@ -30,4 +31,12 @@ public interface MusicSheetService {
      * @return Videos.
      */
     MusicSheets load();
+
+    /**
+     * Create a music sheet.
+     *
+     * @param sheet Music sheet that needs to be created.
+     * @return Created sheet.
+     */
+    MusicSheetDto save(MusicSheetDto sheet);
 }

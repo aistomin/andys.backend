@@ -31,7 +31,7 @@ import org.springframework.stereotype.Component;
  * @since 0.1
  */
 @Component
-final class Authenticator {
+public final class Authenticator {
 
     /**
      * Test REST template.
@@ -44,7 +44,7 @@ final class Authenticator {
      *
      * @return Headers with JWT token.
      */
-    HttpHeaders authenticateAsAdmin() {
+    public HttpHeaders authenticateAsAdmin() {
         final var admin = "admin";
         final var auth = this.authenticate(admin, admin);
         Assertions.assertEquals(200, auth.getStatusCode().value());
