@@ -18,7 +18,8 @@ package com.github.aistomin.andys.backend.services.impl;
 import com.github.aistomin.andys.backend.controllers.music.sheet.MusicSheetDto;
 import com.github.aistomin.andys.backend.controllers.music.sheet.MusicSheets;
 import com.github.aistomin.andys.backend.services.MusicSheetService;
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.stereotype.Service;
 
 /**
@@ -29,17 +30,29 @@ import org.springframework.stereotype.Service;
 @Service
 public final class MusicSheetServiceImpl implements MusicSheetService {
 
+    /**
+     * Temporal storage before real DB integration is implemented.
+     */
+    private final List<MusicSheetDto> storage = new ArrayList<>();
+
     @Override
     public MusicSheets load() {
-        return new MusicSheets(
-            Arrays.asList(
-                new MusicSheetDto(
-                    1L, "ms_1"
-                ),
-                new MusicSheetDto(
-                    2L, "ms_2"
-                )
-            )
-        );
+        return new MusicSheets(this.storage);
+    }
+
+    @Override
+    public MusicSheetDto save(final MusicSheetDto sheet) {
+        if (sheet.getId() == null) {
+            final var max = this.storage.stream()
+                .map(musicSheetDto -> musicSheetDto.getId())
+                .max(Long::compareTo);
+            if (max.isPresent()) {
+                sheet.setId(max.get() + 1);
+            } else {
+                sheet.setId(1L);
+            }
+        }
+        this.storage.add(sheet);
+        return sheet;
     }
 }

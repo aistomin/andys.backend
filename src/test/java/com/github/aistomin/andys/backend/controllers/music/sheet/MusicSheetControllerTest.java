@@ -15,12 +15,15 @@
  */
 package com.github.aistomin.andys.backend.controllers.music.sheet;
 
-import java.util.List;
+import com.github.aistomin.andys.backend.controllers.Authenticator;
+import java.util.UUID;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.ResponseEntity;
 
 /**
  * Test for {@link MusicSheetController}.
@@ -31,20 +34,49 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 public final class MusicSheetControllerTest {
 
     /**
+     * Test authenticator.
+     */
+    @Autowired
+    private Authenticator authenticator;
+
+    /**
      * Test REST template.
      */
     @Autowired
     private TestRestTemplate template;
 
     /**
-     * Check that we correctly load music sheets.
+     * Check that we can correctly create music sheets.
      */
     @Test
-    void testLoadMusicSheets() {
-        final List<MusicSheetDto> all = this.template
+    void testCreateMusicSheet() {
+        final var before = this.template
+            .getForEntity("/music/sheets", MusicSheets.class)
+            .getBody()
+            .getContent().size();
+        final var sheet = new MusicSheetDto(null, UUID.randomUUID().toString());
+        final ResponseEntity<MusicSheetDto> unauthorised = this.template.postForEntity(
+            "/music/sheets", new HttpEntity<>(sheet), MusicSheetDto.class
+        );
+        Assertions.assertEquals(401, unauthorised.getStatusCode().value());
+        final ResponseEntity<MusicSheetDto> created = this.template.postForEntity(
+            "/music/sheets",
+            new HttpEntity<>(sheet, this.authenticator.authenticateAsAdmin()),
+            MusicSheetDto.class
+        );
+        Assertions.assertEquals(201, created.getStatusCode().value());
+        Assertions.assertNotNull(created.getBody().getId());
+        Assertions.assertEquals(sheet.getTitle(), created.getBody().getTitle());
+        final var after = this.template
             .getForEntity("/music/sheets", MusicSheets.class)
             .getBody()
             .getContent();
-        Assertions.assertEquals(2, all.size());
+        Assertions.assertEquals(before + 1, after.size());
+        Assertions.assertTrue(
+            after.stream()
+                .filter(item -> item.getId().equals(created.getBody().getId()))
+                .findFirst()
+                .isPresent()
+        );
     }
 }
