@@ -15,11 +15,13 @@
  */
 package com.github.aistomin.andys.backend.services.impl;
 
+import com.github.aistomin.andys.backend.controllers.exceptions.NotFound;
 import com.github.aistomin.andys.backend.controllers.music.sheet.MusicSheetDto;
 import com.github.aistomin.andys.backend.controllers.music.sheet.MusicSheets;
 import com.github.aistomin.andys.backend.services.MusicSheetService;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 /**
@@ -54,5 +56,28 @@ public final class MusicSheetServiceImpl implements MusicSheetService {
         }
         this.storage.add(sheet);
         return sheet;
+    }
+
+    @Override
+    public void delete(final Long id) {
+        this.storage.remove(this.findById(id));
+    }
+
+    /**
+     * Find music sheet by ID.
+     *
+     * @param id Music sheet ID.
+     * @return Music sheet.
+     */
+    private MusicSheetDto findById(final Long id) {
+        final Optional<MusicSheetDto> found = this.storage.stream()
+            .filter(dto -> dto.getId().equals(id))
+            .findFirst();
+        if (found.isEmpty()) {
+            throw new NotFound(
+                String.format("Music sheet with ID = %d not found.", id)
+            );
+        }
+        return found.get();
     }
 }

@@ -28,7 +28,7 @@ public interface MusicSheetService {
     /**
      * Load music sheets.
      *
-     * @return Videos.
+     * @return Music sheets.
      */
     MusicSheets load();
 
@@ -39,4 +39,11 @@ public interface MusicSheetService {
      * @return Created sheet.
      */
     MusicSheetDto save(MusicSheetDto sheet);
+
+    /**
+     * Delete music sheet.
+     *
+     * @param id Music sheet ID.
+     */
+    void delete(Long id);
 }
