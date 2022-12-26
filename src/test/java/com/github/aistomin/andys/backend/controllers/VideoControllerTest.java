@@ -168,7 +168,7 @@ public final class VideoControllerTest {
     }
 
     /**
-     * Check that we can correctly create a video.
+     * Check that we can correctly delete a video.
      */
     @Test
     public void testDeleteVideo() {
