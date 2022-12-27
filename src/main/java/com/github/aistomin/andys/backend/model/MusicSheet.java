@@ -15,15 +15,13 @@
  */
 package com.github.aistomin.andys.backend.model;
 
-import com.github.aistomin.andys.backend.controllers.video.VideoDto;
+import com.github.aistomin.andys.backend.controllers.music.sheet.MusicSheetDto;
 import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import java.util.Date;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,7 +29,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 /**
- * Data object that stores video's data.
+ * Data object that stores music sheet's data.
  *
  * @since 0.1
  */
@@ -41,15 +39,15 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 @Entity
-public final class Video {
+public final class MusicSheet {
 
     /**
-     * Length of the video description.
+     * Length of the music sheet description.
      */
     private static final int DESCRIPTION_LENGTH = 100_000;
 
     /**
-     * Video ID.
+     * Music sheet ID.
      */
     @Id
     @GeneratedValue(
@@ -58,55 +56,41 @@ public final class Video {
     private Long id;
 
     /**
-     * Video's title.
+     * Music sheet's title.
      */
     @Column(nullable = false)
     private String title;
 
     /**
-     * Video's description.
+     * Musci sheet's description.
      */
-    @Column(length = Video.DESCRIPTION_LENGTH)
+    @Column(length = MusicSheet.DESCRIPTION_LENGTH)
     private String description;
 
     /**
-     * Video URL.
+     * Music sheet's public URL.
      */
     @Column
     private String url;
 
     /**
-     * The date when the video was created.
+     * The date when the music sheet was created.
      */
     @Column
     private Date createdOn;
 
     /**
-     * The date when the video was published.
-     */
-    @Column
-    private Date publishedOn;
-
-    /**
-     * Video hashtags.
-     */
-    @ElementCollection
-    private List<String> tags;
-
-    /**
      * Ctor.
      *
-     * @param dto Video DTO.
+     * @param dto Musci sheet DTO.
      */
-    public Video(final VideoDto dto) {
+    public MusicSheet(final MusicSheetDto dto) {
         this(
             dto.getId(),
             dto.getTitle(),
             dto.getDescription(),
             dto.getUrl(),
-            dto.getCreatedOn(),
-            dto.getPublishedOn(),
-            dto.getTags()
+            dto.getCreatedOn()
         );
     }
 }

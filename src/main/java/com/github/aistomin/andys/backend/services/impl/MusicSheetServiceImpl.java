@@ -18,9 +18,9 @@ package com.github.aistomin.andys.backend.services.impl;
 import com.github.aistomin.andys.backend.controllers.exceptions.NotFound;
 import com.github.aistomin.andys.backend.controllers.music.sheet.MusicSheetDto;
 import com.github.aistomin.andys.backend.controllers.music.sheet.MusicSheets;
+import com.github.aistomin.andys.backend.model.MusicSheet;
+import com.github.aistomin.andys.backend.model.MusicSheetRepository;
 import com.github.aistomin.andys.backend.services.MusicSheetService;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
 
@@ -33,34 +33,34 @@ import org.springframework.stereotype.Service;
 public final class MusicSheetServiceImpl implements MusicSheetService {
 
     /**
-     * Temporal storage before real DB integration is implemented.
+     * Music sheet repository.
      */
-    private final List<MusicSheetDto> storage = new ArrayList<>();
+    private final MusicSheetRepository repo;
+
+    /**
+     * Ctor.
+     *
+     * @param repository Music sheet repository.
+     */
+    public MusicSheetServiceImpl(final MusicSheetRepository repository) {
+        this.repo = repository;
+    }
 
     @Override
     public MusicSheets load() {
-        return new MusicSheets(this.storage);
+        return new MusicSheets(
+            this.repo.findAll().stream().map(MusicSheetDto::new).toList()
+        );
     }
 
     @Override
     public MusicSheetDto save(final MusicSheetDto sheet) {
-        if (sheet.getId() == null) {
-            final var max = this.storage.stream()
-                .map(musicSheetDto -> musicSheetDto.getId())
-                .max(Long::compareTo);
-            if (max.isPresent()) {
-                sheet.setId(max.get() + 1);
-            } else {
-                sheet.setId(1L);
-            }
-        }
-        this.storage.add(sheet);
-        return sheet;
+        return new MusicSheetDto(this.repo.save(new MusicSheet(sheet)));
     }
 
     @Override
     public void delete(final Long id) {
-        this.storage.remove(this.findById(id));
+        this.repo.delete(this.findById(id));
     }
 
     /**
@@ -69,15 +69,14 @@ public final class MusicSheetServiceImpl implements MusicSheetService {
      * @param id Music sheet ID.
      * @return Music sheet.
      */
-    private MusicSheetDto findById(final Long id) {
-        final Optional<MusicSheetDto> found = this.storage.stream()
-            .filter(dto -> dto.getId().equals(id))
-            .findFirst();
-        if (found.isEmpty()) {
+    private MusicSheet findById(final Long id) {
+        final Optional<MusicSheet> found = this.repo.findById(id);
+        if (found.isPresent()) {
+            return found.get();
+        } else {
             throw new NotFound(
                 String.format("Music sheet with ID = %d not found.", id)
             );
         }
-        return found.get();
     }
 }

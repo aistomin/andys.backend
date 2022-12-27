@@ -15,6 +15,8 @@
  */
 package com.github.aistomin.andys.backend.controllers.music.sheet;
 
+import com.github.aistomin.andys.backend.model.MusicSheet;
+import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -42,4 +44,34 @@ public final class MusicSheetDto {
      * Music sheet's title.
      */
     private String title;
+
+    /**
+     * Music sheet description.
+     */
+    private String description;
+
+    /**
+     * Music sheet's public URL.
+     */
+    private String url;
+
+    /**
+     * The date when the music sheet was created.
+     */
+    private Date createdOn;
+
+    /**
+     * Ctor.
+     *
+     * @param sheet Music sheet.
+     */
+    public MusicSheetDto(final MusicSheet sheet) {
+        this(
+            sheet.getId(),
+            sheet.getTitle(),
+            sheet.getDescription(),
+            sheet.getUrl(),
+            sheet.getCreatedOn()
+        );
+    }
 }

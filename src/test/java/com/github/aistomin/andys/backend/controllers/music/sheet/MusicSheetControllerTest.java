@@ -58,7 +58,9 @@ public final class MusicSheetControllerTest {
             .getForEntity("/music/sheets", MusicSheets.class)
             .getBody()
             .getContent().size();
-        final var sheet = new MusicSheetDto(null, UUID.randomUUID().toString());
+        final var sheet = new MusicSheetDto(
+            null, UUID.randomUUID().toString(), null, null, null
+        );
         final ResponseEntity<MusicSheetDto> unauthorised = this.template.postForEntity(
             "/music/sheets", new HttpEntity<>(sheet), MusicSheetDto.class
         );
