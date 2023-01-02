@@ -16,6 +16,7 @@
 package com.github.aistomin.andys.backend.controllers.music.sheet;
 
 import com.github.aistomin.andys.backend.controllers.Authenticator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -80,10 +81,76 @@ public final class MusicSheetControllerTest {
         Assertions.assertEquals(before + 1, after.size());
         Assertions.assertTrue(
             after.stream()
-                .filter(item -> item.getId().equals(created.getBody().getId()))
-                .findFirst()
-                .isPresent()
+                .anyMatch(item -> 
+                    item.getId().equals(created.getBody().getId())
+                )
         );
+    }
+
+    /**
+     * Check that we can correctly update a music sheet.
+     */
+    @Test
+    public void testUpdateMusicSheet() {
+        final int before = this.template
+            .getForEntity("/music/sheets", MusicSheets.class)
+            .getBody()
+            .getContent()
+            .size();
+        final var sheet = new MusicSheetDto();
+        final var initialTitle = "The music sheet I'm going to edit.";
+        sheet.setTitle(initialTitle);
+        sheet.setDescription(
+            "This is the music sheet that will change it's title."
+        );
+        sheet.setUrl("https://whatever.com/m/s/efg");
+        sheet.setCreatedOn(new Date());
+        final var created = this.template.postForEntity(
+            "/music/sheets",
+            new HttpEntity<>(sheet, this.authenticator.authenticateAsAdmin()),
+            MusicSheetDto.class
+        );
+        sheet.setId(created.getBody().getId());
+        Assertions.assertEquals(201, created.getStatusCode().value());
+        sheet.setTitle("Some intermediate title");
+        template.exchange(
+            "/music/sheets",
+            HttpMethod.PUT,
+            new HttpEntity<>(sheet),
+            Void.class
+        );
+        Assertions.assertEquals(
+            initialTitle,
+            this.template.getForEntity("/music/sheets", MusicSheets.class)
+                .getBody()
+                .getContent()
+                .stream()
+                .filter(sh -> sh.getId().equals(sheet.getId()))
+                .findAny().get().getTitle()
+        );
+        final String newTitle = "Final updated title";
+        sheet.setTitle(newTitle);
+        final String newDescription =
+            "This music sheet description was edited.";
+        sheet.setDescription(newDescription);
+        final var response = template.exchange(
+            "/music/sheets",
+            HttpMethod.PUT,
+            new HttpEntity<>(sheet, this.authenticator.authenticateAsAdmin()),
+            Void.class
+        );
+        Assertions.assertEquals(200, response.getStatusCode().value());
+        final List<MusicSheetDto> after = this.template
+            .getForEntity("/music/sheets", MusicSheets.class)
+            .getBody()
+            .getContent();
+        Assertions.assertEquals(before + 1, after.size());
+        final var updated = after
+            .stream()
+            .filter(sh -> sh.getId().equals(sheet.getId()))
+            .findAny().get();
+        Assertions.assertEquals(newTitle, updated.getTitle());
+        Assertions.assertEquals(newDescription, updated.getDescription());
     }
 
     /**
