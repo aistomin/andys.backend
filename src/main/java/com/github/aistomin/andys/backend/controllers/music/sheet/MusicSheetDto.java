@@ -16,6 +16,7 @@
 package com.github.aistomin.andys.backend.controllers.music.sheet;
 
 import com.github.aistomin.andys.backend.model.MusicSheet;
+import jakarta.persistence.Column;
 import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -51,9 +52,16 @@ public final class MusicSheetDto {
     private String description;
 
     /**
-     * Music sheet's public URL.
+     * Music sheet's public preview URL.
      */
-    private String url;
+    @Column
+    private String previewUrl;
+
+    /**
+     * Music sheet's download URL. In the future it can be public or private.
+     */
+    @Column
+    private String downloadUrl;
 
     /**
      * The date when the music sheet was created.
@@ -70,7 +78,8 @@ public final class MusicSheetDto {
             sheet.getId(),
             sheet.getTitle(),
             sheet.getDescription(),
-            sheet.getUrl(),
+            sheet.getPreviewUrl(),
+            sheet.getDownloadUrl(),
             sheet.getCreatedOn()
         );
     }
