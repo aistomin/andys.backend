@@ -79,7 +79,7 @@ public final class VideoController {
      * Edit video.
      *
      * @param video Video that needs to be updated.
-     * @return Updated user.
+     * @return Updated video.
      */
     @PutMapping()
     public ResponseEntity<VideoDto> edit(
