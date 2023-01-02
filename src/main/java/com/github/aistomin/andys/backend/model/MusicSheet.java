@@ -68,10 +68,16 @@ public final class MusicSheet {
     private String description;
 
     /**
-     * Music sheet's public URL.
+     * Music sheet's public preview URL.
      */
     @Column
-    private String url;
+    private String previewUrl;
+
+    /**
+     * Music sheet's download URL. In the future it can be public or private.
+     */
+    @Column
+    private String downloadUrl;
 
     /**
      * The date when the music sheet was created.
@@ -82,14 +88,15 @@ public final class MusicSheet {
     /**
      * Ctor.
      *
-     * @param dto Musci sheet DTO.
+     * @param dto Music sheet DTO.
      */
     public MusicSheet(final MusicSheetDto dto) {
         this(
             dto.getId(),
             dto.getTitle(),
             dto.getDescription(),
-            dto.getUrl(),
+            dto.getPreviewUrl(),
+            dto.getDownloadUrl(),
             dto.getCreatedOn()
         );
     }

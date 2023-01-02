@@ -60,7 +60,7 @@ public final class MusicSheetControllerTest {
             .getBody()
             .getContent().size();
         final var sheet = new MusicSheetDto(
-            null, UUID.randomUUID().toString(), null, null, null
+            null, UUID.randomUUID().toString(), null, null, null, null
         );
         final ResponseEntity<MusicSheetDto> unauthorised = this.template.postForEntity(
             "/music/sheets", new HttpEntity<>(sheet), MusicSheetDto.class
@@ -103,7 +103,7 @@ public final class MusicSheetControllerTest {
         sheet.setDescription(
             "This is the music sheet that will change it's title."
         );
-        sheet.setUrl("https://whatever.com/m/s/efg");
+        sheet.setPreviewUrl("https://whatever.com/m/s/efg");
         sheet.setCreatedOn(new Date());
         final var created = this.template.postForEntity(
             "/music/sheets",
