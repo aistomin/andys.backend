@@ -36,6 +36,7 @@ public final class VideoServiceImpl implements VideoService {
      * Video repository.
      */
     private final VideoRepository repo;
+
     /**
      * Ctor.
      *

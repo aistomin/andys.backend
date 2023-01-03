@@ -15,7 +15,7 @@
  */
 package com.github.aistomin.andys.backend.model;
 
-import com.github.aistomin.andys.backend.controllers.music.sheet.MusicSheetDto;
+import com.github.aistomin.andys.backend.controllers.blog.BlogPostDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -29,7 +29,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 /**
- * Data object that stores music sheet's data.
+ * Data object that stores blog post's data.
  *
  * @since 0.1
  */
@@ -39,15 +39,15 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 @Entity
-public final class MusicSheet {
+public final class BlogPost {
 
     /**
-     * Length of the music sheet description.
+     * Length of the post.
      */
-    private static final int DESCRIPTION_LENGTH = 100_000;
+    private static final int POST_LENGTH = 100_000;
 
     /**
-     * Music sheet ID.
+     * Post ID.
      */
     @Id
     @GeneratedValue(
@@ -56,48 +56,41 @@ public final class MusicSheet {
     private Long id;
 
     /**
-     * Music sheet's title.
+     * Post's title.
      */
     @Column(nullable = false)
     private String title;
 
     /**
-     * Music sheet's description.
+     * Post's text.
      */
-    @Column(length = MusicSheet.DESCRIPTION_LENGTH)
-    private String description;
+    @Column(length = BlogPost.POST_LENGTH)
+    private String text;
 
     /**
-     * Music sheet's public preview URL.
-     */
-    @Column
-    private String previewUrl;
-
-    /**
-     * Music sheet's download URL. In the future it can be public or private.
-     */
-    @Column
-    private String downloadUrl;
-
-    /**
-     * The date when the music sheet was created.
+     * The date when the post was created.
      */
     @Column
     private Date createdOn;
 
     /**
+     * The date when the post was published.
+     */
+    @Column
+    private Date publishedOn;
+
+    /**
      * Ctor.
      *
-     * @param dto Music sheet DTO.
+     * @param dto Blog post DTO.
      */
-    public MusicSheet(final MusicSheetDto dto) {
+    public BlogPost(final BlogPostDto dto) {
         this(
             dto.getId(),
             dto.getTitle(),
-            dto.getDescription(),
-            dto.getPreviewUrl(),
-            dto.getDownloadUrl(),
-            dto.getCreatedOn()
+            dto.getText(),
+            dto.getCreatedOn(),
+            dto.getPublishedOn()
         );
     }
 }

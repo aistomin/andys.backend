@@ -15,6 +15,7 @@
  */
 package com.github.aistomin.andys.backend.controllers;
 
+import com.github.aistomin.andys.backend.controllers.video.VideoController;
 import com.github.aistomin.andys.backend.controllers.video.VideoDto;
 import com.github.aistomin.andys.backend.controllers.video.Videos;
 import java.util.Arrays;
@@ -33,7 +34,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMapAdapter;
 
 /**
- * Test for {@link com.github.aistomin.andys.backend.controllers.video.VideoController}.
+ * Test for {@link VideoController}.
  *
  * @since 0.1
  */
