@@ -17,6 +17,7 @@ package com.github.aistomin.andys.backend.services.impl;
 
 import com.github.aistomin.andys.backend.controllers.blog.BlogPostDto;
 import com.github.aistomin.andys.backend.controllers.blog.BlogPosts;
+import com.github.aistomin.andys.backend.model.BlogPost;
 import com.github.aistomin.andys.backend.model.BlogPostRepository;
 import com.github.aistomin.andys.backend.services.BlogPostService;
 import org.springframework.stereotype.Service;
@@ -48,5 +49,10 @@ public final class BlogPostServiceImpl implements BlogPostService {
         return new BlogPosts(
             this.repo.findAll().stream().map(BlogPostDto::new).toList()
         );
+    }
+
+    @Override
+    public BlogPostDto save(final BlogPostDto post) {
+        return new BlogPostDto(this.repo.save(new BlogPost(post)));
     }
 }
