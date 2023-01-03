@@ -60,7 +60,13 @@ public final class MusicSheetControllerTest {
             .getBody()
             .getContent().size();
         final var sheet = new MusicSheetDto(
-            null, UUID.randomUUID().toString(), null, null, null, null
+            null,
+            UUID.randomUUID().toString(),
+            UUID.randomUUID().toString(),
+            UUID.randomUUID().toString(),
+            UUID.randomUUID().toString(),
+            new Date(),
+            new Date()
         );
         final ResponseEntity<MusicSheetDto> unauthorised = this.template.postForEntity(
             "/music/sheets", new HttpEntity<>(sheet), MusicSheetDto.class
@@ -81,7 +87,7 @@ public final class MusicSheetControllerTest {
         Assertions.assertEquals(before + 1, after.size());
         Assertions.assertTrue(
             after.stream()
-                .anyMatch(item -> 
+                .anyMatch(item ->
                     item.getId().equals(created.getBody().getId())
                 )
         );
