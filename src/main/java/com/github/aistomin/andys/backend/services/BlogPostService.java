@@ -15,6 +15,7 @@
  */
 package com.github.aistomin.andys.backend.services;
 
+import com.github.aistomin.andys.backend.controllers.blog.BlogPostDto;
 import com.github.aistomin.andys.backend.controllers.blog.BlogPosts;
 
 /**
@@ -30,4 +31,19 @@ public interface BlogPostService {
      * @return Blog posts.
      */
     BlogPosts load();
+
+    /**
+     * Save a blog post.
+     *
+     * @param post Blog post that needs to be created.
+     * @return Created blog post.
+     */
+    BlogPostDto save(BlogPostDto post);
+
+    /**
+     * Delete blog post.
+     *
+     * @param id Blog post ID.
+     */
+    void delete(Long id);
 }

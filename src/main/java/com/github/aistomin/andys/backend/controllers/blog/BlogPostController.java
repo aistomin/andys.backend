@@ -16,7 +16,13 @@
 package com.github.aistomin.andys.backend.controllers.blog;
 
 import com.github.aistomin.andys.backend.services.BlogPostService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -51,5 +57,30 @@ public final class BlogPostController {
     @GetMapping
     public BlogPosts load() {
         return this.posts.load();
+    }
+
+    /**
+     * Create a blog post.
+     *
+     * @param post Blog post that needs to be created.
+     * @return Created blog post.
+     */
+    @PostMapping()
+    public ResponseEntity<BlogPostDto> create(
+        @RequestBody final BlogPostDto post
+    ) {
+        return new ResponseEntity<>(
+            this.posts.save(post), HttpStatus.CREATED
+        );
+    }
+
+    /**
+     * Delete blog post.
+     *
+     * @param id Blog post ID.
+     */
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable("id") final Long id) {
+        this.posts.delete(id);
     }
 }
