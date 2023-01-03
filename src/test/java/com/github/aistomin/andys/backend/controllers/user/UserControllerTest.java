@@ -13,11 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.aistomin.andys.backend.controllers;
+package com.github.aistomin.andys.backend.controllers.user;
 
-import com.github.aistomin.andys.backend.controllers.user.RegistrationDto;
-import com.github.aistomin.andys.backend.controllers.user.UserDto;
-import com.github.aistomin.andys.backend.controllers.user.Users;
+import com.github.aistomin.andys.backend.controllers.Authenticator;
 import com.github.aistomin.andys.backend.security.JwtRequest;
 import com.github.aistomin.andys.backend.security.JwtResponse;
 import java.util.HashMap;

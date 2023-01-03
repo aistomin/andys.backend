@@ -63,7 +63,7 @@ public final class Authenticator {
      * @param password Password.
      * @return Authentication response.
      */
-    ResponseEntity<JwtResponse> authenticate(
+    public ResponseEntity<JwtResponse> authenticate(
         final String username, final String password
     ) {
         return this.template.postForEntity(
