@@ -41,6 +41,7 @@ final class MusicSheetDtoTest {
             UUID.randomUUID().toString(),
             UUID.randomUUID().toString(),
             UUID.randomUUID().toString(),
+            new Date(),
             new Date()
         );
         final var dto = new MusicSheetDto(sheet);
@@ -50,5 +51,6 @@ final class MusicSheetDtoTest {
         Assertions.assertEquals(sheet.getPreviewUrl(), dto.getPreviewUrl());
         Assertions.assertEquals(sheet.getDownloadUrl(), dto.getDownloadUrl());
         Assertions.assertEquals(sheet.getCreatedOn(), dto.getCreatedOn());
+        Assertions.assertEquals(sheet.getPublishedOn(), dto.getPublishedOn());
     }
 }

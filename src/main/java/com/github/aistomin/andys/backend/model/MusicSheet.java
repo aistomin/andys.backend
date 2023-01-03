@@ -86,6 +86,12 @@ public final class MusicSheet {
     private Date createdOn;
 
     /**
+     * The date when the music sheet was published.
+     */
+    @Column
+    private Date publishedOn;
+
+    /**
      * Ctor.
      *
      * @param dto Music sheet DTO.
@@ -97,7 +103,8 @@ public final class MusicSheet {
             dto.getDescription(),
             dto.getPreviewUrl(),
             dto.getDownloadUrl(),
-            dto.getCreatedOn()
+            dto.getCreatedOn(),
+            dto.getPublishedOn()
         );
     }
 }

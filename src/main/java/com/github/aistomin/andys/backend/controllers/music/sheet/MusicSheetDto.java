@@ -69,6 +69,11 @@ public final class MusicSheetDto {
     private Date createdOn;
 
     /**
+     * The date when the music sheet was published.
+     */
+    private Date publishedOn;
+
+    /**
      * Ctor.
      *
      * @param sheet Music sheet.
@@ -80,7 +85,8 @@ public final class MusicSheetDto {
             sheet.getDescription(),
             sheet.getPreviewUrl(),
             sheet.getDownloadUrl(),
-            sheet.getCreatedOn()
+            sheet.getCreatedOn(),
+            sheet.getPublishedOn()
         );
     }
 }
