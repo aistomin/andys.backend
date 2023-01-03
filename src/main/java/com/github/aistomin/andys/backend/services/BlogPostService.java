@@ -39,4 +39,11 @@ public interface BlogPostService {
      * @return Created blog post.
      */
     BlogPostDto save(BlogPostDto post);
+
+    /**
+     * Delete blog post.
+     *
+     * @param id Blog post ID.
+     */
+    void delete(Long id);
 }
