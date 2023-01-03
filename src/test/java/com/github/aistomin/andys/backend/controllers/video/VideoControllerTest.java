@@ -13,11 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.aistomin.andys.backend.controllers;
+package com.github.aistomin.andys.backend.controllers.video;
 
-import com.github.aistomin.andys.backend.controllers.video.VideoController;
-import com.github.aistomin.andys.backend.controllers.video.VideoDto;
-import com.github.aistomin.andys.backend.controllers.video.Videos;
+import com.github.aistomin.andys.backend.controllers.Authenticator;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
