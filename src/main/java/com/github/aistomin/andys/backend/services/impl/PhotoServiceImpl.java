@@ -17,6 +17,7 @@ package com.github.aistomin.andys.backend.services.impl;
 
 import com.github.aistomin.andys.backend.controllers.photo.PhotoDto;
 import com.github.aistomin.andys.backend.controllers.photo.Photos;
+import com.github.aistomin.andys.backend.model.Photo;
 import com.github.aistomin.andys.backend.model.PhotoRepository;
 import com.github.aistomin.andys.backend.services.PhotoService;
 import org.springframework.stereotype.Service;
@@ -48,5 +49,10 @@ public final class PhotoServiceImpl implements PhotoService {
         return new Photos(
             this.repo.findAll().stream().map(PhotoDto::new).toList()
         );
+    }
+
+    @Override
+    public PhotoDto save(final PhotoDto photo) {
+        return new PhotoDto(this.repo.save(new Photo(photo)));
     }
 }

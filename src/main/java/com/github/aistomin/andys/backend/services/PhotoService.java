@@ -15,6 +15,7 @@
  */
 package com.github.aistomin.andys.backend.services;
 
+import com.github.aistomin.andys.backend.controllers.photo.PhotoDto;
 import com.github.aistomin.andys.backend.controllers.photo.Photos;
 
 /**
@@ -30,4 +31,12 @@ public interface PhotoService {
      * @return Photos.
      */
     Photos load();
+
+    /**
+     * Save a photo.
+     *
+     * @param photo Photo that needs to be created.
+     * @return Created photo.
+     */
+    PhotoDto save(PhotoDto photo);
 }

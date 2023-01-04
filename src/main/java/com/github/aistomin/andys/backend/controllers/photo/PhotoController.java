@@ -16,7 +16,11 @@
 package com.github.aistomin.andys.backend.controllers.photo;
 
 import com.github.aistomin.andys.backend.services.PhotoService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -51,5 +55,20 @@ public final class PhotoController {
     @GetMapping
     public Photos load() {
         return this.photos.load();
+    }
+
+    /**
+     * Create a photo.
+     *
+     * @param photo Photo that needs to be created.
+     * @return Created photo.
+     */
+    @PostMapping()
+    public ResponseEntity<PhotoDto> create(
+        @RequestBody final PhotoDto photo
+    ) {
+        return new ResponseEntity<>(
+            this.photos.save(photo), HttpStatus.CREATED
+        );
     }
 }

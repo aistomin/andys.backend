@@ -76,6 +76,12 @@
         <property name="message" value="Line has trailing spaces."/>
     </module>
 
+    <module name="RegexpMultiline">
+        <property name="message" value="Multiple empty lines after this line."/>
+        <property name="format" value="[\r]?\n\s*[\r]?\n\s*[\r]?\n"/>
+        <property name="fileExtensions" value="java"/>
+    </module>
+
     <!-- Checks for Headers                                -->
     <!-- See https://checkstyle.org/config_header.html   -->
     <!-- <module name="Header"> -->
