@@ -104,7 +104,8 @@ public class SecurityConfig {
                 HttpMethod.GET,
                 "/videos",
                 "/music/sheets",
-                "/blog/posts"
+                "/blog/posts",
+                "/photos"
             )
             .permitAll()
             .anyRequest().authenticated().and()
