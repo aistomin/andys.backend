@@ -96,6 +96,69 @@ final class BlogPostControllerTest {
     }
 
     /**
+     * Check that we can correctly update a blog post.
+     */
+    @Test
+    public void testUpdateBlogPost() {
+        final int before = this.template
+            .getForEntity("/blog/posts", BlogPosts.class)
+            .getBody()
+            .getContent()
+            .size();
+        final var post = new BlogPostDto();
+        final var initialTitle = "The post I'm going to edit.";
+        post.setTitle(initialTitle);
+        post.setText("This is the post that will change it's title.");
+        post.setCreatedOn(new Date());
+        post.setPublishedOn(new Date());
+        final var created = this.template.postForEntity(
+            "/blog/posts",
+            new HttpEntity<>(post, this.authenticator.authenticateAsAdmin()),
+            BlogPostDto.class
+        );
+        post.setId(created.getBody().getId());
+        Assertions.assertEquals(201, created.getStatusCode().value());
+        post.setTitle("Some intermediate title");
+        template.exchange(
+            "/blog/posts",
+            HttpMethod.PUT,
+            new HttpEntity<>(post),
+            Void.class
+        );
+        Assertions.assertEquals(
+            initialTitle,
+            this.template.getForEntity("/blog/posts", BlogPosts.class)
+                .getBody()
+                .getContent()
+                .stream()
+                .filter(pst -> pst.getId().equals(post.getId()))
+                .findAny().get().getTitle()
+        );
+        final String newTitle = "Final updated title";
+        post.setTitle(newTitle);
+        final String newText = "This post's text was edited.";
+        post.setText(newText);
+        final var response = template.exchange(
+            "/blog/posts",
+            HttpMethod.PUT,
+            new HttpEntity<>(post, this.authenticator.authenticateAsAdmin()),
+            Void.class
+        );
+        Assertions.assertEquals(200, response.getStatusCode().value());
+        final List<BlogPostDto> after = this.template
+            .getForEntity("/blog/posts", BlogPosts.class)
+            .getBody()
+            .getContent();
+        Assertions.assertEquals(before + 1, after.size());
+        final var updated = after
+            .stream()
+            .filter(pst -> pst.getId().equals(post.getId()))
+            .findAny().get();
+        Assertions.assertEquals(newTitle, updated.getTitle());
+        Assertions.assertEquals(newText, updated.getText());
+    }
+
+    /**
      * Check that we can correctly delete a blog post.
      */
     @Test
