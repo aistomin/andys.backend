@@ -20,6 +20,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Blog posts that we return as a response to the frontend request.
+ *
+ * @since 0.1
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

@@ -84,10 +84,10 @@
 
     <!-- Checks for Headers                                -->
     <!-- See https://checkstyle.org/config_header.html   -->
-    <!-- <module name="Header"> -->
-    <!--   <property name="headerFile" value="${checkstyle.header.file}"/> -->
-    <!--   <property name="fileExtensions" value="java"/> -->
-    <!-- </module> -->
+     <module name="Header">
+       <property name="headerFile" value="LICENSE"/>
+       <property name="fileExtensions" value="java"/>
+     </module>
 
     <module name="TreeWalker">
 
@@ -99,6 +99,7 @@
         <module name="JavadocVariable"/>
         <module name="JavadocStyle"/>
         <module name="MissingJavadocMethod"/>
+        <module name="MissingJavadocType"/>
 
         <!-- Checks for Naming Conventions.                  -->
         <!-- See https://checkstyle.org/config_naming.html -->
