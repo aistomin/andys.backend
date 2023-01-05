@@ -77,6 +77,7 @@ public class Application {
                 admin.setPassword(username);
                 this.users.register(admin);
             }
+            logger.info("Application is up and running.");
         };
     }
 }
