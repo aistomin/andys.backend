@@ -39,4 +39,11 @@ public interface PhotoService {
      * @return Created photo.
      */
     PhotoDto save(PhotoDto photo);
+
+    /**
+     * Delete photo.
+     *
+     * @param id Photo ID.
+     */
+    void delete(Long id);
 }

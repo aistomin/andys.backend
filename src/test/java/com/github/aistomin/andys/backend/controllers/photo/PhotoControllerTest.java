@@ -17,6 +17,7 @@ package com.github.aistomin.andys.backend.controllers.photo;
 
 import com.github.aistomin.andys.backend.controllers.Authenticator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
@@ -25,7 +26,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.MultiValueMapAdapter;
 
 /**
  * Test for {@link PhotoController}.
@@ -85,6 +88,68 @@ final class PhotoControllerTest {
         );
         Assertions.assertEquals(
             photo.getPublishedOn(), found.get().getPublishedOn()
+        );
+    }
+
+    /**
+     * Check that we can correctly delete a photo.
+     */
+    @Test
+    public void testDeletePhoto() {
+        final int before = this.template.getForEntity("/photos", Photos.class)
+            .getBody()
+            .getContent()
+            .size();
+        final var photo = new PhotoDto();
+        photo.setDescription("Test photo that I will delete later");
+        photo.setUrl("https://whatever.com/photo/cde");
+        photo.setCreatedOn(new Date());
+        photo.setPublishedOn(new Date());
+        final ResponseEntity<PhotoDto> created = this.template.postForEntity(
+            "/photos",
+            new HttpEntity<>(photo, this.authenticator.authenticateAsAdmin()),
+            PhotoDto.class
+        );
+        Assertions.assertEquals(201, created.getStatusCode().value());
+        final PhotoDto found = this.template
+            .getForEntity("/photos", Photos.class)
+            .getBody()
+            .getContent()
+            .stream()
+            .filter(pht -> pht.getDescription().equals(photo.getDescription()))
+            .findAny()
+            .get();
+        final ResponseEntity<Void> unauthorised = template.exchange(
+            String.format("/photos/%d", found.getId()),
+            HttpMethod.DELETE,
+            new HttpEntity<>(new MultiValueMapAdapter<>(new HashMap<>())),
+            Void.class
+        );
+        Assertions.assertEquals(401, unauthorised.getStatusCode().value());
+        final ResponseEntity<Void> deleted = template.exchange(
+            String.format("/photos/%d", found.getId()),
+            HttpMethod.DELETE,
+            new HttpEntity<>(this.authenticator.authenticateAsAdmin()),
+            Void.class
+        );
+        Assertions.assertEquals(200, deleted.getStatusCode().value());
+        final ResponseEntity<Void> notFound = template.exchange(
+            String.format("/photos/%d", found.getId()),
+            HttpMethod.DELETE,
+            new HttpEntity<>(this.authenticator.authenticateAsAdmin()),
+            Void.class
+        );
+        Assertions.assertEquals(404, notFound.getStatusCode().value());
+        final List<PhotoDto> after = this.template
+            .getForEntity("/photos", Photos.class)
+            .getBody()
+            .getContent();
+        Assertions.assertEquals(before, after.size());
+        Assertions.assertTrue(
+            after.stream()
+                .filter(pht -> pht.getId().equals(found.getId()))
+                .findAny()
+                .isEmpty()
         );
     }
 }

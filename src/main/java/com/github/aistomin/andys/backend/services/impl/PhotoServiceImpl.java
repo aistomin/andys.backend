@@ -15,11 +15,13 @@
  */
 package com.github.aistomin.andys.backend.services.impl;
 
+import com.github.aistomin.andys.backend.controllers.exceptions.NotFound;
 import com.github.aistomin.andys.backend.controllers.photo.PhotoDto;
 import com.github.aistomin.andys.backend.controllers.photo.Photos;
 import com.github.aistomin.andys.backend.model.Photo;
 import com.github.aistomin.andys.backend.model.PhotoRepository;
 import com.github.aistomin.andys.backend.services.PhotoService;
+import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 /**
@@ -54,5 +56,27 @@ public final class PhotoServiceImpl implements PhotoService {
     @Override
     public PhotoDto save(final PhotoDto photo) {
         return new PhotoDto(this.repo.save(new Photo(photo)));
+    }
+
+    @Override
+    public void delete(final Long id) {
+        this.repo.delete(this.findById(id));
+    }
+
+    /**
+     * Find photo by ID.
+     *
+     * @param id Photo's ID.
+     * @return Photo.
+     */
+    private Photo findById(final Long id) {
+        final Optional<Photo> found = this.repo.findById(id);
+        if (found.isPresent()) {
+            return found.get();
+        } else {
+            throw new NotFound(
+                String.format("Photo with ID = %d not found.", id)
+            );
+        }
     }
 }
