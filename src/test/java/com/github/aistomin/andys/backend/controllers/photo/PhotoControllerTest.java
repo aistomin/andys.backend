@@ -92,6 +92,65 @@ final class PhotoControllerTest {
     }
 
     /**
+     * Check that we can correctly update a photo.
+     */
+    @Test
+    public void testUpdatePhoto() {
+        final int before = this.template.getForEntity("/photos", Photos.class)
+            .getBody()
+            .getContent()
+            .size();
+        final var photo = new PhotoDto();
+        final var initialDescription = "This is the photo that will change it's description.";
+        photo.setDescription(initialDescription);
+        photo.setUrl("https://whatever.com/photo/efg");
+        photo.setCreatedOn(new Date());
+        photo.setPublishedOn(new Date());
+        final var created = this.template.postForEntity(
+            "/photos",
+            new HttpEntity<>(photo, this.authenticator.authenticateAsAdmin()),
+            PhotoDto.class
+        );
+        photo.setId(created.getBody().getId());
+        Assertions.assertEquals(201, created.getStatusCode().value());
+        photo.setDescription("Some intermediate title");
+        template.exchange(
+            "/photos",
+            HttpMethod.PUT,
+            new HttpEntity<>(photo),
+            Void.class
+        );
+        Assertions.assertEquals(
+            initialDescription,
+            this.template.getForEntity("/photos", Photos.class)
+                .getBody()
+                .getContent()
+                .stream()
+                .filter(pht -> pht.getId().equals(photo.getId()))
+                .findAny().get().getDescription()
+        );
+        final String newDescription = "This photo description was edited.";
+        photo.setDescription(newDescription);
+        final var response = template.exchange(
+            "/photos",
+            HttpMethod.PUT,
+            new HttpEntity<>(photo, this.authenticator.authenticateAsAdmin()),
+            Void.class
+        );
+        Assertions.assertEquals(200, response.getStatusCode().value());
+        final List<PhotoDto> after = this.template
+            .getForEntity("/photos", Photos.class)
+            .getBody()
+            .getContent();
+        Assertions.assertEquals(before + 1, after.size());
+        final var updated = after
+            .stream()
+            .filter(pht -> pht.getId().equals(photo.getId()))
+            .findAny().get();
+        Assertions.assertEquals(newDescription, updated.getDescription());
+    }
+
+    /**
      * Check that we can correctly delete a photo.
      */
     @Test
