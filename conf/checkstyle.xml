@@ -38,11 +38,13 @@
     </module>
 
     <!-- https://checkstyle.org/config_filters.html#SuppressionFilter -->
-    <module name="SuppressionFilter">
-        <property name="file" value="conf/suppressions.xml"
-                  default="checkstyle-suppressions.xml" />
-        <property name="optional" value="true"/>
-    </module>
+<!--    <module name="SuppressionFilter">-->
+<!--        <property name="file" value="conf/suppressions.xml"-->
+<!--                  default="checkstyle-suppressions.xml" />-->
+<!--        <property name="optional" value="true"/>-->
+<!--    </module>-->
+
+    <module name="SuppressWarningsFilter"/>
 
     <!-- Checks that a package-info.java file exists for each package.     -->
     <!-- See https://checkstyle.org/config_javadoc.html#JavadocPackage -->
@@ -90,6 +92,13 @@
      </module>
 
     <module name="TreeWalker">
+        <module name="SuppressWarningsHolder"/>
+
+        <module name="SuppressWarnings">
+            <property name="id" value="checkstyle:suppresswarnings"/>
+        </module>
+
+        <module name="SuppressWithNearbyCommentFilter"/>
 
         <!-- Checks for Javadoc comments.                     -->
         <!-- See https://checkstyle.org/config_javadoc.html -->
