@@ -15,6 +15,7 @@
  */
 package com.github.aistomin.andys.backend;
 
+import com.github.aistomin.andys.backend.activemq.EmailSender;
 import com.github.aistomin.andys.backend.controllers.user.RegistrationDto;
 import com.github.aistomin.andys.backend.controllers.video.VideoDto;
 import com.github.aistomin.andys.backend.services.UserService;
@@ -56,6 +57,12 @@ public class Application {
      */
     @Autowired
     private VideoService videos;
+
+    /**
+     * Email sender.
+     */
+    @Autowired
+    private EmailSender emailSender;
 
     /**
      * App entry point.

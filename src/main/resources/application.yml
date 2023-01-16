@@ -4,6 +4,10 @@ spring:
     url: ${andys_db_url:jdbc:postgresql://localhost:5432/andys}
     username: ${andys_db_user:root}
     password: ${andys_db_password:root}
+  activemq:
+    broker-url: failover:tcp://localhost:61616?wireFormat.maxInactivityDurationInitalDelay=30000
+    user: admin
+    password: admin
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQL94Dialect
     show-sql: true
