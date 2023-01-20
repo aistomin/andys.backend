@@ -32,33 +32,13 @@ import org.springframework.jms.core.JmsTemplate;
 public class JmsConfig {
 
     /**
-     * Broker URL.
-     */
-    @SuppressWarnings("checkstyle:LineLength")
-    private static final String BROKER_URL = "failover:tcp://localhost:61616?wireFormat.maxInactivityDurationInitalDelay=30000";
-
-    /**
-     * AMQ username.
-     */
-    private static final String BROKER_USERNAME = "admin";
-
-    /**
-     * AMQ password.
-     */
-    private static final String BROKER_PASSWORD = "admin";
-
-    /**
      * Create connection factory.
      *
      * @return Connection factory.
      */
     @Bean
     public ActiveMQConnectionFactory connectionFactory() {
-        final var factory = new ActiveMQConnectionFactory();
-        factory.setBrokerURL(BROKER_URL);
-        factory.setPassword(BROKER_USERNAME);
-        factory.setUserName(BROKER_PASSWORD);
-        return factory;
+        return new ActiveMQConnectionFactory();
     }
 
     /**
