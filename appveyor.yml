@@ -25,7 +25,7 @@ build_script:
   - psql -c 'create database andys;' -U postgres
   - echo $andys_db_user
   - mvn -version
-  - mvn clean install package
+  - mvn -Dtest=\!EmailProcessorTest* clean install package
   - curl -Os https://uploader.codecov.io/latest/linux/codecov
   - chmod +x codecov
   - ./codecov

@@ -56,6 +56,7 @@ public final class EmailProcessor {
      *
      * @param message AMQ message.
      * @throws JMSException If something went wrong.
+     * @todo: Issue #174. Let's implement the real email sending logic.
      */
     @JmsListener(destination = EMAIL_QUEUE)
     public void receiveMessage(final Message message) throws JMSException {
