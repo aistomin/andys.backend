@@ -16,6 +16,7 @@
 package com.github.aistomin.andys.backend.activemq;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jms.annotation.EnableJms;
@@ -32,20 +33,10 @@ import org.springframework.jms.core.JmsTemplate;
 public class JmsConfig {
 
     /**
-     * Broker URL.
+     * ActiveMQ broker URL.
      */
-    @SuppressWarnings("checkstyle:LineLength")
-    private static final String BROKER_URL = "failover:tcp://localhost:61616?wireFormat.maxInactivityDurationInitalDelay=30000";
-
-    /**
-     * AMQ username.
-     */
-    private static final String BROKER_USERNAME = "admin";
-
-    /**
-     * AMQ password.
-     */
-    private static final String BROKER_PASSWORD = "admin";
+    @Value("${spring.activemq.broker-url}")
+    private String brokerUrl;
 
     /**
      * Create connection factory.
@@ -54,11 +45,7 @@ public class JmsConfig {
      */
     @Bean
     public ActiveMQConnectionFactory connectionFactory() {
-        final var factory = new ActiveMQConnectionFactory();
-        factory.setBrokerURL(BROKER_URL);
-        factory.setPassword(BROKER_USERNAME);
-        factory.setUserName(BROKER_PASSWORD);
-        return factory;
+        return new ActiveMQConnectionFactory(this.brokerUrl);
     }
 
     /**
