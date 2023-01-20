@@ -16,6 +16,7 @@
 package com.github.aistomin.andys.backend.activemq;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jms.annotation.EnableJms;
@@ -32,13 +33,19 @@ import org.springframework.jms.core.JmsTemplate;
 public class JmsConfig {
 
     /**
+     * ActiveMQ broker URL.
+     */
+    @Value("${spring.activemq.broker-url}")
+    private String brokerUrl;
+
+    /**
      * Create connection factory.
      *
      * @return Connection factory.
      */
     @Bean
     public ActiveMQConnectionFactory connectionFactory() {
-        return new ActiveMQConnectionFactory();
+        return new ActiveMQConnectionFactory(this.brokerUrl);
     }
 
     /**
