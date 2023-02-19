@@ -13,24 +13,41 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.aistomin.andys.backend.model;
+package com.github.aistomin.andys.backend.controllers.contact;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 /**
- * Data access class for {@link EmailMessage}.
+ * Contact request.
  *
  * @since 0.2
  */
-public interface EmailMessageRepository
-    extends JpaRepository<EmailMessage, Long> {
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString()
+@Data
+public final class ContactRequest {
 
     /**
-     * Find all the messages by dispatcher.
-     *
-     * @param dispatcher Dispatcher.
-     * @return List of the emails.
+     * Email of the person who contacts us.
      */
-    List<EmailMessage> findAllByDispatcher(Person dispatcher);
+    private String email;
+
+    /**
+     * Contact request's subject.
+     */
+    private String subject;
+
+    /**
+     * Contact request's body.
+     */
+    private String body;
+
+    /**
+     * Does the person allow us to send newsletters?
+     */
+    private Boolean allowToSendNewsLetters;
 }

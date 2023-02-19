@@ -20,13 +20,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.aistomin.andys.backend.model.EmailMessage;
 import com.github.aistomin.andys.backend.model.EmailMessageRepository;
 import com.github.aistomin.andys.backend.model.EmailMessageStatus;
+import com.github.aistomin.andys.backend.model.EmailMessageType;
 import com.github.aistomin.andys.backend.model.Person;
-import java.util.HashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Component;
+import java.util.HashMap;
 
 /**
  * Email sender.
@@ -60,18 +61,20 @@ public final class EmailSender {
      * @param receptor   Email receptor.
      * @param subject    Email subject.
      * @param body       Email body.
+     * @param type       Email type.
      * @return Created Email.
      */
     public EmailMessage sendEmail(
         final Person dispatcher,
         final Person receptor,
         final String subject,
-        final String body
+        final String body,
+        final EmailMessageType type
     ) {
         final var email = this.repository.save(
             new EmailMessage(
                 null, dispatcher, receptor, subject, body,
-                EmailMessageStatus.CREATED, null
+                EmailMessageStatus.CREATED, type, null
             )
         );
         this.jmsTemplate.send(

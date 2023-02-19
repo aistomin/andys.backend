@@ -17,6 +17,7 @@ package com.github.aistomin.andys.backend.model;
 
 import jakarta.validation.ConstraintViolationException;
 import java.util.Comparator;
+import java.util.Random;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,8 +47,9 @@ final class PersonRepositoryTest {
         final String email = "andy@grails.test";
         final String name = "Andy";
         final String surname = "Grails";
+        final Boolean allowNews = new Random().nextBoolean();
         this.repository.save(
-            new Person(null, name, surname, email)
+            new Person(null, name, surname, email, allowNews)
         );
         final var andy = this.repository
             .findAll()
@@ -57,7 +59,8 @@ final class PersonRepositoryTest {
         Assertions.assertEquals(name, andy.getFirstName());
         Assertions.assertEquals(surname, andy.getLastName());
         Assertions.assertEquals(email, andy.getEmail());
-        final var john = new Person(null, "John", "Doe", email);
+        Assertions.assertEquals(allowNews, andy.getAllowToSendNewsLetters());
+        final var john = new Person(null, "John", "Doe", email, false);
         Assertions.assertThrows(
             DataIntegrityViolationException.class,
             () -> this.repository.save(john)

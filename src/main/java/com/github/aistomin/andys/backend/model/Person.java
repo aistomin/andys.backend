@@ -50,13 +50,13 @@ public final class Person {
     /**
      * First Name.
      */
-    @Column(nullable = false)
+    @Column
     private String firstName;
 
     /**
      * Last Name.
      */
-    @Column(nullable = false)
+    @Column
     private String lastName;
 
     /**
@@ -65,4 +65,10 @@ public final class Person {
     @Email
     @Column(nullable = false, unique = true)
     private String email;
+
+    /**
+     * Does the person allow us to send newsletters?
+     */
+    @Column(nullable = false)
+    private Boolean allowToSendNewsLetters;
 }

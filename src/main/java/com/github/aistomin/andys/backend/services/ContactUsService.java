@@ -13,24 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.aistomin.andys.backend.model;
-
-import org.springframework.data.jpa.repository.JpaRepository;
-import java.util.List;
+package com.github.aistomin.andys.backend.services;
 
 /**
- * Data access class for {@link EmailMessage}.
+ * "Contact Us" service.
  *
  * @since 0.2
  */
-public interface EmailMessageRepository
-    extends JpaRepository<EmailMessage, Long> {
+public interface ContactUsService {
 
     /**
-     * Find all the messages by dispatcher.
+     * Send us a contact request.
      *
-     * @param dispatcher Dispatcher.
-     * @return List of the emails.
+     * @param email                  User's email.
+     * @param subject                Contact request's subject.
+     * @param body                   Contact request's body.
+     * @param allowToSendNewsLetters Does the person allow us to send
+     *                               newsletters?
      */
-    List<EmailMessage> findAllByDispatcher(Person dispatcher);
+    void contactUs(
+        String email, String subject, String body,
+        Boolean allowToSendNewsLetters
+    );
 }

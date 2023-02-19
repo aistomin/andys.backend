@@ -46,11 +46,11 @@ final class EmailMessageRepositoryTest {
     @Test
     void testSaveEmail() {
         final var clara = this.persons.save(
-            new Person(null, "Clara", "Zetkin", "clara@hotgirls.com")
+            new Person(null, "Clara", "Zetkin", "clara@hotgirls.com", true)
         );
         final var karl = this.persons.save(
             new Person(
-                null, "Karl", "Marx", "wanna_see_my_manifest@redboys.com"
+                null, "Karl", "Marx", "wanna_see_my_manifest@redboys.com", true
             )
         );
         final String subject = "Manifest der Kommunistischen Partei";
@@ -63,6 +63,7 @@ final class EmailMessageRepositoryTest {
                 subject,
                 body,
                 EmailMessageStatus.CREATED,
+                EmailMessageType.NEWS_LETTER,
                 null
             )
         );

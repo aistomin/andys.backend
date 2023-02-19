@@ -23,4 +23,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @since 0.2
  */
 public interface PersonRepository extends JpaRepository<Person, Long> {
+
+    /**
+     * Find person by email.
+     *
+     * @param email Email to seacrh.
+     * @return Found person.
+     */
+    Person findByEmail(String email);
 }

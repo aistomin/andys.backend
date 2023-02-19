@@ -84,6 +84,12 @@ public final class EmailMessage {
     private EmailMessageStatus status = EmailMessageStatus.CREATED;
 
     /**
+     * Email message type.
+     */
+    @Column(nullable = false)
+    private EmailMessageType type;
+
+    /**
      * Some additional free text info about the email message.
      */
     @Column(length = EmailMessage.BODY_LENGTH)

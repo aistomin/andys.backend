@@ -15,11 +15,7 @@
  */
 package com.github.aistomin.andys.backend.activemq;
 
-import com.github.aistomin.andys.backend.model.EmailMessage;
-import com.github.aistomin.andys.backend.model.EmailMessageRepository;
-import com.github.aistomin.andys.backend.model.EmailMessageStatus;
-import com.github.aistomin.andys.backend.model.Person;
-import com.github.aistomin.andys.backend.model.PersonRepository;
+import com.github.aistomin.andys.backend.model.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,7 +60,8 @@ final class EmailProcessorTest {
                 null,
                 "John",
                 "Doe",
-                "test@successful.email"
+                "test@successful.email",
+                true
             )
         );
         final Person max = this.persons.save(
@@ -72,11 +69,13 @@ final class EmailProcessorTest {
                 null,
                 "Max",
                 "Mustermann",
-                "test@failed.email"
+                "test@failed.email",
+                true
             )
         );
         final EmailMessage failed = this.sender.sendEmail(
-            john, max, "Failed email", "Hello Max!"
+            john, max, "Failed email", "Hello Max!",
+            EmailMessageType.NEWS_LETTER
         );
         Thread.sleep(3_000);
         Assertions.assertEquals(
@@ -85,7 +84,8 @@ final class EmailProcessorTest {
         );
         final EmailMessage successful = this.sender.sendEmail(
             max, john, "Successful email",
-            "Hello John! Haven't heard from you a long time!"
+            "Hello John! Haven't heard from you a long time!",
+            EmailMessageType.NEWS_LETTER
         );
         Thread.sleep(3_000);
         Assertions.assertEquals(

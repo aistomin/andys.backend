@@ -31,3 +31,4 @@ spring:
     properties:
       hibernate:
         dialect:org.hibernate.dialect.PostgreSQL81Dialect
+support.email: support@mailinator.com

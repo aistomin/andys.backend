@@ -33,7 +33,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMapAdapter;
 
 /**
- * Test for {@link com.github.aistomin.andys.backend.controllers.user.UserController}.
+ * Test for {@link UserController}.
  *
  * @since 0.1
  */
