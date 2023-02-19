@@ -13,24 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.aistomin.andys.backend.model;
-
-import org.springframework.data.jpa.repository.JpaRepository;
-import java.util.List;
-
 /**
- * Data access class for {@link EmailMessage}.
+ * "Contact Us" controller and classes related to it.
  *
  * @since 0.2
  */
-public interface EmailMessageRepository
-    extends JpaRepository<EmailMessage, Long> {
-
-    /**
-     * Find all the messages by dispatcher.
-     *
-     * @param dispatcher Dispatcher.
-     * @return List of the emails.
-     */
-    List<EmailMessage> findAllByDispatcher(Person dispatcher);
-}
+package com.github.aistomin.andys.backend.controllers.contact;

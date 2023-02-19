@@ -15,22 +15,20 @@
  */
 package com.github.aistomin.andys.backend.model;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import java.util.List;
-
 /**
- * Data access class for {@link EmailMessage}.
+ * Type of the email message.
  *
  * @since 0.2
  */
-public interface EmailMessageRepository
-    extends JpaRepository<EmailMessage, Long> {
+public enum EmailMessageType {
 
     /**
-     * Find all the messages by dispatcher.
-     *
-     * @param dispatcher Dispatcher.
-     * @return List of the emails.
+     * Email message is a contact request from user.
      */
-    List<EmailMessage> findAllByDispatcher(Person dispatcher);
+    CONTACT_REQUEST,
+
+    /**
+     * Email message is a news letter email.
+     */
+    NEWS_LETTER
 }

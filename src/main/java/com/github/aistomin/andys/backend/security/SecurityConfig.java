@@ -121,6 +121,8 @@ public class SecurityConfig {
             .authorizeHttpRequests()
             .requestMatchers("/authenticate")
             .permitAll()
+            .requestMatchers("/contact/us")
+            .permitAll()
             .requestMatchers(
                 HttpMethod.GET,
                 "/videos",
