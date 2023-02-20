@@ -15,7 +15,6 @@
  */
 package com.github.aistomin.andys.backend.security;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -41,20 +40,34 @@ public final class JwtAuthenticationController {
     /**
      * Authentication manager.
      */
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticator;
 
     /**
      * JWT utils.
      */
-    @Autowired
-    private Jwt jwt;
+    private final Jwt jwt;
 
     /**
      * User details service.
      */
-    @Autowired
-    private UserDetailsService userDetailsService;
+    private final UserDetailsService service;
+
+    /**
+     * Ctor.
+     *
+     * @param authenticationManager Authentication manager.
+     * @param utils                 JWT utils.
+     * @param userDetailsService    User details service.
+     */
+    public JwtAuthenticationController(
+        final AuthenticationManager authenticationManager,
+        final Jwt utils,
+        final UserDetailsService userDetailsService
+    ) {
+        this.authenticator = authenticationManager;
+        this.jwt = utils;
+        this.service = userDetailsService;
+    }
 
     /**
      * Authenticate user.
@@ -68,9 +81,9 @@ public final class JwtAuthenticationController {
         @RequestBody final JwtRequest request
     ) throws Exception {
         authenticate(request.getUsername(), request.getPassword());
-        final UserDetails userDetails = this.userDetailsService
+        final UserDetails details = this.service
             .loadUserByUsername(request.getUsername());
-        final String token = this.jwt.generateToken(userDetails);
+        final String token = this.jwt.generateToken(details);
         return ResponseEntity.ok(new JwtResponse(token));
     }
 
@@ -85,7 +98,7 @@ public final class JwtAuthenticationController {
         final String username, final String password
     ) throws Exception {
         try {
-            this.authenticationManager.authenticate(
+            this.authenticator.authenticate(
                 new UsernamePasswordAuthenticationToken(username, password)
             );
         } catch (final DisabledException e) {

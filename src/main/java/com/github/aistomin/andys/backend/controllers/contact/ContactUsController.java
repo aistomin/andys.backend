@@ -56,7 +56,7 @@ public final class ContactUsController {
      * @return Response.
      */
     @PostMapping()
-    public ResponseEntity<String> contactUs(
+    public ResponseEntity<?> contactUs(
         @RequestBody final ContactRequest request
     ) {
         this.contact.contactUs(

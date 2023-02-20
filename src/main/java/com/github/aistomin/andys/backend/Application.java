@@ -15,23 +15,21 @@
  */
 package com.github.aistomin.andys.backend;
 
-import com.github.aistomin.andys.backend.activemq.EmailSender;
 import com.github.aistomin.andys.backend.controllers.user.RegistrationDto;
 import com.github.aistomin.andys.backend.controllers.video.VideoDto;
 import com.github.aistomin.andys.backend.services.UserService;
 import com.github.aistomin.andys.backend.services.VideoService;
-import java.time.LocalDate;
-import java.time.ZoneOffset;
-import java.util.Arrays;
-import java.util.Date;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
+import java.time.LocalDate;
+import java.time.ZoneOffset;
+import java.util.Arrays;
+import java.util.Date;
 
 /**
  * Application class.
@@ -49,20 +47,26 @@ public class Application {
     /**
      * User service.
      */
-    @Autowired
-    private UserService users;
+    private final UserService users;
 
     /**
      * Video service.
      */
-    @Autowired
-    private VideoService videos;
+    private final VideoService videos;
 
     /**
-     * Email sender.
+     * Ctor.
+     *
+     * @param userService  User service.
+     * @param videoService Video service.
      */
-    @Autowired
-    private EmailSender emailSender;
+    public Application(
+        final UserService userService,
+        final VideoService videoService
+    ) {
+        this.users = userService;
+        this.videos = videoService;
+    }
 
     /**
      * App entry point.
