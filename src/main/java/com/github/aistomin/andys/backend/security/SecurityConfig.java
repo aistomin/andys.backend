@@ -16,7 +16,6 @@
 package com.github.aistomin.andys.backend.security;
 
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -48,14 +47,26 @@ public class SecurityConfig {
     /**
      * JWT authentication entry point.
      */
-    @Autowired
-    private JwtAuthenticationEntryPoint auth;
+    private final JwtAuthenticationEntryPoint auth;
 
     /**
      * JWT request filter.
      */
-    @Autowired
-    private JwtRequestFilter filter;
+    private final JwtRequestFilter filter;
+
+    /**
+     * Ctor.
+     *
+     * @param entryPoint       JWT authentication entry point.
+     * @param jwtRequestFilter JWT request filter.
+     */
+    public SecurityConfig(
+        final JwtAuthenticationEntryPoint entryPoint,
+        final JwtRequestFilter jwtRequestFilter
+    ) {
+        this.auth = entryPoint;
+        this.filter = jwtRequestFilter;
+    }
 
     /**
      * Create authentication manager.

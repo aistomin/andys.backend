@@ -22,7 +22,6 @@ import javax.jms.TextMessage;
 import org.apache.activemq.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.json.JsonParserFactory;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
@@ -48,8 +47,16 @@ public final class EmailProcessor {
     /**
      * Email message repository.
      */
-    @Autowired
-    private EmailMessageRepository repository;
+    private final EmailMessageRepository emails;
+
+    /**
+     * Ctor.
+     *
+     * @param repository Email message repository.
+     */
+    public EmailProcessor(final EmailMessageRepository repository) {
+        this.emails = repository;
+    }
 
     /**
      * Receive AMQ message.
@@ -65,7 +72,7 @@ public final class EmailProcessor {
             final var json = JsonParserFactory.getJsonParser()
                 .parseMap(msg.getText());
             final var id = Long.parseLong(json.get("email_id").toString());
-            final var email = this.repository.findById(id).get();
+            final var email = this.emails.findById(id).get();
             if (email.getReceptor().getEmail().endsWith("failed.email")) {
                 email.setStatus(EmailMessageStatus.FAILED);
                 logger.error("Email {} is failed.", email.getId());
@@ -73,7 +80,7 @@ public final class EmailProcessor {
                 email.setStatus(EmailMessageStatus.SENT);
                 logger.debug("Email {} is sent.", email.getId());
             }
-            this.repository.save(email);
+            this.emails.save(email);
         } else {
             logger.error("No idea what is that: {}", message);
         }

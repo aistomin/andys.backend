@@ -21,7 +21,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -41,14 +40,26 @@ public final class JwtRequestFilter extends OncePerRequestFilter {
     /**
      * User details service.
      */
-    @Autowired
-    private UserDetailsService service;
+    private final UserDetailsService service;
 
     /**
      * JWT utils.
      */
-    @Autowired
-    private Jwt utils;
+    private final Jwt jwt;
+
+    /**
+     * Ctor.
+     *
+     * @param userDetails User details service.
+     * @param utils       JWT utils.
+     */
+    public JwtRequestFilter(
+        final UserDetailsService userDetails,
+        final Jwt utils
+    ) {
+        this.service = userDetails;
+        this.jwt = utils;
+    }
 
     @Override
     protected void doFilterInternal(
@@ -65,7 +76,7 @@ public final class JwtRequestFilter extends OncePerRequestFilter {
         if (authorization != null && authorization.startsWith(bearer)) {
             jwtToken = authorization.substring(bearer.length());
             try {
-                username = this.utils.getUsernameFromToken(jwtToken);
+                username = this.jwt.getUsernameFromToken(jwtToken);
             } catch (IllegalArgumentException e) {
                 this.logger.warn("Unable to get JWT Token");
             } catch (ExpiredJwtException e) {
@@ -80,7 +91,7 @@ public final class JwtRequestFilter extends OncePerRequestFilter {
             UserDetails userDetails = this.service.loadUserByUsername(username);
             // if token is valid configure Spring Security to manually set
             // authentication
-            if (this.utils.validateToken(jwtToken, userDetails)) {
+            if (this.jwt.validateToken(jwtToken, userDetails)) {
                 final var token = new UsernamePasswordAuthenticationToken(
                     userDetails, null, userDetails.getAuthorities()
                 );

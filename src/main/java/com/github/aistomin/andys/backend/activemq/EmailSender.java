@@ -24,7 +24,6 @@ import com.github.aistomin.andys.backend.model.EmailMessageType;
 import com.github.aistomin.andys.backend.model.Person;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Component;
 import java.util.HashMap;
@@ -45,14 +44,26 @@ public final class EmailSender {
     /**
      * JMS template.
      */
-    @Autowired
-    private JmsTemplate jmsTemplate;
+    private final JmsTemplate jms;
 
     /**
      * Email message repository.
      */
-    @Autowired
-    private EmailMessageRepository repository;
+    private final EmailMessageRepository emails;
+
+    /**
+     * Ctor.
+     *
+     * @param jmsTemplate JMS template.
+     * @param repository  Email message repository.
+     */
+    public EmailSender(
+        final JmsTemplate jmsTemplate,
+        final EmailMessageRepository repository
+    ) {
+        this.jms = jmsTemplate;
+        this.emails = repository;
+    }
 
     /**
      * Send the email.
@@ -71,13 +82,13 @@ public final class EmailSender {
         final String body,
         final EmailMessageType type
     ) {
-        final var email = this.repository.save(
+        final var email = this.emails.save(
             new EmailMessage(
                 null, dispatcher, receptor, subject, body,
                 EmailMessageStatus.CREATED, type, null
             )
         );
-        this.jmsTemplate.send(
+        this.jms.send(
             EmailProcessor.EMAIL_QUEUE,
             session -> {
                 try {
