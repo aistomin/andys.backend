@@ -14,13 +14,10 @@ spring:
     pool:
       block-if-full: true
       block-if-full-timeout: -1
-      create-connection-on-startup: true
       enabled: false
-      expiry-timeout: 0
       idle-timeout: 30000
       max-connections: 1
-      maximum-active-session-per-connection: 500
-      reconnect-on-exception: true
+      max-sessions-per-connection: 500
       time-between-expiration-check: -1
       use-anonymous-producers: true
   jpa:
