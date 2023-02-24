@@ -101,4 +101,41 @@ class ContactUsControllerTest {
             this.emails.findAllByDispatcher(customer).size()
         );
     }
+
+    /**
+     * Check that we correctly process "Contact Us" request when user sends the
+     * same message over and over again.
+     */
+    @Test
+    void testContinuousRequests() {
+        final var api = "/contact/us";
+        final var request = new ContactRequest(
+            "insistant.dude@mailinator.com",
+            "Hey you!",
+            "I will be spamming you!",
+            true
+        );
+        Assertions.assertEquals(
+            201,
+            this.template.postForEntity(
+                api, new HttpEntity<>(request), String.class
+            ).getStatusCode().value()
+        );
+        final var customer = this.persons.findByEmail(request.getEmail());
+        final var emails = this.emails.findAllByDispatcher(customer);
+        Assertions.assertEquals(1, emails.size());
+        Assertions.assertEquals(
+            201,
+            this.template.postForEntity(
+                api, new HttpEntity<>(request), String.class
+            ).getStatusCode().value()
+        );
+        Assertions.assertEquals(
+            201,
+            this.template.postForEntity(
+                api, new HttpEntity<>(request), String.class
+            ).getStatusCode().value()
+        );
+        Assertions.assertEquals(1, emails.size());
+    }
 }

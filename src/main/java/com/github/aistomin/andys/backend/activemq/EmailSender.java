@@ -26,6 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Component;
+import java.util.Date;
 import java.util.HashMap;
 
 /**
@@ -85,7 +86,7 @@ public final class EmailSender {
         final var email = this.emails.save(
             new EmailMessage(
                 null, dispatcher, receptor, subject, body,
-                EmailMessageStatus.CREATED, type, null
+                EmailMessageStatus.CREATED, type, null, new Date()
             )
         );
         this.jms.send(
