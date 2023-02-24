@@ -26,6 +26,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import java.util.Date;
 
 /**
  * Data object that stores emails that we send.
@@ -94,4 +95,10 @@ public final class EmailMessage {
      */
     @Column(length = EmailMessage.BODY_LENGTH)
     private String info;
+
+    /**
+     * Date when the message was created.
+     */
+    @Column(nullable = false)
+    private Date creationDate;
 }
