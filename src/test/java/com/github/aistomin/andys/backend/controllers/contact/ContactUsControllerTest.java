@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
 
 /**
  * Test for {@link ContactUsController}.
@@ -64,23 +65,25 @@ class ContactUsControllerTest {
         );
         Assertions.assertNull(this.persons.findByEmail(request.getEmail()));
         Assertions.assertEquals(
-            201,
+            HttpStatus.CREATED,
             this.template.postForEntity(
                 api, new HttpEntity<>(request), String.class
-            ).getStatusCode().value()
+            ).getStatusCode()
         );
         final var customer = this.persons.findByEmail(request.getEmail());
         Assertions.assertNotNull(customer);
         Assertions.assertTrue(customer.getAllowToSendNewsLetters());
-        final var emails = this.emails.findAllByDispatcher(customer);
-        Assertions.assertEquals(1, emails.size());
-        Assertions.assertEquals(request.getSubject(), emails.get(0).getSubject());
-        Assertions.assertEquals(request.getBody(), emails.get(0).getBody());
+        final var mails = this.emails.findAllByDispatcher(customer);
+        Assertions.assertEquals(1, mails.size());
+        Assertions.assertEquals(
+            request.getSubject(), mails.get(0).getSubject()
+        );
+        Assertions.assertEquals(request.getBody(), mails.get(0).getBody());
         Assertions.assertNotNull(
             this.persons.findByEmail("support@mailinator.com")
         );
         Assertions.assertEquals(
-            201,
+            HttpStatus.CREATED,
             this.template.postForEntity(
                 api, new HttpEntity<>(
                     new ContactRequest(
@@ -90,14 +93,14 @@ class ContactUsControllerTest {
                         false
                     )
                 ), String.class
-            ).getStatusCode().value()
+            ).getStatusCode()
         );
         Assertions.assertFalse(
             this.persons.findByEmail(request.getEmail())
                 .getAllowToSendNewsLetters()
         );
         Assertions.assertEquals(
-            emails.size() + 1,
+            mails.size() + 1,
             this.emails.findAllByDispatcher(customer).size()
         );
     }
@@ -116,26 +119,26 @@ class ContactUsControllerTest {
             true
         );
         Assertions.assertEquals(
-            201,
+            HttpStatus.CREATED,
             this.template.postForEntity(
                 api, new HttpEntity<>(request), String.class
-            ).getStatusCode().value()
+            ).getStatusCode()
         );
         final var customer = this.persons.findByEmail(request.getEmail());
-        final var emails = this.emails.findAllByDispatcher(customer);
-        Assertions.assertEquals(1, emails.size());
+        final var mails = this.emails.findAllByDispatcher(customer);
+        Assertions.assertEquals(1, mails.size());
         Assertions.assertEquals(
-            201,
+            HttpStatus.CREATED,
             this.template.postForEntity(
                 api, new HttpEntity<>(request), String.class
-            ).getStatusCode().value()
+            ).getStatusCode()
         );
         Assertions.assertEquals(
-            201,
+            HttpStatus.CREATED,
             this.template.postForEntity(
                 api, new HttpEntity<>(request), String.class
-            ).getStatusCode().value()
+            ).getStatusCode()
         );
-        Assertions.assertEquals(1, emails.size());
+        Assertions.assertEquals(1, mails.size());
     }
 }

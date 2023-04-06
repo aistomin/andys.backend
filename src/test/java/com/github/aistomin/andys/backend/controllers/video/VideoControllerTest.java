@@ -28,6 +28,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMapAdapter;
 
@@ -67,17 +68,19 @@ public final class VideoControllerTest {
         video.setCreatedOn(new Date());
         video.setPublishedOn(new Date());
         video.setTags(Arrays.asList("Nature", "Dogs", "Pets"));
-        final ResponseEntity<VideoDto> unauthorised = this.template.postForEntity(
+        final var unauthorised = this.template.postForEntity(
             "/videos", new HttpEntity<>(video), VideoDto.class
         );
-        Assertions.assertEquals(401, unauthorised.getStatusCode().value());
+        Assertions.assertEquals(
+            HttpStatus.UNAUTHORIZED, unauthorised.getStatusCode()
+        );
         final ResponseEntity<VideoDto> created = this.template.postForEntity(
             "/videos",
             new HttpEntity<>(video, this.authenticator.authenticateAsAdmin()),
             VideoDto.class
         );
-        Assertions.assertEquals(201, created.getStatusCode().value());
-        final List<VideoDto> all = this.template.getForEntity("/videos", Videos.class)
+        Assertions.assertEquals(HttpStatus.CREATED, created.getStatusCode());
+        final var all = this.template.getForEntity("/videos", Videos.class)
             .getBody()
             .getContent();
         Assertions.assertEquals(before + 1, all.size());
@@ -126,7 +129,7 @@ public final class VideoControllerTest {
             VideoDto.class
         );
         video.setId(created.getBody().getId());
-        Assertions.assertEquals(201, created.getStatusCode().value());
+        Assertions.assertEquals(HttpStatus.CREATED, created.getStatusCode());
         video.setTitle("Some intermediate title");
         template.exchange(
             "/videos",
@@ -153,8 +156,8 @@ public final class VideoControllerTest {
             new HttpEntity<>(video, this.authenticator.authenticateAsAdmin()),
             Void.class
         );
-        Assertions.assertEquals(200, response.getStatusCode().value());
-        final List<VideoDto> after = this.template.getForEntity("/videos", Videos.class)
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        final var after = this.template.getForEntity("/videos", Videos.class)
             .getBody()
             .getContent();
         Assertions.assertEquals(before + 1, after.size());
@@ -182,12 +185,12 @@ public final class VideoControllerTest {
         video.setCreatedOn(new Date());
         video.setPublishedOn(new Date());
         video.setTags(Arrays.asList("Video", "testing", "deletion"));
-        final ResponseEntity<VideoDto> created = this.template.postForEntity(
+        final var created = this.template.postForEntity(
             "/videos",
             new HttpEntity<>(video, this.authenticator.authenticateAsAdmin()),
             VideoDto.class
         );
-        Assertions.assertEquals(201, created.getStatusCode().value());
+        Assertions.assertEquals(HttpStatus.CREATED, created.getStatusCode());
         final VideoDto found = this.template
             .getForEntity("/videos", Videos.class)
             .getBody()
@@ -202,21 +205,23 @@ public final class VideoControllerTest {
             new HttpEntity<>(new MultiValueMapAdapter<>(new HashMap<>())),
             Void.class
         );
-        Assertions.assertEquals(401, unauthorised.getStatusCode().value());
+        Assertions.assertEquals(
+            HttpStatus.UNAUTHORIZED, unauthorised.getStatusCode()
+        );
         final ResponseEntity<Void> deleted = template.exchange(
             String.format("/videos/%d", found.getId()),
             HttpMethod.DELETE,
             new HttpEntity<>(this.authenticator.authenticateAsAdmin()),
             Void.class
         );
-        Assertions.assertEquals(200, deleted.getStatusCode().value());
+        Assertions.assertEquals(HttpStatus.OK, deleted.getStatusCode());
         final ResponseEntity<Void> notFound = template.exchange(
             String.format("/videos/%d", found.getId()),
             HttpMethod.DELETE,
             new HttpEntity<>(this.authenticator.authenticateAsAdmin()),
             Void.class
         );
-        Assertions.assertEquals(404, notFound.getStatusCode().value());
+        Assertions.assertEquals(HttpStatus.NOT_FOUND, notFound.getStatusCode());
         final List<VideoDto> after = this.template
             .getForEntity("/videos", Videos.class)
             .getBody()

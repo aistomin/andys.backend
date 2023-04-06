@@ -16,7 +16,6 @@
 package com.github.aistomin.andys.backend.model;
 
 import com.github.aistomin.andys.backend.controllers.user.RegistrationDto;
-import com.github.aistomin.andys.backend.controllers.user.UserDto;
 import java.util.UUID;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -29,7 +28,7 @@ import org.junit.jupiter.api.Test;
 final class UserTest {
 
     /**
-     * Check that we correctly convert {@link UserDto} to
+     * Check that we correctly convert {@link RegistrationDto} to
      * {@link com.github.aistomin.andys.backend.model.User}.
      */
     @Test

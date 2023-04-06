@@ -27,6 +27,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMapAdapter;
 
@@ -55,7 +56,8 @@ final class BlogPostControllerTest {
      */
     @Test
     public void testCreateBlogPost() {
-        final int before = this.template.getForEntity("/blog/posts", BlogPosts.class)
+        final int before = this.template
+            .getForEntity("/blog/posts", BlogPosts.class)
             .getBody()
             .getContent()
             .size();
@@ -68,13 +70,15 @@ final class BlogPostControllerTest {
             .postForEntity(
                 "/blog/posts", new HttpEntity<>(post), BlogPostDto.class
             );
-        Assertions.assertEquals(401, unauthorised.getStatusCode().value());
-        final ResponseEntity<BlogPostDto> created = this.template.postForEntity(
+        Assertions.assertEquals(
+            HttpStatus.UNAUTHORIZED, unauthorised.getStatusCode()
+        );
+        final var created = this.template.postForEntity(
             "/blog/posts",
             new HttpEntity<>(post, this.authenticator.authenticateAsAdmin()),
             BlogPostDto.class
         );
-        Assertions.assertEquals(201, created.getStatusCode().value());
+        Assertions.assertEquals(HttpStatus.CREATED, created.getStatusCode());
         final List<BlogPostDto> all = this.template
             .getForEntity("/blog/posts", BlogPosts.class)
             .getBody()
@@ -117,7 +121,7 @@ final class BlogPostControllerTest {
             BlogPostDto.class
         );
         post.setId(created.getBody().getId());
-        Assertions.assertEquals(201, created.getStatusCode().value());
+        Assertions.assertEquals(HttpStatus.CREATED, created.getStatusCode());
         post.setTitle("Some intermediate title");
         template.exchange(
             "/blog/posts",
@@ -144,7 +148,7 @@ final class BlogPostControllerTest {
             new HttpEntity<>(post, this.authenticator.authenticateAsAdmin()),
             Void.class
         );
-        Assertions.assertEquals(200, response.getStatusCode().value());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         final List<BlogPostDto> after = this.template
             .getForEntity("/blog/posts", BlogPosts.class)
             .getBody()
@@ -178,7 +182,7 @@ final class BlogPostControllerTest {
             new HttpEntity<>(post, this.authenticator.authenticateAsAdmin()),
             BlogPostDto.class
         );
-        Assertions.assertEquals(201, created.getStatusCode().value());
+        Assertions.assertEquals(HttpStatus.CREATED, created.getStatusCode());
         final BlogPostDto found = this.template
             .getForEntity("/blog/posts", BlogPosts.class)
             .getBody()
@@ -193,21 +197,23 @@ final class BlogPostControllerTest {
             new HttpEntity<>(new MultiValueMapAdapter<>(new HashMap<>())),
             Void.class
         );
-        Assertions.assertEquals(401, unauthorised.getStatusCode().value());
+        Assertions.assertEquals(
+            HttpStatus.UNAUTHORIZED, unauthorised.getStatusCode()
+        );
         final ResponseEntity<Void> deleted = template.exchange(
             String.format("/blog/posts/%d", found.getId()),
             HttpMethod.DELETE,
             new HttpEntity<>(this.authenticator.authenticateAsAdmin()),
             Void.class
         );
-        Assertions.assertEquals(200, deleted.getStatusCode().value());
+        Assertions.assertEquals(HttpStatus.OK, deleted.getStatusCode());
         final ResponseEntity<Void> notFound = template.exchange(
             String.format("/blog/posts/%d", found.getId()),
             HttpMethod.DELETE,
             new HttpEntity<>(this.authenticator.authenticateAsAdmin()),
             Void.class
         );
-        Assertions.assertEquals(404, notFound.getStatusCode().value());
+        Assertions.assertEquals(HttpStatus.NOT_FOUND, notFound.getStatusCode());
         final List<BlogPostDto> after = this.template
             .getForEntity("/blog/posts", BlogPosts.class)
             .getBody()

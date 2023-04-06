@@ -22,11 +22,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 /**
- * Test for {@link com.github.aistomin.andys.backend.controllers.user.UserController}.
+ * Class that encapsulates tests' authentication logic.
  *
  * @since 0.1
  */
@@ -47,7 +48,7 @@ public final class Authenticator {
     public HttpHeaders authenticateAsAdmin() {
         final var admin = "admin";
         final var auth = this.authenticate(admin, admin);
-        Assertions.assertEquals(200, auth.getStatusCode().value());
+        Assertions.assertEquals(HttpStatus.OK, auth.getStatusCode());
         return new HttpHeaders() {{
             set(
                 "Authorization",

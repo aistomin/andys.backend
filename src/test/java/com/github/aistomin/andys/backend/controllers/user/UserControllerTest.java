@@ -29,6 +29,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMapAdapter;
 
@@ -65,10 +66,13 @@ public final class UserControllerTest {
         final var registration = new RegistrationDto();
         registration.setUsername(UUID.randomUUID().toString());
         registration.setPassword(UUID.randomUUID().toString());
-        final ResponseEntity<UserDto> unauthorised = this.template.postForEntity(
+        final var unauthorised = this.template.postForEntity(
             "/users/register", new HttpEntity<>(registration), UserDto.class
         );
-        Assertions.assertEquals(401, unauthorised.getStatusCode().value());
+        Assertions.assertEquals(
+            HttpStatus.UNAUTHORIZED,
+            unauthorised.getStatusCode()
+        );
         final ResponseEntity<UserDto> created = this.template.postForEntity(
             "/users/register",
             new HttpEntity<>(
@@ -76,7 +80,7 @@ public final class UserControllerTest {
             ),
             UserDto.class
         );
-        Assertions.assertEquals(201, created.getStatusCode().value());
+        Assertions.assertEquals(HttpStatus.CREATED, created.getStatusCode());
         final List<UserDto> all = this.template.exchange(
             "/users", HttpMethod.GET,
             new HttpEntity<>(this.authenticator.authenticateAsAdmin()),
@@ -84,7 +88,9 @@ public final class UserControllerTest {
         ).getBody().getContent();
         Assertions.assertEquals(before + 1, all.size());
         final Optional<UserDto> found = all.stream()
-            .filter(user -> user.getUsername().equals(registration.getUsername()))
+            .filter(user ->
+                user.getUsername().equals(registration.getUsername())
+            )
             .findAny();
         Assertions.assertTrue(found.isPresent());
         final ResponseEntity<JwtResponse> auth = this.template.postForEntity(
@@ -96,9 +102,9 @@ public final class UserControllerTest {
             ),
             JwtResponse.class
         );
-        Assertions.assertEquals(200, auth.getStatusCode().value());
+        Assertions.assertEquals(HttpStatus.OK, auth.getStatusCode());
         Assertions.assertNotNull(auth.getBody().getToken());
-        final ResponseEntity<JwtResponse> wrongPassword = this.template.postForEntity(
+        final var wrongPassword = this.template.postForEntity(
             "/authenticate",
             new HttpEntity<>(
                 new JwtRequest(
@@ -107,7 +113,9 @@ public final class UserControllerTest {
             ),
             JwtResponse.class
         );
-        Assertions.assertEquals(401, wrongPassword.getStatusCode().value());
+        Assertions.assertEquals(
+            HttpStatus.UNAUTHORIZED, wrongPassword.getStatusCode()
+        );
     }
 
     /**
@@ -130,7 +138,7 @@ public final class UserControllerTest {
             ),
             UserDto.class
         );
-        Assertions.assertEquals(201, created.getStatusCode().value());
+        Assertions.assertEquals(HttpStatus.CREATED, created.getStatusCode());
         final UserDto found = this.template.exchange(
                 "/users", HttpMethod.GET,
                 new HttpEntity<>(this.authenticator.authenticateAsAdmin()),
@@ -138,7 +146,9 @@ public final class UserControllerTest {
             ).getBody()
             .getContent()
             .stream()
-            .filter(user -> user.getUsername().equals(registration.getUsername()))
+            .filter(user ->
+                user.getUsername().equals(registration.getUsername())
+            )
             .findAny()
             .get();
         final ResponseEntity<Void> unauthorised = template.exchange(
@@ -147,21 +157,23 @@ public final class UserControllerTest {
             new HttpEntity<>(new MultiValueMapAdapter<>(new HashMap<>())),
             Void.class
         );
-        Assertions.assertEquals(401, unauthorised.getStatusCode().value());
+        Assertions.assertEquals(
+            HttpStatus.UNAUTHORIZED, unauthorised.getStatusCode()
+        );
         final ResponseEntity<Void> deleted = template.exchange(
             String.format("/users/%d", found.getId()),
             HttpMethod.DELETE,
             new HttpEntity<>(this.authenticator.authenticateAsAdmin()),
             Void.class
         );
-        Assertions.assertEquals(200, deleted.getStatusCode().value());
+        Assertions.assertEquals(HttpStatus.OK, deleted.getStatusCode());
         final ResponseEntity<Void> notFound = template.exchange(
             String.format("/users/%d", found.getId()),
             HttpMethod.DELETE,
             new HttpEntity<>(this.authenticator.authenticateAsAdmin()),
             Void.class
         );
-        Assertions.assertEquals(404, notFound.getStatusCode().value());
+        Assertions.assertEquals(HttpStatus.NOT_FOUND, notFound.getStatusCode());
         final List<UserDto> after = this.template.exchange(
             "/users", HttpMethod.GET,
             new HttpEntity<>(this.authenticator.authenticateAsAdmin()),
@@ -182,28 +194,30 @@ public final class UserControllerTest {
     @Test
     void testAuthentication() {
         Assertions.assertEquals(
-            401,
+            HttpStatus.UNAUTHORIZED,
             this.authenticator.authenticate(
                 UUID.randomUUID().toString(),
                 UUID.randomUUID().toString()
-            ).getStatusCode().value()
+            ).getStatusCode()
         );
         Assertions.assertEquals(
-            401,
+            HttpStatus.UNAUTHORIZED,
             this.authenticator.authenticate(
                 "admin",
                 UUID.randomUUID().toString()
-            ).getStatusCode().value()
+            ).getStatusCode()
         );
         final var forbidden = this.template.getForEntity(
             "/users", Users.class
         );
-        Assertions.assertEquals(401, forbidden.getStatusCode().value());
+        Assertions.assertEquals(
+            HttpStatus.UNAUTHORIZED, forbidden.getStatusCode()
+        );
         final var allowed = this.template.exchange(
             "/users", HttpMethod.GET,
             new HttpEntity<>(this.authenticator.authenticateAsAdmin()),
             Users.class
         );
-        Assertions.assertEquals(200, allowed.getStatusCode().value());
+        Assertions.assertEquals(HttpStatus.OK, allowed.getStatusCode());
     }
 }
