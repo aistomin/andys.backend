@@ -44,6 +44,7 @@ final class EmailMessageRepositoryTest {
     /**
      * Check that we correctly save the email message.
      */
+    @SuppressWarnings("checkstyle:LineLength")
     @Test
     void testSaveEmail() {
         final var clara = this.persons.save(

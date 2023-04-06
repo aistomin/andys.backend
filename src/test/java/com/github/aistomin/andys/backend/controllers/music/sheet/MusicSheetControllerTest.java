@@ -27,6 +27,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMapAdapter;
 
@@ -68,16 +69,18 @@ public final class MusicSheetControllerTest {
             new Date(),
             new Date()
         );
-        final ResponseEntity<MusicSheetDto> unauthorised = this.template.postForEntity(
+        final var unauthorised = this.template.postForEntity(
             "/music/sheets", new HttpEntity<>(sheet), MusicSheetDto.class
         );
-        Assertions.assertEquals(401, unauthorised.getStatusCode().value());
-        final ResponseEntity<MusicSheetDto> created = this.template.postForEntity(
+        Assertions.assertEquals(
+            HttpStatus.UNAUTHORIZED, unauthorised.getStatusCode()
+        );
+        final var created = this.template.postForEntity(
             "/music/sheets",
             new HttpEntity<>(sheet, this.authenticator.authenticateAsAdmin()),
             MusicSheetDto.class
         );
-        Assertions.assertEquals(201, created.getStatusCode().value());
+        Assertions.assertEquals(HttpStatus.CREATED, created.getStatusCode());
         Assertions.assertNotNull(created.getBody().getId());
         Assertions.assertEquals(sheet.getTitle(), created.getBody().getTitle());
         final var after = this.template
@@ -117,7 +120,7 @@ public final class MusicSheetControllerTest {
             MusicSheetDto.class
         );
         sheet.setId(created.getBody().getId());
-        Assertions.assertEquals(201, created.getStatusCode().value());
+        Assertions.assertEquals(HttpStatus.CREATED, created.getStatusCode());
         sheet.setTitle("Some intermediate title");
         template.exchange(
             "/music/sheets",
@@ -145,7 +148,7 @@ public final class MusicSheetControllerTest {
             new HttpEntity<>(sheet, this.authenticator.authenticateAsAdmin()),
             Void.class
         );
-        Assertions.assertEquals(200, response.getStatusCode().value());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         final List<MusicSheetDto> after = this.template
             .getForEntity("/music/sheets", MusicSheets.class)
             .getBody()
@@ -171,12 +174,12 @@ public final class MusicSheetControllerTest {
             .size();
         final var sheet = new MusicSheetDto();
         sheet.setTitle("The sheet that I will deleted");
-        final ResponseEntity<MusicSheetDto> created = this.template.postForEntity(
+        final var created = this.template.postForEntity(
             "/music/sheets",
             new HttpEntity<>(sheet, this.authenticator.authenticateAsAdmin()),
             MusicSheetDto.class
         );
-        Assertions.assertEquals(201, created.getStatusCode().value());
+        Assertions.assertEquals(HttpStatus.CREATED, created.getStatusCode());
         final MusicSheetDto found = this.template
             .getForEntity("/music/sheets", MusicSheets.class)
             .getBody()
@@ -191,21 +194,23 @@ public final class MusicSheetControllerTest {
             new HttpEntity<>(new MultiValueMapAdapter<>(new HashMap<>())),
             Void.class
         );
-        Assertions.assertEquals(401, unauthorised.getStatusCode().value());
+        Assertions.assertEquals(
+            HttpStatus.UNAUTHORIZED, unauthorised.getStatusCode()
+        );
         final ResponseEntity<Void> deleted = template.exchange(
             String.format("/music/sheets/%d", found.getId()),
             HttpMethod.DELETE,
             new HttpEntity<>(this.authenticator.authenticateAsAdmin()),
             Void.class
         );
-        Assertions.assertEquals(200, deleted.getStatusCode().value());
+        Assertions.assertEquals(HttpStatus.OK, deleted.getStatusCode());
         final ResponseEntity<Void> notFound = template.exchange(
             String.format("/music/sheets/%d", found.getId()),
             HttpMethod.DELETE,
             new HttpEntity<>(this.authenticator.authenticateAsAdmin()),
             Void.class
         );
-        Assertions.assertEquals(404, notFound.getStatusCode().value());
+        Assertions.assertEquals(HttpStatus.NOT_FOUND, notFound.getStatusCode());
         final List<MusicSheetDto> after = this.template
             .getForEntity("/music/sheets", MusicSheets.class)
             .getBody()

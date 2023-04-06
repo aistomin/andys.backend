@@ -27,6 +27,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMapAdapter;
 
@@ -44,6 +45,9 @@ final class PhotoControllerTest {
     @Autowired
     private Authenticator authenticator;
 
+    /**
+     * Test REST template.
+     */
     @Autowired
     private TestRestTemplate template;
 
@@ -61,17 +65,19 @@ final class PhotoControllerTest {
         photo.setUrl("https://whatever.com/photo/abc");
         photo.setCreatedOn(new Date());
         photo.setPublishedOn(new Date());
-        final ResponseEntity<PhotoDto> unauthorised = this.template.postForEntity(
+        final var unauthorised = this.template.postForEntity(
             "/photos", new HttpEntity<>(photo), PhotoDto.class
         );
-        Assertions.assertEquals(401, unauthorised.getStatusCode().value());
+        Assertions.assertEquals(
+            HttpStatus.UNAUTHORIZED, unauthorised.getStatusCode()
+        );
         final ResponseEntity<PhotoDto> created = this.template.postForEntity(
             "/photos",
             new HttpEntity<>(photo, this.authenticator.authenticateAsAdmin()),
             PhotoDto.class
         );
-        Assertions.assertEquals(201, created.getStatusCode().value());
-        final List<PhotoDto> all = this.template.getForEntity("/photos", Photos.class)
+        Assertions.assertEquals(HttpStatus.CREATED, created.getStatusCode());
+        final var all = this.template.getForEntity("/photos", Photos.class)
             .getBody()
             .getContent();
         Assertions.assertEquals(before + 1, all.size());
@@ -101,7 +107,7 @@ final class PhotoControllerTest {
             .getContent()
             .size();
         final var photo = new PhotoDto();
-        final var initialDescription = "This is the photo that will change it's description.";
+        final var initialDescription = "Description to change.";
         photo.setDescription(initialDescription);
         photo.setUrl("https://whatever.com/photo/efg");
         photo.setCreatedOn(new Date());
@@ -112,7 +118,7 @@ final class PhotoControllerTest {
             PhotoDto.class
         );
         photo.setId(created.getBody().getId());
-        Assertions.assertEquals(201, created.getStatusCode().value());
+        Assertions.assertEquals(HttpStatus.CREATED, created.getStatusCode());
         photo.setDescription("Some intermediate title");
         template.exchange(
             "/photos",
@@ -137,7 +143,7 @@ final class PhotoControllerTest {
             new HttpEntity<>(photo, this.authenticator.authenticateAsAdmin()),
             Void.class
         );
-        Assertions.assertEquals(200, response.getStatusCode().value());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         final List<PhotoDto> after = this.template
             .getForEntity("/photos", Photos.class)
             .getBody()
@@ -164,12 +170,12 @@ final class PhotoControllerTest {
         photo.setUrl("https://whatever.com/photo/cde");
         photo.setCreatedOn(new Date());
         photo.setPublishedOn(new Date());
-        final ResponseEntity<PhotoDto> created = this.template.postForEntity(
+        final var created = this.template.postForEntity(
             "/photos",
             new HttpEntity<>(photo, this.authenticator.authenticateAsAdmin()),
             PhotoDto.class
         );
-        Assertions.assertEquals(201, created.getStatusCode().value());
+        Assertions.assertEquals(HttpStatus.CREATED, created.getStatusCode());
         final PhotoDto found = this.template
             .getForEntity("/photos", Photos.class)
             .getBody()
@@ -184,21 +190,23 @@ final class PhotoControllerTest {
             new HttpEntity<>(new MultiValueMapAdapter<>(new HashMap<>())),
             Void.class
         );
-        Assertions.assertEquals(401, unauthorised.getStatusCode().value());
+        Assertions.assertEquals(
+            HttpStatus.UNAUTHORIZED, unauthorised.getStatusCode()
+        );
         final ResponseEntity<Void> deleted = template.exchange(
             String.format("/photos/%d", found.getId()),
             HttpMethod.DELETE,
             new HttpEntity<>(this.authenticator.authenticateAsAdmin()),
             Void.class
         );
-        Assertions.assertEquals(200, deleted.getStatusCode().value());
+        Assertions.assertEquals(HttpStatus.OK, deleted.getStatusCode());
         final ResponseEntity<Void> notFound = template.exchange(
             String.format("/photos/%d", found.getId()),
             HttpMethod.DELETE,
             new HttpEntity<>(this.authenticator.authenticateAsAdmin()),
             Void.class
         );
-        Assertions.assertEquals(404, notFound.getStatusCode().value());
+        Assertions.assertEquals(HttpStatus.NOT_FOUND, notFound.getStatusCode());
         final List<PhotoDto> after = this.template
             .getForEntity("/photos", Photos.class)
             .getBody()
