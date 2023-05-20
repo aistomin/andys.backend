@@ -17,8 +17,8 @@ package com.github.aistomin.andys.backend.activemq;
 
 import com.github.aistomin.andys.backend.model.EmailMessageRepository;
 import com.github.aistomin.andys.backend.model.EmailMessageStatus;
-import javax.jms.JMSException;
-import javax.jms.TextMessage;
+import jakarta.jms.JMSException;
+import jakarta.jms.TextMessage;
 import org.apache.activemq.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
