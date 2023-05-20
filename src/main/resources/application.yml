@@ -21,11 +21,11 @@ spring:
       time-between-expiration-check: -1
       use-anonymous-producers: true
   jpa:
-    database-platform: org.hibernate.dialect.PostgreSQL94Dialect
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
     show-sql: true
     hibernate:
       ddl-auto: ${andys_ddl_auto:create-drop}
     properties:
       hibernate:
-        dialect:org.hibernate.dialect.PostgreSQL81Dialect
+        dialect:org.hibernate.dialect.PostgreSQLDialect
 support.email: support@mailinator.com
