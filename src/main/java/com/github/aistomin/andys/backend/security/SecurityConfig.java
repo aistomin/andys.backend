@@ -24,6 +24,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -83,11 +84,13 @@ public class SecurityConfig {
         final PasswordEncoder encoder,
         final UserDetailsService user
     ) throws Exception {
-        return http.getSharedObject(AuthenticationManagerBuilder.class)
+        final var builder = http.getSharedObject(
+            AuthenticationManagerBuilder.class
+        );
+        builder
             .userDetailsService(user)
-            .passwordEncoder(encoder)
-            .and()
-            .build();
+            .passwordEncoder(encoder);
+        return builder.build();
     }
 
     /**
@@ -126,27 +129,33 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(
         final HttpSecurity http
     ) throws Exception {
-        http.csrf().disable()
-            .cors()
-            .and()
-            .authorizeHttpRequests()
-            .requestMatchers("/authenticate")
-            .permitAll()
-            .requestMatchers("/contact/us")
-            .permitAll()
-            .requestMatchers(
-                HttpMethod.GET,
-                "/videos",
-                "/music/sheets",
-                "/blog/posts",
-                "/photos"
-            )
-            .permitAll()
-            .anyRequest().authenticated().and()
-            .exceptionHandling()
-            .authenticationEntryPoint(this.auth)
-            .and().sessionManagement()
-            .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        http.csrf(AbstractHttpConfigurer::disable)
+            .cors(configurer -> configurer.configure(http))
+            .authorizeHttpRequests(registry -> {
+                registry.requestMatchers("/authenticate")
+                    .permitAll()
+                    .requestMatchers("/contact/us")
+                    .permitAll()
+                    .requestMatchers(
+                        HttpMethod.GET,
+                        "/videos",
+                        "/music/sheets",
+                        "/blog/posts",
+                        "/photos"
+                    )
+                    .permitAll()
+                    .anyRequest().authenticated();
+            })
+            .exceptionHandling(configurer -> {
+                configurer.configure(http);
+                configurer.authenticationEntryPoint(this.auth);
+            })
+            .sessionManagement(configurer -> {
+                configurer.configure(http);
+                configurer.sessionCreationPolicy(
+                    SessionCreationPolicy.STATELESS
+                );
+            });
         http.addFilterBefore(
             this.filter, UsernamePasswordAuthenticationFilter.class
         );
