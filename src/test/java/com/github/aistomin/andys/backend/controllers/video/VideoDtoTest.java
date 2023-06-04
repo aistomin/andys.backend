@@ -16,12 +16,11 @@
 package com.github.aistomin.andys.backend.controllers.video;
 
 import com.github.aistomin.andys.backend.model.Video;
-import java.util.Arrays;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import java.util.Date;
 import java.util.Random;
 import java.util.UUID;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
 
 /**
  * Test for {@link VideoDto}.
@@ -41,8 +40,7 @@ final class VideoDtoTest {
             UUID.randomUUID().toString(),
             UUID.randomUUID().toString(),
             new Date(),
-            new Date(),
-            Arrays.asList("video", "testing", "conversion")
+            new Date()
         );
         final var dto = new VideoDto(video);
         Assertions.assertEquals(video.getId(), dto.getId());
@@ -51,12 +49,5 @@ final class VideoDtoTest {
         Assertions.assertEquals(video.getUrl(), dto.getUrl());
         Assertions.assertEquals(video.getCreatedOn(), dto.getCreatedOn());
         Assertions.assertEquals(video.getPublishedOn(), dto.getPublishedOn());
-        Assertions.assertEquals(video.getTags().size(), dto.getTags().size());
-        Assertions.assertTrue(
-            video.getTags().stream()
-                .filter(tag -> !dto.getTags().contains(tag))
-                .findAny()
-                .isEmpty()
-        );
     }
 }

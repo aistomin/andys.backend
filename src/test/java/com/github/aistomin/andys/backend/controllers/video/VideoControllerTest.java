@@ -16,11 +16,6 @@
 package com.github.aistomin.andys.backend.controllers.video;
 
 import com.github.aistomin.andys.backend.controllers.Authenticator;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +26,10 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMapAdapter;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * Test for {@link VideoController}.
@@ -67,7 +66,6 @@ public final class VideoControllerTest {
         video.setUrl("https://whatever.com/video/abc");
         video.setCreatedOn(new Date());
         video.setPublishedOn(new Date());
-        video.setTags(Arrays.asList("Nature", "Dogs", "Pets"));
         final var unauthorised = this.template.postForEntity(
             "/videos", new HttpEntity<>(video), VideoDto.class
         );
@@ -98,12 +96,6 @@ public final class VideoControllerTest {
         Assertions.assertEquals(
             video.getPublishedOn(), found.get().getPublishedOn()
         );
-        Assertions.assertEquals(
-            video.getTags().size(), found.get().getTags().size()
-        );
-        for (final String tag : video.getTags()) {
-            Assertions.assertTrue(found.get().getTags().contains(tag));
-        }
     }
 
     /**
@@ -122,7 +114,6 @@ public final class VideoControllerTest {
         video.setUrl("https://whatever.com/video/efg");
         video.setCreatedOn(new Date());
         video.setPublishedOn(new Date());
-        video.setTags(Arrays.asList("Video", "Editing"));
         final var created = this.template.postForEntity(
             "/videos",
             new HttpEntity<>(video, this.authenticator.authenticateAsAdmin()),
@@ -184,7 +175,6 @@ public final class VideoControllerTest {
         video.setUrl("https://whatever.com/video/cde");
         video.setCreatedOn(new Date());
         video.setPublishedOn(new Date());
-        video.setTags(Arrays.asList("Video", "testing", "deletion"));
         final var created = this.template.postForEntity(
             "/videos",
             new HttpEntity<>(video, this.authenticator.authenticateAsAdmin()),

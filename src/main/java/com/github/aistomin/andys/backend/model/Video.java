@@ -17,19 +17,16 @@ package com.github.aistomin.andys.backend.model;
 
 import com.github.aistomin.andys.backend.controllers.video.VideoDto;
 import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import java.util.Date;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import java.util.Date;
 
 /**
  * Data object that stores video's data.
@@ -89,12 +86,6 @@ public final class Video {
     private Date publishedOn;
 
     /**
-     * Video hashtags.
-     */
-    @ElementCollection(fetch = FetchType.LAZY)
-    private List<String> tags;
-
-    /**
      * Ctor.
      *
      * @param dto Video DTO.
@@ -106,8 +97,7 @@ public final class Video {
             dto.getDescription(),
             dto.getUrl(),
             dto.getCreatedOn(),
-            dto.getPublishedOn(),
-            dto.getTags()
+            dto.getPublishedOn()
         );
     }
 }
