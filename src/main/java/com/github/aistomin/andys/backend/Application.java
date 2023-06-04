@@ -28,7 +28,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
-import java.util.Arrays;
 import java.util.Date;
 
 /**
@@ -139,9 +138,6 @@ public class Application {
                 LocalDate.of(2017, 8, 20)
                     .atStartOfDay()
                     .toInstant(ZoneOffset.UTC)
-            ),
-            Arrays.asList(
-                "music", "guitar", "classicalguitar", "classicalmusic", "carcassi"
             )
         ));
         this.videos.save(new VideoDto(
@@ -158,10 +154,6 @@ public class Application {
                 LocalDate.of(2017, 8, 20)
                     .atStartOfDay()
                     .toInstant(ZoneOffset.UTC)
-            ),
-            Arrays.asList(
-                "music", "guitar", "classicalguitar", "germanmusic",
-                "zeitfuertraeume"
             )
         ));
         this.videos.save(new VideoDto(
@@ -178,8 +170,7 @@ public class Application {
                 LocalDate.of(2017, 8, 21)
                     .atStartOfDay()
                     .toInstant(ZoneOffset.UTC)
-            ),
-            Arrays.asList("music", "guitar", "police", "hobbymusician")
+            )
         ));
         this.videos.save(new VideoDto(
             null,
@@ -195,8 +186,7 @@ public class Application {
                 LocalDate.of(2017, 11, 11)
                     .atStartOfDay()
                     .toInstant(ZoneOffset.UTC)
-            ),
-            Arrays.asList("music", "guitar", "classicalguitar", "giuliani")
+            )
         ));
         this.videos.save(new VideoDto(
             null,
@@ -212,8 +202,7 @@ public class Application {
                 LocalDate.of(2017, 11, 13)
                     .atStartOfDay()
                     .toInstant(ZoneOffset.UTC)
-            ),
-            Arrays.asList("music", "guitar", "blackmore")
+            )
         ));
         this.videos.save(new VideoDto(
             null,
@@ -229,8 +218,7 @@ public class Application {
                 LocalDate.of(2017, 12, 15)
                     .atStartOfDay()
                     .toInstant(ZoneOffset.UTC)
-            ),
-            Arrays.asList("music", "guitar", "fernandosor", "classicalguitar")
+            )
         ));
         this.videos.save(new VideoDto(
             null,
@@ -246,8 +234,7 @@ public class Application {
                 LocalDate.of(2019, 5, 30)
                     .atStartOfDay()
                     .toInstant(ZoneOffset.UTC)
-            ),
-            Arrays.asList("music", "guitar", "fernandosor", "classicalguitar")
+            )
         ));
         this.videos.save(new VideoDto(
             null,
@@ -263,8 +250,7 @@ public class Application {
                 LocalDate.of(2019, 7, 9)
                     .atStartOfDay()
                     .toInstant(ZoneOffset.UTC)
-            ),
-            Arrays.asList("music", "guitar", "carulli", "classicalguitar")
+            )
         ));
         this.videos.save(new VideoDto(
             null,
@@ -280,9 +266,6 @@ public class Application {
                 LocalDate.of(2020, 6, 13)
                     .atStartOfDay()
                     .toInstant(ZoneOffset.UTC)
-            ),
-            Arrays.asList(
-                "music", "guitar", "pachelbel", "classicalguitar", "recorder"
             )
         ));
         this.videos.save(new VideoDto(
@@ -299,8 +282,7 @@ public class Application {
                 LocalDate.of(2021, 4, 9)
                     .atStartOfDay()
                     .toInstant(ZoneOffset.UTC)
-            ),
-            Arrays.asList("music", "guitar", "bach", "classicalguitar")
+            )
         ));
         this.logger.info("Demo videos were successfully generated.");
     }

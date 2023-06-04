@@ -16,13 +16,12 @@
 package com.github.aistomin.andys.backend.controllers.video;
 
 import com.github.aistomin.andys.backend.model.Video;
-import java.util.Date;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import java.util.Date;
 
 /**
  * Video DTO.
@@ -67,11 +66,6 @@ public final class VideoDto {
     private Date publishedOn;
 
     /**
-     * Video hashtags.
-     */
-    private List<String> tags;
-
-    /**
      * Ctor.
      *
      * @param video Video entity.
@@ -83,8 +77,7 @@ public final class VideoDto {
             video.getDescription(),
             video.getUrl(),
             video.getCreatedOn(),
-            video.getPublishedOn(),
-            video.getTags()
+            video.getPublishedOn()
         );
     }
 }
