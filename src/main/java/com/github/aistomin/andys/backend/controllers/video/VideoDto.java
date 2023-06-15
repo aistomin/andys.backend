@@ -15,6 +15,7 @@
  */
 package com.github.aistomin.andys.backend.controllers.video;
 
+import com.github.aistomin.andys.backend.controllers.music.sheet.MusicSheetDto;
 import com.github.aistomin.andys.backend.model.Video;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,6 +23,9 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Video DTO.
@@ -56,6 +60,11 @@ public final class VideoDto {
     private String url;
 
     /**
+     * Music sheets that belong to the video.
+     */
+    private Set<MusicSheetDto> sheets = new HashSet<>();
+
+    /**
      * The date when the video was created.
      */
     private Date createdOn;
@@ -76,6 +85,10 @@ public final class VideoDto {
             video.getTitle(),
             video.getDescription(),
             video.getUrl(),
+            video.getSheets()
+                .stream()
+                .map(MusicSheetDto::new)
+                .collect(Collectors.toSet()),
             video.getCreatedOn(),
             video.getPublishedOn()
         );

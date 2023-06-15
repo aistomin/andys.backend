@@ -15,10 +15,13 @@
  */
 package com.github.aistomin.andys.backend.model;
 
+import com.github.aistomin.andys.backend.controllers.music.sheet.MusicSheetDto;
 import com.github.aistomin.andys.backend.controllers.video.VideoDto;
+import com.github.aistomin.andys.backend.utils.MagicNumber;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Random;
 import java.util.UUID;
 
@@ -34,11 +37,28 @@ final class VideoTest {
      */
     @Test
     void testConvert() {
+        final var random = new Random();
+        final var sheets = new HashSet<MusicSheetDto>();
+        for (int i = 0; i < random.nextInt(MagicNumber.TEN); i++) {
+            sheets.add(
+                new MusicSheetDto(
+                    random.nextLong(MagicNumber.THOUSAND),
+                    UUID.randomUUID().toString(),
+                    null,
+                    UUID.randomUUID().toString(),
+                    UUID.randomUUID().toString(),
+                    UUID.randomUUID().toString(),
+                    new Date(),
+                    new Date()
+                )
+            );
+        }
         final var dto = new VideoDto(
-            new Random().nextLong(1000),
+            random.nextLong(MagicNumber.THOUSAND),
             UUID.randomUUID().toString(),
             UUID.randomUUID().toString(),
             UUID.randomUUID().toString(),
+            sheets,
             new Date(),
             new Date()
         );
@@ -47,6 +67,9 @@ final class VideoTest {
         Assertions.assertEquals(dto.getTitle(), video.getTitle());
         Assertions.assertEquals(dto.getDescription(), video.getDescription());
         Assertions.assertEquals(dto.getUrl(), video.getUrl());
+        Assertions.assertEquals(
+            dto.getSheets().size(), video.getSheets().size()
+        );
         Assertions.assertEquals(dto.getCreatedOn(), video.getCreatedOn());
         Assertions.assertEquals(dto.getPublishedOn(), video.getPublishedOn());
     }

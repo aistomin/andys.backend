@@ -29,6 +29,7 @@ import org.springframework.context.annotation.Bean;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.util.Date;
+import java.util.HashSet;
 
 /**
  * Application class.
@@ -129,6 +130,7 @@ public class Application {
             "Matteo Carcassi - Prelude in E Minor // Andrej Istomin",
             "Matteo Carcassi(1792 – 1853): \"Prelude in E Minor\". Performed by Andrej Istomin.",
             "https://www.youtube.com/watch?v=FtJ69YrA3Ok",
+            new HashSet<>(),
             Date.from(
                 LocalDate.of(2017, 8, 20)
                     .atStartOfDay()
@@ -145,6 +147,7 @@ public class Application {
             "Klaus Schindler - Zeit für Träume // Andrej Istomin",
             "The photos in this video were taken by my wife(checkout her channel, by the way:  https://www.youtube.com/channel/UC810...) in Landkreis Dachau(mostly in Schwabhausen and Altomünster). The lovely place where I live.",
             "https://www.youtube.com/watch?v=lLe-HB1WLO4",
+            new HashSet<>(),
             Date.from(
                 LocalDate.of(2017, 8, 20)
                     .atStartOfDay()
@@ -161,6 +164,7 @@ public class Application {
             "Andrej Istomin - Jenny",
             "The melody composed and performed by Andrej Istomin except those telephone sounds.",
             "https://www.youtube.com/watch?v=j_Ve3uiVsaA",
+            new HashSet<>(),
             Date.from(
                 LocalDate.of(2017, 8, 21)
                     .atStartOfDay()
@@ -177,6 +181,7 @@ public class Application {
             "Mauro Giuliani - Sonatina op. 71 no. 1 // Andrej Istomin",
             "A little bit of an autumn mood :) Music piece is composed by Mauro Giuliani, called \"Sonatina op71 n°1\". The pictures in slide-show are the reproductions of different Russian painters.",
             "https://www.youtube.com/watch?v=DIEBQxqY1yU",
+            new HashSet<>(),
             Date.from(
                 LocalDate.of(2017, 11, 11)
                     .atStartOfDay()
@@ -193,6 +198,7 @@ public class Application {
             "Blackmore's Night - Minstrel Hall // Andrej Istomin",
             "The piece is composed by Ritchie Blackmore.",
             "https://www.youtube.com/watch?v=iTVHH1vMIcI",
+            new HashSet<>(),
             Date.from(
                 LocalDate.of(2017, 11, 13)
                     .atStartOfDay()
@@ -209,6 +215,7 @@ public class Application {
             "Fernando Sor - Andante // Andrej Istomin",
             "This time I'm playing \"Andante\" by Fernando Sor. It is the very first time when I try to create a real video instead of slide show which I did for my previous videos. I hope you like it :)",
             "https://www.youtube.com/watch?v=kbd7a7j0VOE",
+            new HashSet<>(),
             Date.from(
                 LocalDate.of(2017, 12, 15)
                     .atStartOfDay()
@@ -225,6 +232,7 @@ public class Application {
             "Greensleeves(English traditional) // Andrej Istomin",
             "Today I'd like to show you my attempt to play instrumental version of the traditional English song \"Greensleeves\".",
             "https://www.youtube.com/watch?v=DDt7N5KxXrM",
+            new HashSet<>(),
             Date.from(
                 LocalDate.of(2019, 5, 30)
                     .atStartOfDay()
@@ -241,6 +249,7 @@ public class Application {
             "Ferdinando Carulli - Andantino // Andrej Istomin",
             "This summer is really hot here in Germany. I decided to create this small summer video where I'm trying to play nice light piece called \"Andantino\" by Ferdinando Carulli (1770-1841).",
             "https://www.youtube.com/watch?v=Hd05dNHYqAw",
+            new HashSet<>(),
             Date.from(
                 LocalDate.of(2019, 7, 9)
                     .atStartOfDay()
@@ -257,6 +266,7 @@ public class Application {
             "Johann Pachelbel - Sarabande (Guitar + Recorder) // Andrej Istomin",
             "This summer is really hot here in Germany. I decided to create this small summer video where I'm trying to play nice light piece called \"Andantino\" by Ferdinando Carulli (1770-1841).",
             "https://www.youtube.com/watch?v=hRvXB_gnR84",
+            new HashSet<>(),
             Date.from(
                 LocalDate.of(2020, 6, 13)
                     .atStartOfDay()
@@ -273,6 +283,7 @@ public class Application {
             "J. S. Bach - Bourrée // Andrej Istomin",
             "Thanks for watching this video. If you like it, please subscribe to my channel, comment the videos, \"like\" them and share with your friends.",
             "https://www.youtube.com/watch?v=AjQBAQ1jzwc",
+            new HashSet<>(),
             Date.from(
                 LocalDate.of(2021, 4, 9)
                     .atStartOfDay()
