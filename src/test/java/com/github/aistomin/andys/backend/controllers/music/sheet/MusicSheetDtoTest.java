@@ -17,8 +17,11 @@ package com.github.aistomin.andys.backend.controllers.music.sheet;
 
 import com.github.aistomin.andys.backend.model.MusicSheet;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Random;
 import java.util.UUID;
+import com.github.aistomin.andys.backend.model.Video;
+import com.github.aistomin.andys.backend.utils.MagicNumber;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -35,9 +38,19 @@ final class MusicSheetDtoTest {
      */
     @Test
     void testConvert() {
+        final var random = new Random();
         final var sheet = new MusicSheet(
-            new Random().nextLong(1000),
+            random.nextLong(MagicNumber.THOUSAND),
             UUID.randomUUID().toString(),
+            new Video(
+                random.nextLong(MagicNumber.THOUSAND),
+                UUID.randomUUID().toString(),
+                UUID.randomUUID().toString(),
+                UUID.randomUUID().toString(),
+                new HashSet<>(),
+                new Date(),
+                new Date()
+            ),
             UUID.randomUUID().toString(),
             UUID.randomUUID().toString(),
             UUID.randomUUID().toString(),
@@ -47,6 +60,9 @@ final class MusicSheetDtoTest {
         final var dto = new MusicSheetDto(sheet);
         Assertions.assertEquals(sheet.getId(), dto.getId());
         Assertions.assertEquals(sheet.getTitle(), dto.getTitle());
+        Assertions.assertEquals(
+            sheet.getVideo().getId(), dto.getVideo().getId()
+        );
         Assertions.assertEquals(sheet.getDescription(), dto.getDescription());
         Assertions.assertEquals(sheet.getPreviewUrl(), dto.getPreviewUrl());
         Assertions.assertEquals(sheet.getDownloadUrl(), dto.getDownloadUrl());

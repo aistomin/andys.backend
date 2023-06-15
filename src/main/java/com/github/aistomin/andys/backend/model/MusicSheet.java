@@ -22,6 +22,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import java.util.Date;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -62,6 +63,12 @@ public final class MusicSheet {
     private String title;
 
     /**
+     * Video with the music.
+     */
+    @ManyToOne
+    private Video video;
+
+    /**
      * Music sheet's description.
      */
     @Column(length = MusicSheet.DESCRIPTION_LENGTH)
@@ -100,6 +107,7 @@ public final class MusicSheet {
         this(
             dto.getId(),
             dto.getTitle(),
+            dto.getVideo() != null ? new Video(dto.getVideo()) : null,
             dto.getDescription(),
             dto.getPreviewUrl(),
             dto.getDownloadUrl(),

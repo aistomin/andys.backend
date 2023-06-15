@@ -21,12 +21,16 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Data object that stores video's data.
@@ -74,6 +78,12 @@ public final class Video {
     private String url;
 
     /**
+     * Music sheets that belong to the video.
+     */
+    @OneToMany
+    private Set<MusicSheet> sheets = new HashSet<>();
+
+    /**
      * The date when the video was created.
      */
     @Column
@@ -96,6 +106,10 @@ public final class Video {
             dto.getTitle(),
             dto.getDescription(),
             dto.getUrl(),
+            dto.getSheets()
+                .stream()
+                .map(MusicSheet::new)
+                .collect(Collectors.toSet()),
             dto.getCreatedOn(),
             dto.getPublishedOn()
         );

@@ -15,6 +15,7 @@
  */
 package com.github.aistomin.andys.backend.controllers.music.sheet;
 
+import com.github.aistomin.andys.backend.controllers.video.VideoDto;
 import com.github.aistomin.andys.backend.model.MusicSheet;
 import jakarta.persistence.Column;
 import java.util.Date;
@@ -45,6 +46,11 @@ public final class MusicSheetDto {
      * Music sheet's title.
      */
     private String title;
+
+    /**
+     * Video with the music.
+     */
+    private VideoDto video;
 
     /**
      * Music sheet description.
@@ -82,6 +88,7 @@ public final class MusicSheetDto {
         this(
             sheet.getId(),
             sheet.getTitle(),
+            sheet.getVideo() != null ? new VideoDto(sheet.getVideo()) : null,
             sheet.getDescription(),
             sheet.getPreviewUrl(),
             sheet.getDownloadUrl(),

@@ -15,10 +15,13 @@
  */
 package com.github.aistomin.andys.backend.controllers.video;
 
+import com.github.aistomin.andys.backend.model.MusicSheet;
 import com.github.aistomin.andys.backend.model.Video;
+import com.github.aistomin.andys.backend.utils.MagicNumber;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Random;
 import java.util.UUID;
 
@@ -34,11 +37,28 @@ final class VideoDtoTest {
      */
     @Test
     void testConvert() {
+        final var random = new Random();
+        final var sheets = new HashSet<MusicSheet>();
+        for (int i = 0; i < random.nextInt(MagicNumber.TEN); i++) {
+            sheets.add(
+                new MusicSheet(
+                    random.nextLong(MagicNumber.THOUSAND),
+                    UUID.randomUUID().toString(),
+                    null,
+                    UUID.randomUUID().toString(),
+                    UUID.randomUUID().toString(),
+                    UUID.randomUUID().toString(),
+                    new Date(),
+                    new Date()
+                )
+            );
+        }
         final var video = new Video(
-            new Random().nextLong(1000),
+            random.nextLong(MagicNumber.THOUSAND),
             UUID.randomUUID().toString(),
             UUID.randomUUID().toString(),
             UUID.randomUUID().toString(),
+            sheets,
             new Date(),
             new Date()
         );
@@ -47,6 +67,9 @@ final class VideoDtoTest {
         Assertions.assertEquals(video.getTitle(), dto.getTitle());
         Assertions.assertEquals(video.getDescription(), dto.getDescription());
         Assertions.assertEquals(video.getUrl(), dto.getUrl());
+        Assertions.assertEquals(
+            video.getSheets().size(), dto.getSheets().size()
+        );
         Assertions.assertEquals(video.getCreatedOn(), dto.getCreatedOn());
         Assertions.assertEquals(video.getPublishedOn(), dto.getPublishedOn());
     }
