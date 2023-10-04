@@ -16,7 +16,7 @@
         <maven.compiler.source>18</maven.compiler.source>
         <maven.compiler.target>18</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <jjwt.version>0.11.5</jjwt.version>
+        <jjwt.version>0.12.0</jjwt.version>
         <linkXRef>false</linkXRef>
     </properties>
     <dependencies>
