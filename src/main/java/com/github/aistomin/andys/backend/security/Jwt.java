@@ -93,7 +93,7 @@ public final class Jwt implements Serializable {
      * @return Claims.
      */
     private Claims getAllClaimsFromToken(final String token) {
-        return Jwts.parserBuilder()
+        return Jwts.parser()
             .setSigningKey(this.key())
             .build()
             .parseClaimsJws(token)
