@@ -28,7 +28,7 @@ jobs:
       run: |
         sudo -u postgres createdb --owner=joe andys
     - name: Build with Maven
-      run: mvn clean install package javadoc:javadoc
+      run: mvn clean install package
       env:
         andys_db_url: jdbc:postgresql://localhost:5432/andys
         andys_db_user: joe
