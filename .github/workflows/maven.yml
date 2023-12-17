@@ -27,7 +27,6 @@ jobs:
     - name: Create additional database
       run: |
         sudo -u postgres createdb --owner=joe andys
-        PGPASSWORD=foo psql --username=joe --host=localhost --list timetable
     - name: Build with Maven
       run: mvn clean install package javadoc:javadoc
       env:
