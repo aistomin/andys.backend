@@ -31,6 +31,10 @@ jobs:
         cache: maven
     - name: Build with Maven
       run: mvn clean install package javadoc:javadoc
+      env:
+        andys_db_url: jdbc:postgresql://postgres:5432/andys
+        andys_db_user: root
+        andys_db_password: root
     - name: Publish Codecov
       run: bash <(curl -s https://codecov.io/bash)
     - name: Update dependency graph
