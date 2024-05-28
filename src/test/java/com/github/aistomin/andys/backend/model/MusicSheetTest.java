@@ -47,6 +47,7 @@ final class MusicSheetTest {
                 UUID.randomUUID().toString(),
                 UUID.randomUUID().toString(),
                 UUID.randomUUID().toString(),
+                UUID.randomUUID().toString(),
                 new HashSet<>(),
                 new Date(),
                 new Date()

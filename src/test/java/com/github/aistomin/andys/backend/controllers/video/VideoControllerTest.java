@@ -64,6 +64,7 @@ public final class VideoControllerTest {
         video.setTitle("My New Video");
         video.setDescription("This is my new video");
         video.setUrl("https://whatever.com/video/abc");
+        video.setYoutubeId("abc");
         video.setCreatedOn(new Date());
         video.setPublishedOn(new Date());
         final var unauthorised = this.template.postForEntity(
@@ -112,6 +113,7 @@ public final class VideoControllerTest {
         video.setTitle(initialTitle);
         video.setDescription("This is the video that will change it's title.");
         video.setUrl("https://whatever.com/video/efg");
+        video.setYoutubeId("efg");
         video.setCreatedOn(new Date());
         video.setPublishedOn(new Date());
         final var created = this.template.postForEntity(
@@ -173,6 +175,7 @@ public final class VideoControllerTest {
         video.setTitle("Video that I will deleted");
         video.setDescription("Test video that I will delete later");
         video.setUrl("https://whatever.com/video/cde");
+        video.setYoutubeId("cde");
         video.setCreatedOn(new Date());
         video.setPublishedOn(new Date());
         final var created = this.template.postForEntity(
