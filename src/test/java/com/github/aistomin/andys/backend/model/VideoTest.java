@@ -58,6 +58,7 @@ final class VideoTest {
             UUID.randomUUID().toString(),
             UUID.randomUUID().toString(),
             UUID.randomUUID().toString(),
+            UUID.randomUUID().toString(),
             sheets,
             new Date(),
             new Date()
@@ -67,6 +68,7 @@ final class VideoTest {
         Assertions.assertEquals(dto.getTitle(), video.getTitle());
         Assertions.assertEquals(dto.getDescription(), video.getDescription());
         Assertions.assertEquals(dto.getUrl(), video.getUrl());
+        Assertions.assertEquals(dto.getYoutubeId(), video.getYoutubeId());
         Assertions.assertEquals(
             dto.getSheets().size(), video.getSheets().size()
         );

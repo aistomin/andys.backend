@@ -74,8 +74,14 @@ public final class Video {
     /**
      * Video URL.
      */
-    @Column
+    @Column(nullable = false)
     private String url;
+
+    /**
+     * Video's ID on the YouTube platform.
+     */
+    @Column(nullable = false)
+    private String youtubeId;
 
     /**
      * Music sheets that belong to the video.
@@ -106,6 +112,7 @@ public final class Video {
             dto.getTitle(),
             dto.getDescription(),
             dto.getUrl(),
+            dto.getYoutubeId(),
             dto.getSheets()
                 .stream()
                 .map(MusicSheet::new)

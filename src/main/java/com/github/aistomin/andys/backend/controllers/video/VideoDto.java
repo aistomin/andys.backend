@@ -60,6 +60,11 @@ public final class VideoDto {
     private String url;
 
     /**
+     * Video's ID on the YouTube platform.
+     */
+    private String youtubeId;
+
+    /**
      * Music sheets that belong to the video.
      */
     private Set<MusicSheetDto> sheets = new HashSet<>();
@@ -85,6 +90,7 @@ public final class VideoDto {
             video.getTitle(),
             video.getDescription(),
             video.getUrl(),
+            video.getYoutubeId(),
             video.getSheets()
                 .stream()
                 .map(MusicSheetDto::new)
