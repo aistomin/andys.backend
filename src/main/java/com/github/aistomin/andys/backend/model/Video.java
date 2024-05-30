@@ -18,6 +18,7 @@ package com.github.aistomin.andys.backend.model;
 import com.github.aistomin.andys.backend.controllers.video.VideoDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -85,14 +86,15 @@ public final class Video {
 
     /**
      * Music sheets that belong to the video.
+     * @todo: Issue #414 Fix the fetch type.
      */
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     private Set<MusicSheet> sheets = new HashSet<>();
 
     /**
      * The date when the video was created.
      */
-    @Column
+    @Column(nullable = false)
     private Date createdOn;
 
     /**
