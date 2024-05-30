@@ -15,15 +15,14 @@
  */
 package com.github.aistomin.andys.backend.controllers.music.sheet;
 
-import com.github.aistomin.andys.backend.controllers.video.VideoDto;
 import com.github.aistomin.andys.backend.model.MusicSheet;
 import jakarta.persistence.Column;
-import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import java.util.Date;
 
 /**
  * Music sheet DTO.
@@ -46,11 +45,6 @@ public final class MusicSheetDto {
      * Music sheet's title.
      */
     private String title;
-
-    /**
-     * Video with the music.
-     */
-    private VideoDto video;
 
     /**
      * Music sheet description.
@@ -88,7 +82,6 @@ public final class MusicSheetDto {
         this(
             sheet.getId(),
             sheet.getTitle(),
-            sheet.getVideo() != null ? new VideoDto(sheet.getVideo()) : null,
             sheet.getDescription(),
             sheet.getPreviewUrl(),
             sheet.getDownloadUrl(),

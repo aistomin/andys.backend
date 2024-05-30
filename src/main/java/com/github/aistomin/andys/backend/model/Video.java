@@ -92,6 +92,13 @@ public final class Video {
     private Set<MusicSheet> sheets = new HashSet<>();
 
     /**
+     * Lyrics that belong to the video.
+     * @todo: Issue #414 Fix the fetch type.
+     */
+    @OneToMany(fetch = FetchType.EAGER)
+    private Set<Lyrics> lyrics = new HashSet<>();
+
+    /**
      * The date when the video was created.
      */
     @Column(nullable = false)
@@ -118,6 +125,10 @@ public final class Video {
             dto.getSheets()
                 .stream()
                 .map(MusicSheet::new)
+                .collect(Collectors.toSet()),
+            dto.getLyrics()
+                .stream()
+                .map(Lyrics::new)
                 .collect(Collectors.toSet()),
             dto.getCreatedOn(),
             dto.getPublishedOn()

@@ -63,7 +63,6 @@ public final class LyricsControllerTest {
         final var lyrics = new LyricsDto(
             null,
             UUID.randomUUID().toString(),
-            null,
             UUID.randomUUID().toString(),
             new Date(),
             new Date()
