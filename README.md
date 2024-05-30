@@ -10,6 +10,7 @@ Frontend application: https://github.com/aistomin/andys.frontend
 Admin application: https://github.com/aistomin/andys.admin
 
 To start the app run:
+
 ```
 mvn spring-boot:run
 ```
