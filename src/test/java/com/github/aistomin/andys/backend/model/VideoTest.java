@@ -15,6 +15,7 @@
  */
 package com.github.aistomin.andys.backend.model;
 
+import com.github.aistomin.andys.backend.controllers.lyrics.LyricsDto;
 import com.github.aistomin.andys.backend.controllers.music.sheet.MusicSheetDto;
 import com.github.aistomin.andys.backend.controllers.video.VideoDto;
 import com.github.aistomin.andys.backend.utils.MagicNumber;
@@ -39,13 +40,22 @@ final class VideoTest {
     void testConvert() {
         final var random = new Random();
         final var sheets = new HashSet<MusicSheetDto>();
+        final var lyrics = new HashSet<LyricsDto>();
         for (int i = 0; i < random.nextInt(MagicNumber.TEN); i++) {
             sheets.add(
                 new MusicSheetDto(
                     random.nextLong(MagicNumber.THOUSAND),
                     UUID.randomUUID().toString(),
-                    null,
                     UUID.randomUUID().toString(),
+                    UUID.randomUUID().toString(),
+                    UUID.randomUUID().toString(),
+                    new Date(),
+                    new Date()
+                )
+            );
+            lyrics.add(
+                new LyricsDto(
+                    random.nextLong(MagicNumber.THOUSAND),
                     UUID.randomUUID().toString(),
                     UUID.randomUUID().toString(),
                     new Date(),
@@ -60,6 +70,7 @@ final class VideoTest {
             UUID.randomUUID().toString(),
             UUID.randomUUID().toString(),
             sheets,
+            lyrics,
             new Date(),
             new Date()
         );
@@ -71,6 +82,9 @@ final class VideoTest {
         Assertions.assertEquals(dto.getYoutubeId(), video.getYoutubeId());
         Assertions.assertEquals(
             dto.getSheets().size(), video.getSheets().size()
+        );
+        Assertions.assertEquals(
+            dto.getLyrics().size(), video.getLyrics().size()
         );
         Assertions.assertEquals(dto.getCreatedOn(), video.getCreatedOn());
         Assertions.assertEquals(dto.getPublishedOn(), video.getPublishedOn());

@@ -16,12 +16,10 @@
 package com.github.aistomin.andys.backend.controllers.lyrics;
 
 import com.github.aistomin.andys.backend.model.Lyrics;
-import com.github.aistomin.andys.backend.model.Video;
 import com.github.aistomin.andys.backend.utils.MagicNumber;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Random;
 import java.util.UUID;
 
@@ -41,16 +39,6 @@ final class LyricsDtoTest {
         final var lyrics = new Lyrics(
             random.nextLong(MagicNumber.THOUSAND),
             UUID.randomUUID().toString(),
-            new Video(
-                random.nextLong(MagicNumber.THOUSAND),
-                UUID.randomUUID().toString(),
-                UUID.randomUUID().toString(),
-                UUID.randomUUID().toString(),
-                UUID.randomUUID().toString(),
-                new HashSet<>(),
-                new Date(),
-                new Date()
-            ),
             UUID.randomUUID().toString(),
             new Date(),
             new Date()
@@ -58,9 +46,6 @@ final class LyricsDtoTest {
         final var dto = new LyricsDto(lyrics);
         Assertions.assertEquals(lyrics.getId(), dto.getId());
         Assertions.assertEquals(lyrics.getTitle(), dto.getTitle());
-        Assertions.assertEquals(
-            lyrics.getVideo().getId(), dto.getVideo().getId()
-        );
         Assertions.assertEquals(lyrics.getText(), dto.getText());
         Assertions.assertEquals(lyrics.getCreatedOn(), dto.getCreatedOn());
         Assertions.assertEquals(lyrics.getPublishedOn(), dto.getPublishedOn());

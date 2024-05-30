@@ -15,7 +15,6 @@
  */
 package com.github.aistomin.andys.backend.controllers.lyrics;
 
-import com.github.aistomin.andys.backend.controllers.video.VideoDto;
 import com.github.aistomin.andys.backend.model.Lyrics;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -47,11 +46,6 @@ public final class LyricsDto {
     private String title;
 
     /**
-     * Video with the music.
-     */
-    private VideoDto video;
-
-    /**
      * Lyrics description.
      */
     private String text;
@@ -75,7 +69,6 @@ public final class LyricsDto {
         this(
             lyrics.getId(),
             lyrics.getTitle(),
-            lyrics.getVideo() != null ? new VideoDto(lyrics.getVideo()) : null,
             lyrics.getText(),
             lyrics.getCreatedOn(),
             lyrics.getPublishedOn()

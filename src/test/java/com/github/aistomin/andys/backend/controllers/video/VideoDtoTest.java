@@ -15,6 +15,7 @@
  */
 package com.github.aistomin.andys.backend.controllers.video;
 
+import com.github.aistomin.andys.backend.model.Lyrics;
 import com.github.aistomin.andys.backend.model.MusicSheet;
 import com.github.aistomin.andys.backend.model.Video;
 import com.github.aistomin.andys.backend.utils.MagicNumber;
@@ -39,13 +40,22 @@ final class VideoDtoTest {
     void testConvert() {
         final var random = new Random();
         final var sheets = new HashSet<MusicSheet>();
+        final var lyrics = new HashSet<Lyrics>();
         for (int i = 0; i < random.nextInt(MagicNumber.TEN); i++) {
             sheets.add(
                 new MusicSheet(
                     random.nextLong(MagicNumber.THOUSAND),
                     UUID.randomUUID().toString(),
-                    null,
                     UUID.randomUUID().toString(),
+                    UUID.randomUUID().toString(),
+                    UUID.randomUUID().toString(),
+                    new Date(),
+                    new Date()
+                )
+            );
+            lyrics.add(
+                new Lyrics(
+                    random.nextLong(MagicNumber.THOUSAND),
                     UUID.randomUUID().toString(),
                     UUID.randomUUID().toString(),
                     new Date(),
@@ -60,6 +70,7 @@ final class VideoDtoTest {
             UUID.randomUUID().toString(),
             UUID.randomUUID().toString(),
             sheets,
+            lyrics,
             new Date(),
             new Date()
         );
@@ -71,6 +82,9 @@ final class VideoDtoTest {
         Assertions.assertEquals(video.getYoutubeId(), dto.getYoutubeId());
         Assertions.assertEquals(
             video.getSheets().size(), dto.getSheets().size()
+        );
+        Assertions.assertEquals(
+            video.getLyrics().size(), dto.getLyrics().size()
         );
         Assertions.assertEquals(video.getCreatedOn(), dto.getCreatedOn());
         Assertions.assertEquals(video.getPublishedOn(), dto.getPublishedOn());

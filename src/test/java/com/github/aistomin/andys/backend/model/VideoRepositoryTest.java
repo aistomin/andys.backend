@@ -46,6 +46,12 @@ final class VideoRepositoryTest {
     private MusicSheetRepository sheets;
 
     /**
+     * Lyrics repository.
+     */
+    @Autowired
+    private LyricsRepository lyrics;
+
+    /**
      * Check that we can correctly save the video.
      */
     @Test
@@ -62,6 +68,10 @@ final class VideoRepositoryTest {
             add(createMusicSheet());
             add(createMusicSheet());
         }};
+        final var texts = new HashSet<Lyrics>() {{
+            add(createLyrics());
+            add(createLyrics());
+        }};
         this.videos.save(
             new Video(
                 null,
@@ -70,6 +80,7 @@ final class VideoRepositoryTest {
                 url,
                 youtubeId,
                 notes,
+                texts,
                 date,
                 published
             )
@@ -111,6 +122,7 @@ final class VideoRepositoryTest {
             "bla-bla-id",
             null,
             null,
+            null,
             null
         );
         Assertions.assertThrows(
@@ -131,8 +143,24 @@ final class VideoRepositoryTest {
             new MusicSheet(
                 null,
                 UUID.randomUUID().toString(),
-                null,
                 UUID.randomUUID().toString(),
+                UUID.randomUUID().toString(),
+                UUID.randomUUID().toString(),
+                new Date(),
+                new Date()
+            )
+        );
+    }
+
+    /**
+     * Create lyrics with random data.
+     *
+     * @return Lyrics.
+     */
+    private Lyrics createLyrics() {
+        return this.lyrics.save(
+            new Lyrics(
+                null,
                 UUID.randomUUID().toString(),
                 UUID.randomUUID().toString(),
                 new Date(),

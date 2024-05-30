@@ -63,7 +63,6 @@ public final class MusicSheetControllerTest {
         final var sheet = new MusicSheetDto(
             null,
             UUID.randomUUID().toString(),
-            null,
             UUID.randomUUID().toString(),
             UUID.randomUUID().toString(),
             UUID.randomUUID().toString(),

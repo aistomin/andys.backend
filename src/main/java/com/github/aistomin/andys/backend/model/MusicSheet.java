@@ -21,13 +21,12 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import java.util.Date;
-import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import java.util.Date;
 
 /**
  * Data object that stores music sheet's data.
@@ -61,12 +60,6 @@ public final class MusicSheet {
      */
     @Column(nullable = false)
     private String title;
-
-    /**
-     * Video with the music.
-     */
-    @ManyToOne
-    private Video video;
 
     /**
      * Music sheet's description.
@@ -107,7 +100,6 @@ public final class MusicSheet {
         this(
             dto.getId(),
             dto.getTitle(),
-            dto.getVideo() != null ? new Video(dto.getVideo()) : null,
             dto.getDescription(),
             dto.getPreviewUrl(),
             dto.getDownloadUrl(),

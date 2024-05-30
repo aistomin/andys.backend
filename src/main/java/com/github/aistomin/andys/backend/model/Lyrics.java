@@ -21,7 +21,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -63,12 +62,6 @@ public final class Lyrics {
     private String title;
 
     /**
-     * Song's video.
-     */
-    @ManyToOne
-    private Video video;
-
-    /**
      * Lyrics' text.
      */
     @Column(length = Lyrics.TEXT_LENGTH)
@@ -95,7 +88,6 @@ public final class Lyrics {
         this(
             dto.getId(),
             dto.getTitle(),
-            dto.getVideo() != null ? new Video(dto.getVideo()) : null,
             dto.getText(),
             dto.getCreatedOn(),
             dto.getPublishedOn()
