@@ -141,7 +141,6 @@ public class SecurityConfig {
                         "/videos",
                         "/music/sheets",
                         "/blog/posts",
-                        "/photos",
                         "/lyrics"
                     )
                     .permitAll()
