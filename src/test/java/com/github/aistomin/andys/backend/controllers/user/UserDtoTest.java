@@ -16,10 +16,11 @@
 package com.github.aistomin.andys.backend.controllers.user;
 
 import com.github.aistomin.andys.backend.model.User;
-import java.util.Random;
-import java.util.UUID;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import java.util.Date;
+import java.util.Random;
+import java.util.UUID;
 
 /**
  * Test for {@link UserDto}.
@@ -36,10 +37,12 @@ final class UserDtoTest {
         final User user = new User(
             new Random().nextLong(1000),
             UUID.randomUUID().toString(),
-            UUID.randomUUID().toString()
+            UUID.randomUUID().toString(),
+            new Date()
         );
         final UserDto dto = new UserDto(user);
         Assertions.assertEquals(user.getId(), dto.getId());
         Assertions.assertEquals(user.getUsername(), dto.getUsername());
+        Assertions.assertNotNull(user.getCreatedOn());
     }
 }
