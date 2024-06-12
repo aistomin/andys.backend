@@ -27,6 +27,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import java.util.Date;
 
 /**
  * Data object that stores user's data.
@@ -64,11 +65,17 @@ public final class User {
     private String password;
 
     /**
+     * The date when the user was created.
+     */
+    @Column(nullable = false)
+    private Date createdOn;
+
+    /**
      * Ctor.
      *
      * @param user User DTO.
      */
     public User(final RegistrationDto user) {
-        this(null, user.getUsername(), user.getPassword());
+        this(null, user.getUsername(), user.getPassword(), new Date());
     }
 }
