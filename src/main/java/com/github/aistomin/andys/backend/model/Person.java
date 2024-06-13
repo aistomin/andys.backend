@@ -25,6 +25,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import java.util.Date;
 
 /**
  * Data object that stores person's data.
@@ -71,4 +72,10 @@ public final class Person {
      */
     @Column(nullable = false)
     private Boolean allowToSendNewsLetters;
+
+    /**
+     * The date when the person was created.
+     */
+    @Column(nullable = false)
+    private Date createdOn;
 }
