@@ -97,8 +97,8 @@ public final class EmailMessage {
     private String info;
 
     /**
-     * Date when the message was created.
+     * The date when the email message was created.
      */
     @Column(nullable = false)
-    private Date creationDate;
+    private Date createdOn;
 }

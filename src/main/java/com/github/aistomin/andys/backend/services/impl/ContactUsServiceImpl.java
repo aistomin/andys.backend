@@ -107,7 +107,7 @@ public final class ContactUsServiceImpl implements ContactUsService {
             );
         }
         final var duplicates = this.emails
-            .findAllByDispatcherAndReceptorAndSubjectAndBodyAndCreationDateIsAfter(
+            .findAllByDispatcherAndReceptorAndSubjectAndBodyAndCreatedOnIsAfter(
                 dispatcher, receptor, subject,
                 body, DateUtils.addWeeks(new Date(), -1)
             );
