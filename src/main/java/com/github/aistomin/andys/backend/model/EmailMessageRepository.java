@@ -46,7 +46,7 @@ public interface EmailMessageRepository
      * @return List of emails.
      */
     @SuppressWarnings("linelength")
-    List<EmailMessage> findAllByDispatcherAndReceptorAndSubjectAndBodyAndCreationDateIsAfter(
+    List<EmailMessage> findAllByDispatcherAndReceptorAndSubjectAndBodyAndCreatedOnIsAfter(
         Person dispatcher,
         Person receptor,
         String subject,
