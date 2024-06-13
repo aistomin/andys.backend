@@ -25,6 +25,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import java.util.Date;
 
 /**
  * Test for {@link EmailProcessor} and {@link EmailSender}.
@@ -70,7 +71,8 @@ final class EmailProcessorTest {
                 "John",
                 "Doe",
                 "test@successful.email",
-                true
+                true,
+                new Date()
             )
         );
         final Person max = this.persons.save(
@@ -79,7 +81,8 @@ final class EmailProcessorTest {
                 "Max",
                 "Mustermann",
                 "test@failed.email",
-                true
+                true,
+                new Date()
             )
         );
         final EmailMessage failed = this.sender.sendEmail(

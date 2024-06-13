@@ -90,7 +90,9 @@ public final class ContactUsServiceImpl implements ContactUsService {
         var dispatcher = this.persons.findByEmail(email);
         if (dispatcher == null) {
             dispatcher = this.persons.save(
-                new Person(null, null, null, email, allowToSendNewsLetters)
+                new Person(
+                    null, null, null, email, allowToSendNewsLetters, new Date()
+                )
             );
         } else {
             dispatcher.setAllowToSendNewsLetters(allowToSendNewsLetters);
@@ -99,7 +101,9 @@ public final class ContactUsServiceImpl implements ContactUsService {
         var receptor = this.persons.findByEmail(this.support);
         if (receptor == null) {
             receptor = this.persons.save(
-                new Person(null, "Support", "Support", support, true)
+                new Person(
+                    null, "Support", "Support", support, true, new Date()
+                )
             );
         }
         final var duplicates = this.emails
