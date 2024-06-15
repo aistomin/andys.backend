@@ -21,12 +21,12 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import java.util.Date;
 
 /**
  * Data object that stores blog post's data.
@@ -68,9 +68,9 @@ public final class BlogPost {
     private String text;
 
     /**
-     * The date when the post was created.
+     * The date when the blog post was created.
      */
-    @Column
+    @Column(nullable = false)
     private Date createdOn;
 
     /**
