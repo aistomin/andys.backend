@@ -37,6 +37,7 @@ WORKDIR /build
 
 COPY ./src src/
 COPY ./conf conf/
+
 RUN --mount=type=bind,source=pom.xml,target=pom.xml \
     --mount=type=cache,target=/root/.m2 \
     ./mvnw package -DskipTests && \
@@ -80,6 +81,10 @@ RUN adduser \
     --no-create-home \
     --uid "${UID}" \
     appuser
+
+RUN mkdir -p /logs
+RUN chown appuser /logs
+
 USER appuser
 
 # Copy the executable from the "package" stage.
