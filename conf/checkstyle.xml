@@ -87,7 +87,7 @@
     <!-- Checks for Headers                                -->
     <!-- See https://checkstyle.org/config_header.html   -->
      <module name="Header">
-       <property name="headerFile" value="LICENSE"/>
+       <property name="headerFile" value="conf/LICENSE"/>
        <property name="fileExtensions" value="java"/>
      </module>
 
