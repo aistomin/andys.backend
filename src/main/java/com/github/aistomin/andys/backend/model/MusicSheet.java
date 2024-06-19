@@ -82,7 +82,7 @@ public final class MusicSheet {
     /**
      * The date when the music sheet was created.
      */
-    @Column
+    @Column(nullable = false)
     private Date createdOn;
 
     /**

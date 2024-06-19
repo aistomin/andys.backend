@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import java.util.Date;
 
 /**
  * Music sheets' controller.
@@ -70,6 +71,7 @@ public final class MusicSheetController {
     public ResponseEntity<MusicSheetDto> create(
         @RequestBody final MusicSheetDto sheet
     ) {
+        sheet.setCreatedOn(new Date());
         return new ResponseEntity<>(
             this.musicSheets.save(sheet), HttpStatus.CREATED
         );
