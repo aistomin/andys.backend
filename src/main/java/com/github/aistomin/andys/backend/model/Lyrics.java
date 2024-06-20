@@ -70,7 +70,7 @@ public final class Lyrics {
     /**
      * The date when the lyrics were created.
      */
-    @Column
+    @Column(nullable = false)
     private Date createdOn;
 
     /**

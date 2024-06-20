@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import java.util.Date;
 
 /**
  * Lyrics controller.
@@ -70,6 +71,7 @@ public final class LyricsController {
     public ResponseEntity<LyricsDto> create(
         @RequestBody final LyricsDto entity
     ) {
+        entity.setCreatedOn(new Date());
         return new ResponseEntity<>(
             this.lyrics.save(entity), HttpStatus.CREATED
         );
