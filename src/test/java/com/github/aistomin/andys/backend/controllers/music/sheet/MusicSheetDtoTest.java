@@ -31,12 +31,16 @@ import java.util.UUID;
 final class MusicSheetDtoTest {
 
     /**
+     * Randomizer.
+     */
+    private final Random random = new Random();
+
+    /**
      * Check that we correctly convert {@link MusicSheet} to
      * {@link MusicSheetDto}.
      */
     @Test
     void testConvert() {
-        final var random = new Random();
         final var sheet = new MusicSheet(
             random.nextLong(MagicNumber.THOUSAND),
             UUID.randomUUID().toString(),
@@ -54,5 +58,29 @@ final class MusicSheetDtoTest {
         Assertions.assertEquals(sheet.getDownloadUrl(), dto.getDownloadUrl());
         Assertions.assertEquals(sheet.getCreatedOn(), dto.getCreatedOn());
         Assertions.assertEquals(sheet.getPublishedOn(), dto.getPublishedOn());
+    }
+
+    /**
+     * Check that we can properly convert an object to its String
+     * representation.
+     */
+    @Test
+    void testToString() {
+        final var sheet = new MusicSheet(
+            random.nextLong(MagicNumber.THOUSAND),
+            UUID.randomUUID().toString(),
+            UUID.randomUUID().toString(),
+            UUID.randomUUID().toString(),
+            UUID.randomUUID().toString(),
+            new Date(),
+            new Date()
+        );
+        final var str = sheet.toString();
+        Assertions.assertTrue(
+            str.contains(String.format("id=%d", sheet.getId()))
+        );
+        Assertions.assertTrue(
+            str.contains(String.format("title=%s", sheet.getTitle()))
+        );
     }
 }
