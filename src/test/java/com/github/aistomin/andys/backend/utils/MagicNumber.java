@@ -29,6 +29,11 @@ public final class MagicNumber {
     }
 
     /**
+     * A three.
+     */
+    public static final Integer THREE = 3;
+
+    /**
      * A ten.
      */
     public static final Integer TEN = 10;
