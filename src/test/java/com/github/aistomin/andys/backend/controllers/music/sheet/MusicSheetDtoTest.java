@@ -19,7 +19,10 @@ import com.github.aistomin.andys.backend.model.MusicSheet;
 import com.github.aistomin.andys.backend.utils.MagicNumber;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Random;
 import java.util.UUID;
 
@@ -41,15 +44,7 @@ final class MusicSheetDtoTest {
      */
     @Test
     void testConvert() {
-        final var sheet = new MusicSheet(
-            random.nextLong(MagicNumber.THOUSAND),
-            UUID.randomUUID().toString(),
-            UUID.randomUUID().toString(),
-            UUID.randomUUID().toString(),
-            UUID.randomUUID().toString(),
-            new Date(),
-            new Date()
-        );
+        final var sheet = createTestSheet();
         final var dto = new MusicSheetDto(sheet);
         Assertions.assertEquals(sheet.getId(), dto.getId());
         Assertions.assertEquals(sheet.getTitle(), dto.getTitle());
@@ -66,8 +61,30 @@ final class MusicSheetDtoTest {
      */
     @Test
     void testToString() {
-        final var sheet = new MusicSheet(
-            random.nextLong(MagicNumber.THOUSAND),
+        final var sheet = new MusicSheetDto(createTestSheet());
+        final var str = sheet.toString();
+        Assertions.assertTrue(
+            str.contains(String.format("id=%d", sheet.getId()))
+        );
+        Assertions.assertTrue(
+            str.contains(String.format("title=%s", sheet.getTitle()))
+        );
+    }
+
+    /**
+     * Check that we correctly compare music sheets.
+     */
+    @Test
+    void testEquals() {
+        final var sheets = Arrays.asList(
+            new MusicSheetDto(createTestSheet()),
+            new MusicSheetDto(createTestSheet()),
+            new MusicSheetDto(createTestSheet())
+        );
+        Collections.shuffle(sheets);
+        final var sheet = sheets.get(0);
+        final var modified = new MusicSheetDto(
+            sheet.getId(),
             UUID.randomUUID().toString(),
             UUID.randomUUID().toString(),
             UUID.randomUUID().toString(),
@@ -75,12 +92,52 @@ final class MusicSheetDtoTest {
             new Date(),
             new Date()
         );
-        final var str = sheet.toString();
-        Assertions.assertTrue(
-            str.contains(String.format("id=%d", sheet.getId()))
+        Assertions.assertEquals(sheet, modified);
+        Assertions.assertEquals(0, sheets.indexOf(modified));
+    }
+
+    /**
+     * Check that we correctly compute the hash code for the music sheet.
+     */
+    @Test
+    void testHashCode() {
+        final var sheets = new HashSet<>(
+            Arrays.asList(
+                new MusicSheetDto(createTestSheet()),
+                new MusicSheetDto(createTestSheet()),
+                new MusicSheetDto(createTestSheet())
+            )
         );
-        Assertions.assertTrue(
-            str.contains(String.format("title=%s", sheet.getTitle()))
+        Assertions.assertEquals(MagicNumber.THREE, sheets.size());
+        final var sheet = sheets.iterator().next();
+        final var modified = new MusicSheetDto(
+            sheet.getId(),
+            UUID.randomUUID().toString(),
+            UUID.randomUUID().toString(),
+            UUID.randomUUID().toString(),
+            UUID.randomUUID().toString(),
+            new Date(),
+            new Date()
+        );
+        Assertions.assertEquals(sheet.hashCode(), modified.hashCode());
+        sheets.add(modified);
+        Assertions.assertEquals(MagicNumber.THREE, sheets.size());
+    }
+
+    /**
+     * Create a test music sheet with random values.
+     *
+     * @return A test music sheet.
+     */
+    private MusicSheet createTestSheet() {
+        return new MusicSheet(
+            random.nextLong(MagicNumber.THOUSAND),
+            UUID.randomUUID().toString(),
+            UUID.randomUUID().toString(),
+            UUID.randomUUID().toString(),
+            UUID.randomUUID().toString(),
+            new Date(),
+            new Date()
         );
     }
 }

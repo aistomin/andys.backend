@@ -31,7 +31,7 @@ import java.util.Date;
  */
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString()
 @Data
 public final class MusicSheetDto {
@@ -39,6 +39,7 @@ public final class MusicSheetDto {
     /**
      * Music sheet ID.
      */
+    @EqualsAndHashCode.Include
     private Long id;
 
     /**
