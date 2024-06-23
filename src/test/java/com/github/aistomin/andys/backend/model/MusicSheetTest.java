@@ -31,14 +31,18 @@ import java.util.UUID;
 final class MusicSheetTest {
 
     /**
+     * Randomizer.
+     */
+    private final Random random = new Random();
+
+    /**
      * Check that we correctly convert {@link MusicSheetDto} to
      * {@link MusicSheet}.
      */
     @Test
     void testConvert() {
-        final var random = new Random();
         final var dto = new MusicSheetDto(
-            random.nextLong(MagicNumber.THOUSAND),
+            this.random.nextLong(MagicNumber.THOUSAND),
             UUID.randomUUID().toString(),
             UUID.randomUUID().toString(),
             UUID.randomUUID().toString(),
@@ -54,5 +58,29 @@ final class MusicSheetTest {
         Assertions.assertEquals(dto.getDownloadUrl(), sheet.getDownloadUrl());
         Assertions.assertEquals(dto.getCreatedOn(), sheet.getCreatedOn());
         Assertions.assertEquals(dto.getPublishedOn(), sheet.getPublishedOn());
+    }
+
+    /**
+     * Check that we can properly convert an object to its String
+     * representation.
+     */
+    @Test
+    void testToString() {
+        final var sheet = new MusicSheet(
+            this.random.nextLong(MagicNumber.THOUSAND),
+            UUID.randomUUID().toString(),
+            UUID.randomUUID().toString(),
+            UUID.randomUUID().toString(),
+            UUID.randomUUID().toString(),
+            new Date(),
+            new Date()
+        );
+        final var str = sheet.toString();
+        Assertions.assertTrue(
+            str.contains(String.format("id=%d", sheet.getId()))
+        );
+        Assertions.assertTrue(
+            str.contains(String.format("title=%s", sheet.getTitle()))
+        );
     }
 }
