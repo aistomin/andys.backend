@@ -136,13 +136,12 @@ public final class Jwt implements Serializable {
         final Map<String, Object> claims, final String subject
     ) {
         return Jwts.builder()
-            .setClaims(claims)
-            .setSubject(subject)
-            .setIssuedAt(new Date(System.currentTimeMillis()))
-            .setExpiration(
+            .claims(claims)
+            .subject(subject)
+            .issuedAt(new Date(System.currentTimeMillis()))
+            .expiration(
                 new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY)
-            )
-            .signWith(key()).compact();
+            ).signWith(key()).compact();
     }
 
     /**
