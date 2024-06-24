@@ -34,17 +34,21 @@ import java.util.UUID;
 final class VideoTest {
 
     /**
+     * Randomizer.
+     */
+    private final Random random = new Random();
+
+    /**
      * Check that we correctly convert {@link VideoDto} to {@link Video}.
      */
     @Test
     void testConvert() {
-        final var random = new Random();
         final var sheets = new HashSet<MusicSheetDto>();
         final var lyrics = new HashSet<LyricsDto>();
-        for (int i = 0; i < random.nextInt(MagicNumber.TEN); i++) {
+        for (int i = 0; i < this.random.nextInt(MagicNumber.TEN); i++) {
             sheets.add(
                 new MusicSheetDto(
-                    random.nextLong(MagicNumber.THOUSAND),
+                    this.random.nextLong(MagicNumber.THOUSAND),
                     UUID.randomUUID().toString(),
                     UUID.randomUUID().toString(),
                     UUID.randomUUID().toString(),
@@ -55,7 +59,7 @@ final class VideoTest {
             );
             lyrics.add(
                 new LyricsDto(
-                    random.nextLong(MagicNumber.THOUSAND),
+                    this.random.nextLong(MagicNumber.THOUSAND),
                     UUID.randomUUID().toString(),
                     UUID.randomUUID().toString(),
                     new Date(),
@@ -64,7 +68,7 @@ final class VideoTest {
             );
         }
         final var dto = new VideoDto(
-            random.nextLong(MagicNumber.THOUSAND),
+            this.random.nextLong(MagicNumber.THOUSAND),
             UUID.randomUUID().toString(),
             UUID.randomUUID().toString(),
             UUID.randomUUID().toString(),
@@ -88,5 +92,31 @@ final class VideoTest {
         );
         Assertions.assertEquals(dto.getCreatedOn(), video.getCreatedOn());
         Assertions.assertEquals(dto.getPublishedOn(), video.getPublishedOn());
+    }
+
+    /**
+     * Check that we can properly convert an object to its String
+     * representation.
+     */
+    @Test
+    void testToString() {
+        final var video = new Video(
+            this.random.nextLong(MagicNumber.THOUSAND),
+            UUID.randomUUID().toString(),
+            UUID.randomUUID().toString(),
+            UUID.randomUUID().toString(),
+            UUID.randomUUID().toString(),
+            null,
+            null,
+            new Date(),
+            new Date()
+        );
+        final var str = video.toString();
+        Assertions.assertTrue(
+            str.contains(String.format("id=%d", video.getId()))
+        );
+        Assertions.assertTrue(
+            str.contains(String.format("title=%s", video.getTitle()))
+        );
     }
 }
