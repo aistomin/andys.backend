@@ -18,17 +18,17 @@ package com.github.aistomin.andys.backend.security;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
+import javax.crypto.SecretKey;
 import java.io.Serial;
 import java.io.Serializable;
-import java.security.Key;
 import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Component;
 
 /**
  * JWT utils.
@@ -94,10 +94,10 @@ public final class Jwt implements Serializable {
      */
     private Claims getAllClaimsFromToken(final String token) {
         return Jwts.parser()
-            .setSigningKey(this.key())
+            .verifyWith(this.key())
             .build()
-            .parseClaimsJws(token)
-            .getBody();
+            .parseSignedClaims(token)
+            .getPayload();
     }
 
     /**
@@ -164,7 +164,7 @@ public final class Jwt implements Serializable {
      *
      * @return Secret key.
      */
-    private Key key() {
+    private SecretKey key() {
         return Keys.hmacShaKeyFor(Base64.getDecoder().decode(this.secret));
     }
 }
