@@ -31,13 +31,17 @@ import java.util.UUID;
 final class LyricsTest {
 
     /**
+     * Randomizer.
+     */
+    private final Random random = new Random();
+
+    /**
      * Check that we correctly convert {@link LyricsDto} to {@link Lyrics}.
      */
     @Test
     void testConvert() {
-        final var random = new Random();
         final var dto = new LyricsDto(
-            random.nextLong(MagicNumber.THOUSAND),
+            this.random.nextLong(MagicNumber.THOUSAND),
             UUID.randomUUID().toString(),
             UUID.randomUUID().toString(),
             new Date(),
@@ -49,5 +53,27 @@ final class LyricsTest {
         Assertions.assertEquals(dto.getText(), lyrics.getText());
         Assertions.assertEquals(dto.getCreatedOn(), lyrics.getCreatedOn());
         Assertions.assertEquals(dto.getPublishedOn(), lyrics.getPublishedOn());
+    }
+
+    /**
+     * Check that we can properly convert an object to its String
+     * representation.
+     */
+    @Test
+    void testToString() {
+        final var lyrics = new Lyrics(
+            this.random.nextLong(MagicNumber.THOUSAND),
+            UUID.randomUUID().toString(),
+            UUID.randomUUID().toString(),
+            new Date(),
+            new Date()
+        );
+        final var str = lyrics.toString();
+        Assertions.assertTrue(
+            str.contains(String.format("id=%d", lyrics.getId()))
+        );
+        Assertions.assertTrue(
+            str.contains(String.format("title=%s", lyrics.getTitle()))
+        );
     }
 }
