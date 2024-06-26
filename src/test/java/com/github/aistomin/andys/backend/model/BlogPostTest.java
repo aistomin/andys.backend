@@ -16,11 +16,11 @@
 package com.github.aistomin.andys.backend.model;
 
 import com.github.aistomin.andys.backend.controllers.blog.BlogPostDto;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import java.util.Date;
 import java.util.Random;
 import java.util.UUID;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
 
 /**
  * Test for {@link BlogPost}.
@@ -30,13 +30,18 @@ import org.junit.jupiter.api.Test;
 final class BlogPostTest {
 
     /**
+     * Randomizer.
+     */
+    private final Random random = new Random();
+
+    /**
      * Check that we correctly convert {@link BlogPostDto} to
      * {@link BlogPost}.
      */
     @Test
     void testConvert() {
         final var dto = new BlogPostDto(
-            new Random().nextLong(1000),
+            this.random.nextLong(1000),
             UUID.randomUUID().toString(),
             UUID.randomUUID().toString(),
             new Date(),
@@ -48,5 +53,27 @@ final class BlogPostTest {
         Assertions.assertEquals(dto.getText(), post.getText());
         Assertions.assertEquals(dto.getCreatedOn(), post.getCreatedOn());
         Assertions.assertEquals(dto.getPublishedOn(), post.getPublishedOn());
+    }
+
+    /**
+     * Check that we can properly convert an object to its String
+     * representation.
+     */
+    @Test
+    void testToString() {
+        final var post = new BlogPost(
+            this.random.nextLong(1000),
+            UUID.randomUUID().toString(),
+            UUID.randomUUID().toString(),
+            new Date(),
+            new Date()
+        );
+        final var str = post.toString();
+        Assertions.assertTrue(
+            str.contains(String.format("id=%d", post.getId()))
+        );
+        Assertions.assertTrue(
+            str.contains(String.format("title=%s", post.getTitle()))
+        );
     }
 }
