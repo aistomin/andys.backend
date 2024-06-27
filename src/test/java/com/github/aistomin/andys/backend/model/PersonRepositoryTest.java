@@ -61,6 +61,7 @@ final class PersonRepositoryTest {
         Assertions.assertEquals(surname, andy.getLastName());
         Assertions.assertEquals(email, andy.getEmail());
         Assertions.assertEquals(allowNews, andy.getAllowToSendNewsLetters());
+        Assertions.assertNotNull(andy.getCreatedOn());
         final var john = new Person(
             null, "John", "Doe", email, false, new Date()
         );
