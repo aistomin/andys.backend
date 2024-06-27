@@ -16,9 +16,12 @@
 package com.github.aistomin.andys.backend.model;
 
 import com.github.aistomin.andys.backend.controllers.user.RegistrationDto;
-import java.util.UUID;
+import com.github.aistomin.andys.backend.utils.MagicNumber;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import java.util.Date;
+import java.util.Random;
+import java.util.UUID;
 
 /**
  * Test for {@link User}.
@@ -26,6 +29,11 @@ import org.junit.jupiter.api.Test;
  * @since 0.1
  */
 final class UserTest {
+
+    /**
+     * Randomizer.
+     */
+    private final Random random = new Random();
 
     /**
      * Check that we correctly convert {@link RegistrationDto} to
@@ -39,5 +47,29 @@ final class UserTest {
         );
         final User user = new User(dto);
         Assertions.assertEquals(dto.getUsername(), user.getUsername());
+    }
+
+    /**
+     * Check that we can properly convert an object to its String
+     * representation.
+     */
+    @Test
+    void testToString() {
+        final var video = new User(
+            this.random.nextLong(MagicNumber.THOUSAND),
+            UUID.randomUUID().toString(),
+            UUID.randomUUID().toString(),
+            new Date()
+        );
+        final var str = video.toString();
+        Assertions.assertTrue(
+            str.contains(String.format("id=%d", video.getId()))
+        );
+        Assertions.assertTrue(
+            str.contains(String.format("username=%s", video.getUsername()))
+        );
+        Assertions.assertFalse(
+            str.contains(String.format("password=%s", video.getUsername()))
+        );
     }
 }
