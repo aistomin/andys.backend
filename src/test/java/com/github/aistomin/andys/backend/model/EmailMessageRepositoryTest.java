@@ -82,6 +82,8 @@ final class EmailMessageRepositoryTest {
         Assertions.assertEquals(subject, email.getSubject());
         Assertions.assertEquals(body, email.getBody());
         Assertions.assertEquals(EmailMessageStatus.CREATED, email.getStatus());
+        Assertions.assertEquals(EmailMessageType.NEWS_LETTER, email.getType());
+        Assertions.assertNotNull(email.getCreatedOn());
         Assertions.assertNull(email.getInfo());
         final var info = "SUCCESS: OK";
         email.setStatus(EmailMessageStatus.SENT);
