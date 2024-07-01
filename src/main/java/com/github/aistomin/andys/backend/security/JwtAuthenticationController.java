@@ -17,8 +17,6 @@ package com.github.aistomin.andys.backend.security;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -56,8 +54,8 @@ public final class JwtAuthenticationController {
      * Ctor.
      *
      * @param authenticationManager Authentication manager.
-     * @param utils                 JWT utils.
-     * @param userDetailsService    User details service.
+     * @param utils JWT utils.
+     * @param userDetailsService User details service.
      */
     public JwtAuthenticationController(
         final AuthenticationManager authenticationManager,
@@ -74,12 +72,11 @@ public final class JwtAuthenticationController {
      *
      * @param request Authentication request.
      * @return JWT response.
-     * @throws Exception If something goes wrong.
      */
     @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
     public ResponseEntity<?> authenticate(
         @RequestBody final JwtRequest request
-    ) throws Exception {
+    ) {
         authenticate(request.getUsername(), request.getPassword());
         final UserDetails details = this.service
             .loadUserByUsername(request.getUsername());
@@ -92,19 +89,12 @@ public final class JwtAuthenticationController {
      *
      * @param username Username.
      * @param password Password.
-     * @throws Exception If something goes wrong.
      */
     private void authenticate(
         final String username, final String password
-    ) throws Exception {
-        try {
-            this.authenticator.authenticate(
-                new UsernamePasswordAuthenticationToken(username, password)
-            );
-        } catch (final DisabledException e) {
-            throw new Exception("USER_DISABLED", e);
-        } catch (final BadCredentialsException e) {
-            throw new Exception("INVALID_CREDENTIALS", e);
-        }
+    ) {
+        this.authenticator.authenticate(
+            new UsernamePasswordAuthenticationToken(username, password)
+        );
     }
 }
