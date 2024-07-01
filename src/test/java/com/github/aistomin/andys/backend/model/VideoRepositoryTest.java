@@ -15,6 +15,8 @@
  */
 package com.github.aistomin.andys.backend.model;
 
+import jakarta.transaction.Transactional;
+import org.hibernate.LazyInitializationException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,6 +57,7 @@ final class VideoRepositoryTest {
      * Check that we can correctly save the video.
      */
     @Test
+    @Transactional
     void testSaveVideo() {
         final var before = this.videos.findAll().size();
         final var title = "My first Video";
@@ -106,6 +109,16 @@ final class VideoRepositoryTest {
                     .contains(sheet.getTitle())
             )
         );
+        Assertions.assertEquals(texts.size(), video.getLyrics().size());
+        texts.forEach(text ->
+            Assertions.assertTrue(
+                video.getLyrics()
+                    .stream()
+                    .map(Lyrics::getTitle)
+                    .toList()
+                    .contains(text.getTitle())
+            )
+        );
         Assertions.assertEquals(before + 1, this.videos.findAll().size());
     }
 
@@ -131,6 +144,54 @@ final class VideoRepositoryTest {
         );
         video.setCreatedOn(new Date());
         this.videos.save(video);
+    }
+
+    /**
+     * The Video entity is a relatively "rich" thing, and it has some
+     * collections, that logically belong to it. In this test I want to make
+     * sure that we do not select all the data from database, but all the
+     * dependent collections are loaded on demand. The test is executed in the
+     * non-transactional context, so any call to the sub-collections should end
+     * up with the {@link LazyInitializationException}. The other tests are
+     * checking that the collections can be actually loaded in the transactional
+     * context.
+     */
+    @Test
+    void testLazyLoadingOfTheDependentEntities() {
+        final var title = "My second Video";
+        this.videos.save(
+            new Video(
+                null,
+                title,
+                "This is a nice video about damn Hibernate.",
+                "https://videoserver.de/hibernate-ist-doof",
+                "hibernate-ist-doof",
+                new HashSet<>() {{
+                    add(createMusicSheet());
+                    add(createMusicSheet());
+                    add(createMusicSheet());
+                }},
+                new HashSet<>() {{
+                    add(createLyrics());
+                    add(createLyrics());
+                }},
+                new Date(),
+                new Date()
+            )
+        );
+        final var video = this.videos.findByTitle(title);
+        Assertions.assertThrows(
+            LazyInitializationException.class,
+            () -> {
+                video.getLyrics().size();
+            }
+        );
+        Assertions.assertThrows(
+            LazyInitializationException.class,
+            () -> {
+                video.getSheets().size();
+            }
+        );
     }
 
     /**

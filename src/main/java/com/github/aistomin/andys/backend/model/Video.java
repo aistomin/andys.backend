@@ -24,10 +24,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.ToString;
+import org.springframework.data.jpa.repository.Query;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -38,8 +38,7 @@ import java.util.stream.Collectors;
  *
  * @since 0.1
  */
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
@@ -86,16 +85,14 @@ public final class Video {
 
     /**
      * Music sheets that belong to the video.
-     * @todo: Issue #414 Fix the fetch type.
      */
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.LAZY)
     private Set<MusicSheet> sheets = new HashSet<>();
 
     /**
      * Lyrics that belong to the video.
-     * @todo: Issue #414 Fix the fetch type.
      */
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.LAZY)
     private Set<Lyrics> lyrics = new HashSet<>();
 
     /**
@@ -133,5 +130,27 @@ public final class Video {
             dto.getCreatedOn(),
             dto.getPublishedOn()
         );
+    }
+
+    /**
+     * Get all the music sheets related to the video. Note: the sheets will be
+     * lazily load only when this method is explicitly called.
+     *
+     * @return A list of music sheets.
+     */
+    @Query("FROM Video v JOIN FETCH v.sheets")
+    public Set<MusicSheet> getSheets() {
+        return sheets;
+    }
+
+    /**
+     * Get all the lyrics related to the video. Note: the sheets will be lazily
+     * load only when this method is explicitly called.
+     *
+     * @return A list of music sheets.
+     */
+    @Query("FROM Video v JOIN FETCH v.lyrics")
+    public Set<Lyrics> getLyrics() {
+        return lyrics;
     }
 }

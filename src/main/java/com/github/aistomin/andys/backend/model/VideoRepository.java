@@ -23,4 +23,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @since 0.1
  */
 public interface VideoRepository extends JpaRepository<Video, Long> {
+
+    /**
+     * Find a video by the title.
+     *
+     * @param title The video's title.
+     * @return The found video.
+     */
+    Video findByTitle(String title);
 }
