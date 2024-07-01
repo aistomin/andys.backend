@@ -27,7 +27,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.springframework.data.jpa.repository.Query;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -130,27 +129,5 @@ public final class Video {
             dto.getCreatedOn(),
             dto.getPublishedOn()
         );
-    }
-
-    /**
-     * Get all the music sheets related to the video. Note: the sheets will be
-     * lazily loaded only when this method is explicitly called.
-     *
-     * @return A list of music sheets.
-     */
-    @Query("FROM Video v JOIN FETCH v.sheets")
-    public Set<MusicSheet> getSheets() {
-        return sheets;
-    }
-
-    /**
-     * Get all the lyrics related to the video. Note: the lyrics will be lazily
-     * loaded only when this method is explicitly called.
-     *
-     * @return A list of lyrics.
-     */
-    @Query("FROM Video v JOIN FETCH v.lyrics")
-    public Set<Lyrics> getLyrics() {
-        return lyrics;
     }
 }
