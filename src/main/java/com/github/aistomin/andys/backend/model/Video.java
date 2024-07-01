@@ -134,7 +134,7 @@ public final class Video {
 
     /**
      * Get all the music sheets related to the video. Note: the sheets will be
-     * lazily load only when this method is explicitly called.
+     * lazily loaded only when this method is explicitly called.
      *
      * @return A list of music sheets.
      */
@@ -144,10 +144,10 @@ public final class Video {
     }
 
     /**
-     * Get all the lyrics related to the video. Note: the sheets will be lazily
-     * load only when this method is explicitly called.
+     * Get all the lyrics related to the video. Note: the lyrics will be lazily
+     * loaded only when this method is explicitly called.
      *
-     * @return A list of music sheets.
+     * @return A list of lyrics.
      */
     @Query("FROM Video v JOIN FETCH v.lyrics")
     public Set<Lyrics> getLyrics() {
