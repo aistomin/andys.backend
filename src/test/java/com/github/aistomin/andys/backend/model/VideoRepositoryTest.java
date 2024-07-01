@@ -164,8 +164,8 @@ final class VideoRepositoryTest {
                 null,
                 title,
                 "This is a nice video about damn Hibernate.",
-                "https://videoserver.de/hibernate-ist-doof",
-                "hibernate-ist-doof",
+                "https://videoserver.de/hibernate-ist-nicht-doof",
+                "hibernate-ist-nicht-doof",
                 new HashSet<>() {{
                     add(createMusicSheet());
                     add(createMusicSheet());
