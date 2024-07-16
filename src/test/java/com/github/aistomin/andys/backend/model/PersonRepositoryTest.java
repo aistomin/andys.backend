@@ -15,11 +15,11 @@
  */
 package com.github.aistomin.andys.backend.model;
 
+import com.github.aistomin.andys.backend.utils.AndysIntegrationTest;
 import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import java.util.Comparator;
 import java.util.Date;
@@ -30,8 +30,7 @@ import java.util.Random;
  *
  * @since 0.2
  */
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-final class PersonRepositoryTest {
+final class PersonRepositoryTest extends AndysIntegrationTest {
 
     /**
      * Person repository.

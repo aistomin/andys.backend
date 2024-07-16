@@ -16,28 +16,27 @@
 package com.github.aistomin.andys.backend.controllers.music.sheet;
 
 import com.github.aistomin.andys.backend.controllers.Authenticator;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import com.github.aistomin.andys.backend.utils.AndysIntegrationTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMapAdapter;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * Test for {@link MusicSheetController}.
  *
  * @since 0.1
  */
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public final class MusicSheetControllerTest {
+public final class MusicSheetControllerTest extends AndysIntegrationTest {
 
     /**
      * Test authenticator.

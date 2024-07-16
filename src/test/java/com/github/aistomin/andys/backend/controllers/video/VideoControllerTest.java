@@ -16,10 +16,10 @@
 package com.github.aistomin.andys.backend.controllers.video;
 
 import com.github.aistomin.andys.backend.controllers.Authenticator;
+import com.github.aistomin.andys.backend.utils.AndysIntegrationTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -36,8 +36,7 @@ import java.util.Optional;
  *
  * @since 0.1
  */
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public final class VideoControllerTest {
+public final class VideoControllerTest extends AndysIntegrationTest {
 
     /**
      * Test authenticator.

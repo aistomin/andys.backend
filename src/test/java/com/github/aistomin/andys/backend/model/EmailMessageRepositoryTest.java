@@ -15,10 +15,10 @@
  */
 package com.github.aistomin.andys.backend.model;
 
+import com.github.aistomin.andys.backend.utils.AndysIntegrationTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import java.util.Date;
 
 /**
@@ -26,8 +26,7 @@ import java.util.Date;
  *
  * @since 0.2
  */
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-final class EmailMessageRepositoryTest {
+final class EmailMessageRepositoryTest extends AndysIntegrationTest {
 
     /**
      * Email message repository.

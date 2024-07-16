@@ -16,10 +16,10 @@
 package com.github.aistomin.andys.backend.controllers.lyrics;
 
 import com.github.aistomin.andys.backend.controllers.Authenticator;
+import com.github.aistomin.andys.backend.utils.AndysIntegrationTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -36,8 +36,7 @@ import java.util.UUID;
  *
  * @since 0.2
  */
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public final class LyricsControllerTest {
+public final class LyricsControllerTest extends AndysIntegrationTest {
 
     /**
      * Test authenticator.

@@ -15,12 +15,12 @@
  */
 package com.github.aistomin.andys.backend.model;
 
+import com.github.aistomin.andys.backend.utils.AndysIntegrationTest;
 import jakarta.transaction.Transactional;
 import org.hibernate.LazyInitializationException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import java.util.Comparator;
 import java.util.Date;
@@ -32,8 +32,7 @@ import java.util.UUID;
  *
  * @since 0.2
  */
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-final class VideoRepositoryTest {
+class VideoRepositoryTest extends AndysIntegrationTest {
 
     /**
      * Videos repository.

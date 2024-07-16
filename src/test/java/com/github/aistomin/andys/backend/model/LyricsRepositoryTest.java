@@ -15,10 +15,10 @@
  */
 package com.github.aistomin.andys.backend.model;
 
+import com.github.aistomin.andys.backend.utils.AndysIntegrationTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import java.util.Date;
 import java.util.UUID;
@@ -28,8 +28,7 @@ import java.util.UUID;
  *
  * @since 0.2
  */
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-final class LyricsRepositoryTest {
+final class LyricsRepositoryTest extends AndysIntegrationTest {
 
     /**
      * Lyrics repository.

@@ -17,10 +17,10 @@ package com.github.aistomin.andys.backend.controllers.contact;
 
 import com.github.aistomin.andys.backend.model.EmailMessageRepository;
 import com.github.aistomin.andys.backend.model.PersonRepository;
+import com.github.aistomin.andys.backend.utils.AndysIntegrationTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
@@ -30,8 +30,7 @@ import org.springframework.http.HttpStatus;
  *
  * @since 0.2
  */
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class ContactUsControllerTest {
+class ContactUsControllerTest extends AndysIntegrationTest {
 
     /**
      * Test REST template.
