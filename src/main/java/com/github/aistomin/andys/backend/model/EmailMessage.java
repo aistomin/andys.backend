@@ -75,7 +75,7 @@ public final class EmailMessage {
     /**
      * Email body.
      */
-    @Column(nullable = false, length = EmailMessage.BODY_LENGTH)
+    @Column(nullable = false, length = BODY_LENGTH)
     private String body;
 
     /**
@@ -93,7 +93,7 @@ public final class EmailMessage {
     /**
      * Some additional free text info about the email message.
      */
-    @Column(length = EmailMessage.BODY_LENGTH)
+    @Column(length = BODY_LENGTH)
     private String info;
 
     /**

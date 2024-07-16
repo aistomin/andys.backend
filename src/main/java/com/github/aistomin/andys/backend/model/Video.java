@@ -67,7 +67,7 @@ public final class Video {
     /**
      * Video's description.
      */
-    @Column(length = Video.DESCRIPTION_LENGTH)
+    @Column(length = DESCRIPTION_LENGTH)
     private String description;
 
     /**

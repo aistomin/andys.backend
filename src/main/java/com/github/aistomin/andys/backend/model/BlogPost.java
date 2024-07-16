@@ -62,7 +62,7 @@ public final class BlogPost {
     /**
      * Post's text.
      */
-    @Column(length = BlogPost.POST_LENGTH)
+    @Column(length = POST_LENGTH)
     private String text;
 
     /**
