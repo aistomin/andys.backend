@@ -64,7 +64,7 @@ public final class Lyrics {
     /**
      * Lyrics' text.
      */
-    @Column(length = Lyrics.TEXT_LENGTH)
+    @Column(length = TEXT_LENGTH)
     private String text;
 
     /**

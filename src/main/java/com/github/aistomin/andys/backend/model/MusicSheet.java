@@ -64,7 +64,7 @@ public final class MusicSheet {
     /**
      * Music sheet's description.
      */
-    @Column(length = MusicSheet.DESCRIPTION_LENGTH)
+    @Column(length = DESCRIPTION_LENGTH)
     private String description;
 
     /**
