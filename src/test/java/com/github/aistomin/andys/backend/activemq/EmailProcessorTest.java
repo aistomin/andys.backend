@@ -21,10 +21,10 @@ import com.github.aistomin.andys.backend.model.EmailMessageStatus;
 import com.github.aistomin.andys.backend.model.EmailMessageType;
 import com.github.aistomin.andys.backend.model.Person;
 import com.github.aistomin.andys.backend.model.PersonRepository;
+import com.github.aistomin.andys.backend.utils.AndysIntegrationTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import java.util.Date;
 
 /**
@@ -32,8 +32,7 @@ import java.util.Date;
  *
  * @since 0.2
  */
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-final class EmailProcessorTest {
+final class EmailProcessorTest extends AndysIntegrationTest {
 
     /**
      * Sleep timeout.

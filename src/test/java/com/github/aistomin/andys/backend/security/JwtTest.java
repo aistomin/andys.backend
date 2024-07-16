@@ -16,10 +16,10 @@
 package com.github.aistomin.andys.backend.security;
 
 import com.github.aistomin.andys.backend.controllers.Authenticator;
+import com.github.aistomin.andys.backend.utils.AndysIntegrationTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import java.util.UUID;
 
@@ -28,8 +28,7 @@ import java.util.UUID;
  *
  * @since 0.2
  */
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-final class JwtTest {
+final class JwtTest extends AndysIntegrationTest {
 
     /**
      * Test authenticator.
