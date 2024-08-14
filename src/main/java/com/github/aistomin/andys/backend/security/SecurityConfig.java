@@ -58,7 +58,7 @@ public class SecurityConfig {
     /**
      * Ctor.
      *
-     * @param entryPoint       JWT authentication entry point.
+     * @param entryPoint JWT authentication entry point.
      * @param jwtRequestFilter JWT request filter.
      */
     public SecurityConfig(
@@ -72,9 +72,9 @@ public class SecurityConfig {
     /**
      * Create authentication manager.
      *
-     * @param http    HTTP security.
+     * @param http HTTP security.
      * @param encoder Password encoder.
-     * @param user    User details.
+     * @param user User details.
      * @return Authentication manager.
      * @throws Exception If something goes wrong.
      */
@@ -131,7 +131,7 @@ public class SecurityConfig {
     ) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
             .cors(configurer -> configurer.configure(http))
-            .authorizeHttpRequests(registry -> {
+            .authorizeHttpRequests(registry ->
                 registry.requestMatchers("/authenticate")
                     .permitAll()
                     .requestMatchers("/contact/us")
@@ -144,8 +144,7 @@ public class SecurityConfig {
                         "/lyrics"
                     )
                     .permitAll()
-                    .anyRequest().authenticated();
-            })
+                    .anyRequest().authenticated())
             .exceptionHandling(configurer -> {
                 configurer.configure(http);
                 configurer.authenticationEntryPoint(this.auth);
