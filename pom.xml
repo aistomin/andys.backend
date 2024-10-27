@@ -326,7 +326,7 @@
             <plugin>
                 <groupId>com.github.spotbugs</groupId>
                 <artifactId>spotbugs-maven-plugin</artifactId>
-                <version>4.8.6.4</version>
+                <version>4.8.6.5</version>
                 <configuration>
                     <onlyAnalyze>com.github.aistomin.*</onlyAnalyze>
                     <effort>max</effort>
