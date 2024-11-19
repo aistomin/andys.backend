@@ -22,7 +22,8 @@ spring:
       use-anonymous-producers: true
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
-    show-sql: true
+    show-sql: false
+#    open-in-view: false
     hibernate:
       ddl-auto: ${andys_ddl_auto:create-drop}
     properties:
