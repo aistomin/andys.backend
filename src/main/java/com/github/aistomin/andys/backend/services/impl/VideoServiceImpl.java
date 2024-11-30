@@ -21,8 +21,6 @@ import com.github.aistomin.andys.backend.controllers.video.Videos;
 import com.github.aistomin.andys.backend.model.Video;
 import com.github.aistomin.andys.backend.model.VideoRepository;
 import com.github.aistomin.andys.backend.services.VideoService;
-import jakarta.transaction.Transactional;
-import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
 import java.util.Optional;
 
@@ -32,7 +30,7 @@ import java.util.Optional;
  * @since 0.1
  */
 @Service
-public class VideoServiceImpl implements VideoService {
+public final class VideoServiceImpl implements VideoService {
 
     /**
      * Video repository.
@@ -48,41 +46,21 @@ public class VideoServiceImpl implements VideoService {
         this.repo = repository;
     }
 
-    /**
-     * Load videos. Note: this method loads videos "deeply" with all the nested
-     * collections. If you need to load it lazily, you need to create a method
-     * for it and adjust this Javadoc :)
-     *
-     * @return Loaded videos.
-     */
-    @Transactional
     @Override
     public Videos load() {
         return new Videos(
-            this.repo.findAll().stream().map(video -> {
-                Hibernate.initialize(video.getSheets());
-                Hibernate.initialize(video.getLyrics());
-                return new VideoDto(video);
-            }).toList()
+            this.repo.loadAll()
+                .stream()
+                .map(VideoDto::new)
+                .toList()
         );
     }
 
-    /**
-     * Save a video.
-     *
-     * @param video Video that needs to be created.
-     * @return Created video.
-     */
     @Override
     public VideoDto save(final VideoDto video) {
         return new VideoDto(this.repo.save(new Video(video)));
     }
 
-    /**
-     * Delete video.
-     *
-     * @param id Video ID.
-     */
     @Override
     public void delete(final Long id) {
         this.repo.delete(this.findById(id));

@@ -16,6 +16,8 @@
 package com.github.aistomin.andys.backend.model;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import java.util.List;
 
 /**
  * Data access class for {@link Video}.
@@ -31,4 +33,17 @@ public interface VideoRepository extends JpaRepository<Video, Long> {
      * @return The found video.
      */
     Video findByTitle(String title);
+
+    /**
+     * Deeply load all the videos with their nested collection.
+     *
+     * @return Videos.
+     */
+    @Query("""
+                SELECT v
+                FROM Video v
+                LEFT JOIN FETCH v.sheets
+                LEFT JOIN FETCH v.lyrics
+        """)
+    List<Video> loadAll();
 }
