@@ -35,15 +35,15 @@ public interface VideoRepository extends JpaRepository<Video, Long> {
     Video findByTitle(String title);
 
     /**
-     * Deeply load all the videos with their nested collection.
+     * Deeply load all the videos with their nested collections.
      *
      * @return Videos.
      */
     @Query("""
-                SELECT v
-                FROM Video v
-                LEFT JOIN FETCH v.sheets
-                LEFT JOIN FETCH v.lyrics
+            SELECT video
+            FROM Video video
+            LEFT JOIN FETCH video.sheets
+            LEFT JOIN FETCH video.lyrics
         """)
     List<Video> loadAll();
 }
