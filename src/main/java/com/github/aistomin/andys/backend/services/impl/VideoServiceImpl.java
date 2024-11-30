@@ -21,8 +21,8 @@ import com.github.aistomin.andys.backend.controllers.video.Videos;
 import com.github.aistomin.andys.backend.model.Video;
 import com.github.aistomin.andys.backend.model.VideoRepository;
 import com.github.aistomin.andys.backend.services.VideoService;
-import java.util.Optional;
 import org.springframework.stereotype.Service;
+import java.util.Optional;
 
 /**
  * Video's service's implementation.
@@ -49,7 +49,10 @@ public final class VideoServiceImpl implements VideoService {
     @Override
     public Videos load() {
         return new Videos(
-            this.repo.findAll().stream().map(VideoDto::new).toList()
+            this.repo.loadAll()
+                .stream()
+                .map(VideoDto::new)
+                .toList()
         );
     }
 

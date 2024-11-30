@@ -22,7 +22,7 @@ spring:
       use-anonymous-producers: true
   jpa:
     show-sql: false
-#    open-in-view: false
+    open-in-view: false
     hibernate:
       ddl-auto: ${andys_ddl_auto:create-drop}
 support.email: support@mailinator.com
